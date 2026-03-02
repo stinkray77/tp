@@ -30,9 +30,10 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 
 ### Ray Chua
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/stinkray77.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[[homepage]](https://stinkray77.github.io)]
+[[github](http://github.com/stinkray77)]
 
 - Role: Developer
 - Responsibilities: Data
