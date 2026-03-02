@@ -21,7 +21,7 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 
 ### Dayne Tang
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/daynerss1.png" width="200px">
 
 [[github](http://github.com/daynerss1)]
 
