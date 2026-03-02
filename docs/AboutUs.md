@@ -40,10 +40,9 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 
 ### Tan Yi Zhong
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/bombyz003.png" width="768">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/bombyz003)]
 
 - Role: Developer
 - Responsibilities: Dev Ops + Threading
