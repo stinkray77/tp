@@ -15,9 +15,9 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 
 <img src="images/randalliasdanx.png" width="200px">
 
-[[github](https://github.com/randaliasdanx)]
+[[github](https://github.com/randalliasdanx)]
 
-- Role: Project Advisor
+- Role: Software Engineer
 
 ### Dayne Tang
 
