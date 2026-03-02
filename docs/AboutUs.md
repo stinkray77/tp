@@ -35,8 +35,8 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 [[[homepage]](https://stinkray77.github.io)]
 [[github](http://github.com/stinkray77)]
 
-- Role: Developer
-- Responsibilities: Data
+* Role: Software Developer
+* Responsibilities: Data
 
 ### Tan Yi Zhong
 
