@@ -1,11 +1,9 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
-
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -13,13 +11,9 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
 
-/**
- * Changes the remark of an existing person in the address book.
- */
 public class RemarkCommand extends Command {
 
     public static final String COMMAND_WORD = "remark";
-
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Edits the remark of the person identified "
             + "by the index number used in the last person listing. "
@@ -35,20 +29,14 @@ public class RemarkCommand extends Command {
     private final Index index;
     private final Remark remark;
 
-    /**
-     * @param index of the person in the filtered person list to edit the remark
-     * @param remark of the person to be updated to
-     */
     public RemarkCommand(Index index, Remark remark) {
         requireAllNonNull(index, remark);
-
         this.index = index;
         this.remark = remark;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
@@ -66,11 +54,6 @@ public class RemarkCommand extends Command {
         return new CommandResult(generateSuccessMessage(editedPerson));
     }
 
-    /**
-     * Generates a command execution success message based on whether
-     * the remark is added to or removed from
-     * {@code personToEdit}.
-     */
     private String generateSuccessMessage(Person personToEdit) {
         String message = !remark.value.isEmpty() ? MESSAGE_ADD_REMARK_SUCCESS : MESSAGE_DELETE_REMARK_SUCCESS;
         return String.format(message, Messages.format(personToEdit));
@@ -81,14 +64,10 @@ public class RemarkCommand extends Command {
         if (other == this) {
             return true;
         }
-
-        // instanceof handles nulls
         if (!(other instanceof RemarkCommand)) {
             return false;
         }
-
         RemarkCommand e = (RemarkCommand) other;
-        return index.equals(e.index)
-                && remark.equals(e.remark);
+        return index.equals(e.index) && remark.equals(e.remark);
     }
 }
