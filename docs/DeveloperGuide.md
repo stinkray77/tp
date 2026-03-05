@@ -332,14 +332,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+3.  A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  Changes made via commands must be auto-saved within 1 second of completion.
+5.  The student list must scroll smoothly and display at least 200 hundred student records without lag or stutter.
+6.  The default view must show essential fields like name and timeslot without horizontal scrolling
+7.  The System should warn users when adding a student with the same name or phone number as an existing entry, to prevent duplicate records.
+8.  Must consume less than 150MB of RAM, and minimal CPU when idle.
 
-*{More to be added}*
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Field**: A piece of data within a student record(e.g., Name, Phone Number)
+* **List View**: The graphical display showing all student records in a scrollable table or grid format
+* **Timeslot**: The scheduled day and time of the tuition for a student
+* **Rate**: Tuition fee that is agreed upon
+* **Command Box**: The text box where users type commands
+* **Command Output Area**: The display area showing the results of command entered (successes or failures)
+* **Auto-save**: Automatic saving of changes without needing any extra user action
+* **Duplicate Record**: A new student entry that is identical or near identical to an existing entry
+* **Line-break**: In multi-line commands, it is the point where the command visually wraps to the next line in the display
 
 --------------------------------------------------------------------------------------------------------------------
 

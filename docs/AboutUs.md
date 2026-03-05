@@ -41,7 +41,7 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 
 ### Tan Yi Zhong
 
-<img src="images/bombyz003.png" width="768">
+<img src="images/bombyz003.png" width="200">
 
 [[github](http://github.com/bombyz003)]
 
