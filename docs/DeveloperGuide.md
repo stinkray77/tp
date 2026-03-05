@@ -346,6 +346,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
         Use case ends.
 
 
+**Use Case 03: Add a contact**
+
+**MSS**
+
+1. User requests to add a contact.
+2. AB3 shows the required details to be input.
+3. User provides new contact's details.
+4. AB3 records the new contact and shows a success message with the added contact's details.
+
+   Use case ends.
+
+**Extensions**
+
+* 3a. The provided details are invalid.
+    * 3a1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+* 3b. There are missing compulsory details.
+    * 3b1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+* 3c. A matching contact already exists.
+    * 3b1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
