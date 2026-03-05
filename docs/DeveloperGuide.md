@@ -303,30 +303,114 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use Case 01: Delete a person**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User performs <u>Search for contacts (UC 04).</u>
+2.  User requests to delete the target contact from the shown results.
+3.  AB3 deletes the target contact.
+4.  AB3 shows a success message with the deleted contact's details.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. The specified contact to delete is invalid. 
+    * 2a1. AB3 shows an error message.
+ 
+        Use case resumes from step 1.
 
-  Use case ends.
 
-* 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+**Use Case 02: Search for contacts**
 
-      Use case resumes at step 2.
+**MSS**
 
-*{More to be added}*
+1. User requests to search for a contact.
+2. AB3 prompts for the search criteria to search by.
+3. User inputs the search criteria.
+4. AB3 shows a list of contacts that match the criteria. 
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. AB3 detects invalid search input.
+    * 3a1. AB3 shows an error message.
+
+        Use case resumes from step 1.
+
+
+* 3b. No contacts match the criteria.
+    * 3b1. AB3 shows an empty list.
+
+        Use case ends.
+
+
+**Use Case 03: Add a contact**
+
+**MSS**
+
+1. User requests to add a contact.
+2. AB3 shows the required details to be input.
+3. User provides new contact's details.
+4. AB3 records the new contact and shows a success message with the added contact's details.
+
+   Use case ends.
+
+**Extensions**
+
+* 3a. The provided details are invalid.
+    * 3a1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+
+* 3b. There are missing compulsory details.
+    * 3b1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+
+* 3c. A matching contact already exists.
+    * 3b1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+
+**Use Case 04: Update a contact's attribute**
+
+**MSS**
+
+1. User performs <u>Search for contacts (UC02)</u>.
+2. User requests to update an attribute of the target contact from the search results.
+3. AB3 shows the required details to be input.
+4. User provides the new value for the selected attribute.
+5. AB3 updates the target contact with the new attribute value.
+6. AB3 shows a success message with the updated contact details.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. The specified contact is invalid.
+    * 2a1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+
+* 2b. The requested attribute is not supported for update.
+    * 2b1. AB3 shows an error message.
+
+      Use case resumes from step 2.
+
+
+* 4a. The provided attribute value is invalid.
+    * 4a1. AB3 shows an error message.
+
+      Use case resumes from step 3.
+
 
 ### Non-Functional Requirements
 
