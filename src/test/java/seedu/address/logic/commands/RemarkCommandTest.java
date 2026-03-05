@@ -18,6 +18,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Note;
 import seedu.address.model.person.Remark;
 
 /**
@@ -35,7 +36,7 @@ public class RemarkCommandTest {
                 INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new Person(
                 firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
-                firstPerson.getAddress(), new Remark(REMARK_STUB), firstPerson.getTags());
+                firstPerson.getAddress(), new Remark(REMARK_STUB), firstPerson.getNote(), firstPerson.getTags());
 
         RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
                 new Remark(REMARK_STUB));
@@ -56,7 +57,7 @@ public class RemarkCommandTest {
                 INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new Person(
                 firstPerson.getName(), firstPerson.getPhone(), firstPerson.getEmail(),
-                firstPerson.getAddress(), new Remark(""), firstPerson.getTags());
+                firstPerson.getAddress(), new Remark(""), firstPerson.getNote(), firstPerson.getTags());
 
         RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
                 new Remark(""));
