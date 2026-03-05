@@ -31,15 +31,15 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Remark remark, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Remark remark, Note note,Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, remark, note, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
-        this.tags.addAll(tags);
         this.note = note;
+        this.tags.addAll(tags);
     }
 
     public Name getName() {
