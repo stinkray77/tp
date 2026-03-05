@@ -50,9 +50,9 @@ You can reach us at the email `abhishekparanjape[at]comp.nus.edu.sg`
 
 ### Abhishek Paranjape
 
-<img src="images/abhishek.png" width="200px">
+<img src="images/abhishekparanjape.png" width="200px">
 
 [[github](http://github.com/AbhishekParanjape)]
 
-* Role: Software Engineer
+* Role: Developer
 * Responsibilities: CI + CD
