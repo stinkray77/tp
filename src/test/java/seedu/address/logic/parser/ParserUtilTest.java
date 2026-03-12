@@ -15,11 +15,13 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -38,6 +40,12 @@ public class ParserUtilTest {
     private static final String VALID_PAYMENT_STATUS = "Paid";
     private static final String VALID_SUBJECT_1 = "Mathematics";
     private static final String VALID_SUBJECT_2 = "English";
+    private static final String VALID_DAY_1 = "Monday";
+    private static final String VALID_DAY_2 = "Tuesday";
+    private static final String INVALID_DAY = "Monday@";
+    private static final String VALID_TIME_1 = "1400";
+    private static final String VALID_TIME_2 = "0900";
+    private static final String INVALID_TIME = "14";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
 
@@ -194,6 +202,100 @@ public class ParserUtilTest {
         Set<Subject> expectedSet = new HashSet<>(Arrays.asList(
                 new Subject(VALID_SUBJECT_1),
                 new Subject(VALID_SUBJECT_2)));
+        assertEquals(expectedSet, actualSet);
+    }
+
+    @Test
+    public void parseDay_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, ()
+                -> ParserUtil.parseDay((String) null));
+    }
+
+    @Test
+    public void parseDay_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, ()
+                -> ParserUtil.parseDay(INVALID_DAY));
+    }
+
+    @Test
+    public void parseDay_validValue_returnsDay() throws Exception {
+        Day expected = new Day(VALID_DAY_1);
+        assertEquals(expected, ParserUtil.parseDay(VALID_DAY_1));
+    }
+
+    @Test
+    public void parseDays_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, ()
+                -> ParserUtil.parseDays(null));
+    }
+
+    @Test
+    public void parseDays_collectionWithInvalid_throwsParseException() {
+        assertThrows(ParseException.class, ()
+                -> ParserUtil.parseDays(
+                        Arrays.asList(VALID_DAY_1, INVALID_DAY)));
+    }
+
+    @Test
+    public void parseDays_emptyCollection_returnsEmptySet() throws Exception {
+        assertTrue(ParserUtil.parseDays(
+                Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void parseDays_collectionWithValid_returnsDaySet() throws Exception {
+        Set<Day> actualSet = ParserUtil.parseDays(
+                Arrays.asList(VALID_DAY_1, VALID_DAY_2));
+        Set<Day> expectedSet = new HashSet<>(Arrays.asList(
+                new Day(VALID_DAY_1),
+                new Day(VALID_DAY_2)));
+        assertEquals(expectedSet, actualSet);
+    }
+
+    @Test
+    public void parseTime_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, ()
+                -> ParserUtil.parseTime((String) null));
+    }
+
+    @Test
+    public void parseTime_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, ()
+                -> ParserUtil.parseTime(INVALID_TIME));
+    }
+
+    @Test
+    public void parseTime_validValue_returnsTime() throws Exception {
+        Time expected = new Time(VALID_TIME_1);
+        assertEquals(expected, ParserUtil.parseTime(VALID_TIME_1));
+    }
+
+    @Test
+    public void parseTimes_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, ()
+                -> ParserUtil.parseTimes(null));
+    }
+
+    @Test
+    public void parseTimes_collectionWithInvalid_throwsParseException() {
+        assertThrows(ParseException.class, ()
+                -> ParserUtil.parseTimes(
+                        Arrays.asList(VALID_TIME_1, INVALID_TIME)));
+    }
+
+    @Test
+    public void parseTimes_emptyCollection_returnsEmptySet() throws Exception {
+        assertTrue(ParserUtil.parseTimes(
+                Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void parseTimes_collectionWithValid_returnsTimeSet() throws Exception {
+        Set<Time> actualSet = ParserUtil.parseTimes(
+                Arrays.asList(VALID_TIME_1, VALID_TIME_2));
+        Set<Time> expectedSet = new HashSet<>(Arrays.asList(
+                new Time(VALID_TIME_1),
+                new Time(VALID_TIME_2)));
         assertEquals(expectedSet, actualSet);
     }
 

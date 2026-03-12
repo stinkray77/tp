@@ -2,6 +2,8 @@ package seedu.address.testutil;
 
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DAY_MONDAY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DAY_WEDNESDAY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_AMY;
@@ -12,6 +14,8 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PAYMENT_STATUS_
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PAYMENT_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_0900;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_1400;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +31,13 @@ public class TypicalPersons {
 
     public static final Person ALICE = new PersonBuilder().withName("Alice Pauline")
             .withAddress("123, Jurong West Ave 6, #08-111").withEmail("alice@example.com")
-            .withSubjects("Mathematics").withEmergencyContact("94351253")
+            .withSubjects("Mathematics").withDays("Monday").withTimes("1400")
+            .withEmergencyContact("94351253")
             .withPaymentStatus("Paid").withTags("friends").build();
     public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withEmail("johnd@example.com").withSubjects("English")
+            .withDays("Wednesday").withTimes("0900")
             .withEmergencyContact("98765432").withPaymentStatus("Due")
             .withTags("owesMoney", "friends").build();
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz")
@@ -62,11 +68,13 @@ public class TypicalPersons {
     // Manually added - Person's details found in {@code CommandTestUtil}
     public static final Person AMY = new PersonBuilder().withName(VALID_NAME_AMY)
             .withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
+            .withDays(VALID_DAY_MONDAY).withTimes(VALID_TIME_1400)
             .withEmergencyContact(VALID_EMERGENCY_CONTACT_AMY)
             .withPaymentStatus(VALID_PAYMENT_STATUS_AMY)
             .withTags(VALID_TAG_FRIEND).build();
     public static final Person BOB = new PersonBuilder().withName(VALID_NAME_BOB)
             .withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB)
+            .withDays(VALID_DAY_WEDNESDAY).withTimes(VALID_TIME_0900)
             .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
             .withPaymentStatus(VALID_PAYMENT_STATUS_BOB)
             .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();

@@ -5,6 +5,8 @@
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
     "subjects" : [ "Mathematics" ],
+    "days" : [ "Monday" ],
+    "times" : [ "1400" ],
     "emergencyContact" : "94351253",
     "paymentStatus" : "Paid",
     "tags" : [ "friends" ]
@@ -13,6 +15,8 @@
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "subjects" : [ "English" ],
+    "days" : [ "Wednesday" ],
+    "times" : [ "0900" ],
     "emergencyContact" : "98765432",
     "paymentStatus" : "Due",
     "tags" : [ "owesMoney", "friends" ]
@@ -21,6 +25,8 @@
     "email" : "heinz@example.com",
     "address" : "wall street",
     "subjects" : [ ],
+    "days" : [ ],
+    "times" : [ ],
     "emergencyContact" : "95352563",
     "paymentStatus" : "Paid",
     "tags" : [ ]
@@ -29,6 +35,8 @@
     "email" : "cornelia@example.com",
     "address" : "10th street",
     "subjects" : [ ],
+    "days" : [ ],
+    "times" : [ ],
     "emergencyContact" : "87652533",
     "paymentStatus" : "Due",
     "tags" : [ "friends" ]
@@ -37,6 +45,8 @@
     "email" : "werner@example.com",
     "address" : "michegan ave",
     "subjects" : [ ],
+    "days" : [ ],
+    "times" : [ ],
     "emergencyContact" : "94822240",
     "paymentStatus" : "Paid",
     "tags" : [ ]
@@ -45,6 +55,8 @@
     "email" : "lydia@example.com",
     "address" : "little tokyo",
     "subjects" : [ ],
+    "days" : [ ],
+    "times" : [ ],
     "emergencyContact" : "94824270",
     "paymentStatus" : "Due",
     "tags" : [ ]
@@ -53,6 +65,8 @@
     "email" : "anna@example.com",
     "address" : "4th street",
     "subjects" : [ ],
+    "days" : [ ],
+    "times" : [ ],
     "emergencyContact" : "94824420",
     "paymentStatus" : "Overdue",
     "tags" : [ ]

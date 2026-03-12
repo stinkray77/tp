@@ -36,6 +36,7 @@ public class RemarkCommandTest {
         Person editedPerson = new Person(
                 firstPerson.getName(), firstPerson.getEmail(),
                 firstPerson.getAddress(), firstPerson.getSubjects(),
+                firstPerson.getDays(), firstPerson.getTimes(),
                 firstPerson.getEmergencyContact(),
                 firstPerson.getPaymentStatus(), firstPerson.getTags());
 
@@ -59,6 +60,7 @@ public class RemarkCommandTest {
         Person editedPerson = new Person(
                 firstPerson.getName(), firstPerson.getEmail(),
                 firstPerson.getAddress(), firstPerson.getSubjects(),
+                firstPerson.getDays(), firstPerson.getTimes(),
                 firstPerson.getEmergencyContact(),
                 firstPerson.getPaymentStatus(), firstPerson.getTags());
 

@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DAY_WEDNESDAY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PAYMENT_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_0900;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,6 +60,14 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY)
                 .withTags(VALID_TAG_HUSBAND).build();
         assertFalse(DESC_AMY.equals(editedAmy));
+
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withDays(VALID_DAY_WEDNESDAY).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withTimes(VALID_TIME_0900).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
     }
 
     @Test
@@ -73,6 +83,10 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getAddress().orElse(null)
                 + ", subjects="
                 + editPersonDescriptor.getSubjects().orElse(null)
+                + ", days="
+                + editPersonDescriptor.getDays().orElse(null)
+                + ", times="
+                + editPersonDescriptor.getTimes().orElse(null)
                 + ", emergencyContact="
                 + editPersonDescriptor.getEmergencyContact().orElse(null)
                 + ", paymentStatus="

@@ -10,6 +10,8 @@ public class CliSyntax {
     public static final Prefix PREFIX_EMAIL = new Prefix("e/");
     public static final Prefix PREFIX_ADDRESS = new Prefix("a/");
     public static final Prefix PREFIX_SUBJECT = new Prefix("s/");
+    public static final Prefix PREFIX_DAY = new Prefix("d/");
+    public static final Prefix PREFIX_TIME = new Prefix("ti/");
     public static final Prefix PREFIX_EMERGENCY_CONTACT = new Prefix("ec/");
     public static final Prefix PREFIX_PAYMENT_STATUS = new Prefix("ps/");
     public static final Prefix PREFIX_TAG = new Prefix("t/");

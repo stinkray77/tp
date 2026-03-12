@@ -3,12 +3,14 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -42,6 +44,10 @@ public class CommandTestUtil {
     public static final String VALID_PAYMENT_STATUS_BOB = "Due";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
+    public static final String VALID_DAY_MONDAY = "Monday";
+    public static final String VALID_DAY_WEDNESDAY = "Wednesday";
+    public static final String VALID_TIME_1400 = "1400";
+    public static final String VALID_TIME_0900 = "0900";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME
             + VALID_NAME_AMY;
@@ -71,6 +77,14 @@ public class CommandTestUtil {
             + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG
             + VALID_TAG_HUSBAND;
+    public static final String DAY_DESC_MONDAY = " " + PREFIX_DAY
+            + VALID_DAY_MONDAY;
+    public static final String DAY_DESC_WEDNESDAY = " " + PREFIX_DAY
+            + VALID_DAY_WEDNESDAY;
+    public static final String TIME_DESC_1400 = " " + PREFIX_TIME
+            + VALID_TIME_1400;
+    public static final String TIME_DESC_0900 = " " + PREFIX_TIME
+            + VALID_TIME_0900;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME
             + "James&";
@@ -83,6 +97,10 @@ public class CommandTestUtil {
             + PREFIX_PAYMENT_STATUS + "Unknown";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG
             + "hubby*";
+    public static final String INVALID_DAY_DESC = " " + PREFIX_DAY
+            + "Monday@";
+    public static final String INVALID_TIME_DESC = " " + PREFIX_TIME
+            + "14";
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";

@@ -3,12 +3,14 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +21,9 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -36,7 +40,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_EMAIL,
-                        PREFIX_ADDRESS, PREFIX_SUBJECT,
+                        PREFIX_ADDRESS, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME,
                         PREFIX_EMERGENCY_CONTACT, PREFIX_PAYMENT_STATUS,
                         PREFIX_TAG);
 
@@ -71,6 +75,10 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         parseSubjectsForEdit(argMultimap.getAllValues(PREFIX_SUBJECT))
                 .ifPresent(editPersonDescriptor::setSubjects);
+        parseDaysForEdit(argMultimap.getAllValues(PREFIX_DAY))
+                .ifPresent(editPersonDescriptor::setDays);
+        parseTimesForEdit(argMultimap.getAllValues(PREFIX_TIME))
+                .ifPresent(editPersonDescriptor::setTimes);
         if (argMultimap.getValue(PREFIX_EMERGENCY_CONTACT).isPresent()) {
             editPersonDescriptor.setEmergencyContact(
                     ParserUtil.parseEmergencyContact(
@@ -108,6 +116,40 @@ public class EditCommandParser implements Parser<EditCommand> {
                 && subjects.contains("")
                 ? Collections.emptySet() : subjects;
         return Optional.of(ParserUtil.parseSubjects(subjectSet));
+    }
+
+    /**
+     * Parses {@code Collection<String> days} into a {@code Set<Day>}
+     * if {@code days} is non-empty.
+     */
+    private Optional<Set<Day>> parseDaysForEdit(
+            Collection<String> days) throws ParseException {
+        assert days != null;
+
+        if (days.isEmpty()) {
+            return Optional.empty();
+        }
+        Collection<String> daySet = days.size() == 1
+                && days.contains("")
+                ? Collections.emptySet() : days;
+        return Optional.of(ParserUtil.parseDays(daySet));
+    }
+
+    /**
+     * Parses {@code Collection<String> times} into a {@code Set<Time>}
+     * if {@code times} is non-empty.
+     */
+    private Optional<Set<Time>> parseTimesForEdit(
+            Collection<String> times) throws ParseException {
+        assert times != null;
+
+        if (times.isEmpty()) {
+            return Optional.empty();
+        }
+        Collection<String> timeSet = times.size() == 1
+                && times.contains("")
+                ? Collections.emptySet() : times;
+        return Optional.of(ParserUtil.parseTimes(timeSet));
     }
 
     /**

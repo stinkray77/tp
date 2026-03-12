@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DAY_WEDNESDAY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PAYMENT_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_0900;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
@@ -89,6 +91,14 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE)
                 .withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        editedAlice = new PersonBuilder(ALICE)
+                .withDays(VALID_DAY_WEDNESDAY).build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        editedAlice = new PersonBuilder(ALICE)
+                .withTimes(VALID_TIME_0900).build();
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
@@ -98,6 +108,8 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail()
                 + ", address=" + ALICE.getAddress()
                 + ", subjects=" + ALICE.getSubjects()
+                + ", days=" + ALICE.getDays()
+                + ", times=" + ALICE.getTimes()
                 + ", emergencyContact=" + ALICE.getEmergencyContact()
                 + ", paymentStatus=" + ALICE.getPaymentStatus()
                 + ", tags=" + ALICE.getTags() + "}";
