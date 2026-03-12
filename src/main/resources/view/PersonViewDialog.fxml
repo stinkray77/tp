@@ -29,10 +29,11 @@
         </columnConstraints>
 
         <rowConstraints>
-            <RowConstraints minHeight="30.0" />
-            <RowConstraints minHeight="30.0" />
-            <RowConstraints minHeight="30.0" />
-            <RowConstraints minHeight="30.0" />
+            <RowConstraints minHeight="25.0" />
+            <RowConstraints minHeight="25.0" />
+            <RowConstraints minHeight="25.0" />
+            <RowConstraints minHeight="25.0" />
+            <RowConstraints minHeight="25.0" />
         </rowConstraints>
 
         <Label text="Phone:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
@@ -46,6 +47,9 @@
 
         <Label text="Tags:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
         <Label fx:id="tagsLabel" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+        <Label text="Payment:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+        <Label fx:id="paymentLabel" wrapText="true" GridPane.rowIndex="4" GridPane.columnIndex="1" />
     </GridPane>
 
     <!-- Close Button -->

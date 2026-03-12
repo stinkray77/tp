@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
+
+import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 
 public class PersonViewDialog {
@@ -26,6 +28,9 @@ public class PersonViewDialog {
 
     @FXML
     private Label tagsLabel;
+
+    @FXML
+    private Label paymentLabel;
 
     // Add other fields as needed (e.g., student ID, class, etc.)
 
@@ -71,6 +76,9 @@ public class PersonViewDialog {
                 .reduce((a, b) -> a + ", " + b)
                 .orElse("None");
         tagsLabel.setText(tags);
+
+        PaymentStatus hasPaid = person.getPaymentStatus();
+        paymentLabel.setText(hasPaid.toString());
     }
 
     @FXML
