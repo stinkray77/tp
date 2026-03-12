@@ -40,12 +40,17 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         AddCommand command = (AddCommand) parser.parseCommand(PersonUtil.getAddCommand(person));
         assertEquals(new AddCommand(person), command);
+
+        AddCommand mixedCaseCommand =
+                (AddCommand) parser.parseCommand("AdD" + PersonUtil.getAddCommand(person).substring(3));
+        assertEquals(new AddCommand(person), mixedCaseCommand);
     }
 
     @Test
     public void parseCommand_clear() throws Exception {
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+        assertTrue(parser.parseCommand("ClEaR") instanceof ClearCommand);
     }
 
     @Test
@@ -53,6 +58,10 @@ public class AddressBookParserTest {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
                 DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
+
+        DeleteCommand mixedCaseCommand = (DeleteCommand) parser.parseCommand(
+                "DeLeTe " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), mixedCaseCommand);
     }
 
     @Test
@@ -62,12 +71,17 @@ public class AddressBookParserTest {
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
         assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+
+        EditCommand mixedCaseCommand = (EditCommand) parser.parseCommand("EdIt " + INDEX_FIRST_PERSON.getOneBased()
+                + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), mixedCaseCommand);
     }
 
     @Test
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+        assertTrue(parser.parseCommand("ExIt") instanceof ExitCommand);
     }
 
     @Test
@@ -76,18 +90,24 @@ public class AddressBookParserTest {
         FindCommand command = (FindCommand) parser.parseCommand(
                 FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+
+        FindCommand mixedCaseCommand = (FindCommand) parser.parseCommand(
+                "FiNd " + keywords.stream().collect(Collectors.joining(" ")));
+        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), mixedCaseCommand);
     }
 
     @Test
     public void parseCommand_help() throws Exception {
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD) instanceof HelpCommand);
         assertTrue(parser.parseCommand(HelpCommand.COMMAND_WORD + " 3") instanceof HelpCommand);
+        assertTrue(parser.parseCommand("HeLp") instanceof HelpCommand);
     }
 
     @Test
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+        assertTrue(parser.parseCommand("LiSt") instanceof ListCommand);
     }
 
     @Test
@@ -95,6 +115,10 @@ public class AddressBookParserTest {
         RemarkCommand command = (RemarkCommand) parser.parseCommand(
                 RemarkCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " r/ hello");
         assertEquals(new RemarkCommand(INDEX_FIRST_PERSON, new Remark("hello")), command);
+
+        RemarkCommand mixedCaseCommand = (RemarkCommand) parser.parseCommand(
+                "ReMaRk " + INDEX_FIRST_PERSON.getOneBased() + " r/ hello");
+        assertEquals(new RemarkCommand(INDEX_FIRST_PERSON, new Remark("hello")), mixedCaseCommand);
     }
 
     @Test

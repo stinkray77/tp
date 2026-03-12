@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +30,7 @@ public class AddressBookParser {
      * Used for initial separation of command word and args.
      */
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
+    private static final boolean IS_COMMAND_CASE_INSENSITIVE = true;
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
 
     /**
@@ -44,13 +46,14 @@ public class AddressBookParser {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
-        final String commandWord = matcher.group("commandWord");
+        final String rawCommandWord = matcher.group("commandWord");
+        final String commandWord = normalizeCommandWord(rawCommandWord);
         final String arguments = matcher.group("arguments");
 
         // Note to developers: Change the log level in config.json to enable lower level (i.e., FINE, FINER and lower)
         // log messages such as the one below.
         // Lower level log messages are used sparingly to minimize noise in the code.
-        logger.fine("Command word: " + commandWord + "; Arguments: " + arguments);
+        logger.fine("Command word: " + rawCommandWord + "; Arguments: " + arguments);
 
         switch (commandWord) {
 
@@ -85,6 +88,13 @@ public class AddressBookParser {
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
+    }
+
+    private static String normalizeCommandWord(String commandWord) {
+        if (!IS_COMMAND_CASE_INSENSITIVE) {
+            return commandWord;
+        }
+        return commandWord.toLowerCase(Locale.ROOT);
     }
 
 }
