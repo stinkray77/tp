@@ -316,9 +316,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. The specified contact to delete is invalid. 
+* 2a. The specified contact to delete is invalid.
     * 2a1. AB3 shows an error message.
- 
+
         Use case resumes from step 1.
 
 
@@ -330,7 +330,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. User requests to search for a contact.
 2. AB3 prompts for the search criteria to search by.
 3. User inputs the search criteria.
-4. AB3 shows a list of contacts that match the criteria. 
+4. AB3 shows a list of contacts that match the criteria.
 
     Use case ends.
 
