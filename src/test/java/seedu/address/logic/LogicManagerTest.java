@@ -22,6 +22,7 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -68,8 +69,9 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand,
-                MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        // Update the expected exception message to match new DeleteCommand behavior
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_OUT_OF_RANGE, 9);
+        assertCommandException(deleteCommand, expectedMessage);
     }
 
     @Test
