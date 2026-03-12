@@ -22,7 +22,8 @@ public class DeleteCommand extends Command {
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted student: %1$s succesfully\nTotal students now: %2$d";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS =
+            "Deleted student: %1$s succesfully\nTotal students now: %2$d";
 
     // Custom error message for out of range
     public static final String MESSAGE_OUT_OF_RANGE = "Out of range: No student found at index %1$d.";
@@ -47,7 +48,8 @@ public class DeleteCommand extends Command {
 
         int remainingStudents = model.getAddressBook().getPersonList().size();
 
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, personToDelete.getName().fullName, remainingStudents));
+        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
+                personToDelete.getName().fullName, remainingStudents));
     }
 
     @Override
