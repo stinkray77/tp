@@ -1,17 +1,20 @@
 package seedu.address.ui;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
-import java.io.IOException;
-
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 
+/**
+ * A dialog to show the details of a person.
+ */
 public class PersonViewDialog {
 
     @FXML
