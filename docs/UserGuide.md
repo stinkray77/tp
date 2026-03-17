@@ -45,7 +45,7 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 
 ## Features
 
-<box type="info" seamless>
+</box type="info" seamless>
 
 **Notes about the command format:**<br>
 
