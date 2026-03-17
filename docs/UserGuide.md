@@ -133,6 +133,19 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
+### Viewing a student : `view`
+
+Shows the full details of the student at the given index.
+
+Format: `view INDEX`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, …​
+
+Examples:
+* `view 1` shows the full details of the 1st student in the current list.
+* `find Alex` followed by `view 1` shows the full details of the 1st student in the filtered results.
+* 
 ### Deleting a student : `delete`
 
 Deletes the specified student from Tutor Central.
