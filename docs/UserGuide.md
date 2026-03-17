@@ -82,7 +82,7 @@ Adds a student to Tutor Central.
 
 Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]… [d/DAY]… [ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
 
-<box type="tip" seamless>
+</box type="tip" seamless>
 
 **Tip:** A student can have any number of tags (including 0)
 </box>
