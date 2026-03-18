@@ -15,7 +15,11 @@ UniquePersonList -right-> Person
 Person -up-> "*" Tag
 
 Person *--> Name
-Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> "*" Subject
+Person *--> "*" Day
+Person *--> "*" Time
+Person *--> EmergencyContact
+Person *--> PaymentStatus
 @enduml
