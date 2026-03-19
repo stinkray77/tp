@@ -6,12 +6,14 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -38,6 +40,8 @@ public class EditPersonDescriptorBuilder {
         descriptor.setEmail(person.getEmail());
         descriptor.setAddress(person.getAddress());
         descriptor.setSubjects(person.getSubjects());
+        descriptor.setDays(person.getDays());
+        descriptor.setTimes(person.getTimes());
         descriptor.setEmergencyContact(person.getEmergencyContact());
         descriptor.setPaymentStatus(person.getPaymentStatus());
         descriptor.setTags(person.getTags());
@@ -91,6 +95,28 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withPaymentStatus(String status) {
         descriptor.setPaymentStatus(new PaymentStatus(status));
+        return this;
+    }
+
+    /**
+     * Parses the {@code days} into a {@code Set<Day>} and set it to the
+     * {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withDays(String... days) {
+        Set<Day> daySet = Stream.of(days)
+                .map(Day::new).collect(Collectors.toSet());
+        descriptor.setDays(daySet);
+        return this;
+    }
+
+    /**
+     * Parses the {@code times} into a {@code Set<Time>} and set it to the
+     * {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withTimes(String... times) {
+        Set<Time> timeSet = Stream.of(times)
+                .map(Time::new).collect(Collectors.toSet());
+        descriptor.setTimes(timeSet);
         return this;
     }
 

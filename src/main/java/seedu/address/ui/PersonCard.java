@@ -43,6 +43,10 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane subjects;
     @FXML
+    private FlowPane days;
+    @FXML
+    private FlowPane times;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -63,6 +67,14 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(s -> s.subjectName))
                 .forEach(s -> subjects.getChildren()
                         .add(new Label(s.subjectName)));
+        person.getDays().stream()
+                .sorted(Comparator.comparing(d -> d.dayName))
+                .forEach(d -> days.getChildren()
+                        .add(new Label(d.dayName)));
+        person.getTimes().stream()
+                .sorted(Comparator.comparing(t -> t.timeValue))
+                .forEach(t -> times.getChildren()
+                        .add(new Label(t.timeValue)));
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren()
