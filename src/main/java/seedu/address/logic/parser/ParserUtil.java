@@ -10,11 +10,13 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -153,6 +155,60 @@ public class ParserUtil {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
         return new Tag(trimmedTag);
+    }
+
+    /**
+     * Parses a {@code String day} into a {@code Day}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code day} is invalid.
+     */
+    public static Day parseDay(String day) throws ParseException {
+        requireNonNull(day);
+        String trimmedDay = day.trim();
+        if (!Day.isValidDay(trimmedDay)) {
+            throw new ParseException(Day.MESSAGE_CONSTRAINTS);
+        }
+        return new Day(trimmedDay);
+    }
+
+    /**
+     * Parses {@code Collection<String> days} into a {@code Set<Day>}.
+     */
+    public static Set<Day> parseDays(Collection<String> days) throws ParseException {
+        requireNonNull(days);
+        final Set<Day> daySet = new HashSet<>();
+        for (String dayName : days) {
+            daySet.add(parseDay(dayName));
+        }
+        return daySet;
+    }
+
+    /**
+     * Parses a {@code String time} into a {@code Time}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code time} is invalid.
+     */
+    public static Time parseTime(String time) throws ParseException {
+        requireNonNull(time);
+        String trimmedTime = time.trim();
+        if (!Time.isValidTime(trimmedTime)) {
+            throw new ParseException(Time.MESSAGE_CONSTRAINTS);
+        }
+        return new Time(trimmedTime);
+    }
+
+    /**
+     * Parses {@code Collection<String> times} into a {@code Set<Time>}.
+     */
+    public static Set<Time> parseTimes(Collection<String> times) throws ParseException {
+        requireNonNull(times);
+        final Set<Time> timeSet = new HashSet<>();
+        for (String timeValue : times) {
+            timeSet.add(parseTime(timeValue));
+        }
+        return timeSet;
     }
 
     /**

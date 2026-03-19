@@ -98,6 +98,8 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail()
                 + ", address=" + ALICE.getAddress()
                 + ", subjects=" + ALICE.getSubjects()
+                + ", days=" + ALICE.getDays()
+                + ", times=" + ALICE.getTimes()
                 + ", emergencyContact=" + ALICE.getEmergencyContact()
                 + ", paymentStatus=" + ALICE.getPaymentStatus()
                 + ", tags=" + ALICE.getTags() + "}";

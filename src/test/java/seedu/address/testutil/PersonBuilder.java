@@ -119,6 +119,7 @@ public class PersonBuilder {
      */
     public Person build() {
         return new Person(name, email, address, subjects,
+                new HashSet<>(), new HashSet<>(),
                 emergencyContact, paymentStatus, tags);
     }
 

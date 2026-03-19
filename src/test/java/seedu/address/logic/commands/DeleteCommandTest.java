@@ -13,7 +13,6 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -32,8 +31,10 @@ public class DeleteCommandTest {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
 
+        // The remaining students will be current total minus 1
+        int expectedRemaining = model.getAddressBook().getPersonList().size() - 1;
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
+                personToDelete.getName().fullName, expectedRemaining);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -46,7 +47,8 @@ public class DeleteCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_OUT_OF_RANGE, outOfBoundIndex.getOneBased());
+        assertCommandFailure(deleteCommand, model, expectedMessage);
     }
 
     @Test
@@ -56,8 +58,10 @@ public class DeleteCommandTest {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
 
+        // The remaining total students in the overall address book will be current total minus 1
+        int expectedRemaining = model.getAddressBook().getPersonList().size() - 1;
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
+                personToDelete.getName().fullName, expectedRemaining);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -76,7 +80,8 @@ public class DeleteCommandTest {
 
         DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
 
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_OUT_OF_RANGE, outOfBoundIndex.getOneBased());
+        assertCommandFailure(deleteCommand, model, expectedMessage);
     }
 
     @Test

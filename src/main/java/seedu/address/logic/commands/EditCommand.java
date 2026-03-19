@@ -131,8 +131,8 @@ public class EditCommand extends Command {
                 .orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedEmail, updatedAddress,
-                updatedSubjects, updatedEmergencyContact,
-                updatedPaymentStatus, updatedTags);
+                updatedSubjects, personToEdit.getDays(), personToEdit.getTimes(),
+                updatedEmergencyContact, updatedPaymentStatus, updatedTags);
     }
 
     @Override

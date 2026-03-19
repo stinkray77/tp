@@ -4,30 +4,28 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a lesson time in 24-hour format.
+ * Represents a Time in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidTime(String)}
  */
 public class Time {
-
     public static final String MESSAGE_CONSTRAINTS =
-            "Time should be exactly 4 digits in 24-hour format (e.g. 1400)";
-    public static final String VALIDATION_REGEX = "\\d{4}";
-
-    public final String value;
+            "Times should only contain numeric characters, and should not be blank";
+    public static final String VALIDATION_REGEX = "[0-9]{4}";
+    public final String timeValue;
 
     /**
      * Constructs a {@code Time}.
      *
-     * @param time A valid 4-digit time in 24-hour format.
+     * @param time A valid time value.
      */
     public Time(String time) {
         requireNonNull(time);
         checkArgument(isValidTime(time), MESSAGE_CONSTRAINTS);
-        value = time;
+        timeValue = time;
     }
 
     /**
-     * Returns true if a given string is a valid time.
+     * Returns true if a given string is a valid time value.
      */
     public static boolean isValidTime(String test) {
         return test.matches(VALIDATION_REGEX);
@@ -35,7 +33,7 @@ public class Time {
 
     @Override
     public String toString() {
-        return value;
+        return timeValue;
     }
 
     @Override
@@ -44,16 +42,18 @@ public class Time {
             return true;
         }
 
+        // instanceof handles nulls
         if (!(other instanceof Time)) {
             return false;
         }
 
         Time otherTime = (Time) other;
-        return value.equals(otherTime.value);
+        return timeValue.equals(otherTime.timeValue);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return timeValue.hashCode();
     }
 }
+

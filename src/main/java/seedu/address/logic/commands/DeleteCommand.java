@@ -6,7 +6,6 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -19,11 +18,15 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person identified by the index number used in the displayed person list.\n"
+            + ": Deletes the person identified by the index number used in the displayed student list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS =
+            "Deleted student: %1$s succesfully\nTotal students now: %2$d";
+
+    // Custom error message for out of range
+    public static final String MESSAGE_OUT_OF_RANGE = "Out of range: No student found at index %1$d.";
 
     private final Index targetIndex;
 
@@ -37,12 +40,16 @@ public class DeleteCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(String.format(MESSAGE_OUT_OF_RANGE, targetIndex.getOneBased()));
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deletePerson(personToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+
+        int remainingStudents = model.getAddressBook().getPersonList().size();
+
+        return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
+                personToDelete.getName().fullName, remainingStudents));
     }
 
     @Override

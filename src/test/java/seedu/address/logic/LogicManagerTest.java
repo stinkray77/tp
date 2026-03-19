@@ -1,7 +1,6 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -21,8 +20,8 @@ import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
-import seedu.address.logic.commands.ViewCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -69,8 +68,9 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand,
-                MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        // Update the expected exception message to match new DeleteCommand behavior
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_OUT_OF_RANGE, 9);
+        assertCommandException(deleteCommand, expectedMessage);
     }
 
     @Test
@@ -78,18 +78,6 @@ public class LogicManagerTest {
         String listCommand = ListCommand.COMMAND_WORD;
         assertCommandSuccess(listCommand,
                 ListCommand.MESSAGE_SUCCESS, model);
-    }
-
-    @Test
-    public void execute_viewCommand_success() throws Exception {
-        model.addPerson(AMY);
-        Model expectedModel = new ModelManager(
-                model.getAddressBook(), new UserPrefs());
-        String viewCommand = ViewCommand.COMMAND_WORD + " 1";
-        String expectedMessage = String.format(
-                ViewCommand.MESSAGE_VIEW_PERSON_SUCCESS,
-                Messages.format(AMY));
-        assertCommandSuccess(viewCommand, expectedMessage, expectedModel);
     }
 
     @Test

@@ -4,15 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a day of the week for a student's lesson.
+ * Represents a Day in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidDay(String)}
  */
 public class Day {
-
     public static final String MESSAGE_CONSTRAINTS =
             "Days should only contain alphanumeric characters and spaces, and should not be blank";
     public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
-
     public final String dayName;
 
     /**
@@ -30,7 +28,7 @@ public class Day {
      * Returns true if a given string is a valid day name.
      */
     public static boolean isValidDay(String test) {
-        return test != null && test.matches(VALIDATION_REGEX);
+        return test.matches(VALIDATION_REGEX);
     }
 
     @Override
@@ -44,6 +42,7 @@ public class Day {
             return true;
         }
 
+        // instanceof handles nulls
         if (!(other instanceof Day)) {
             return false;
         }

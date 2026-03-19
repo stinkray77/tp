@@ -23,6 +23,8 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Subject> subjects = new HashSet<>();
+    private final Set<Day> days = new HashSet<>();
+    private final Set<Time> times = new HashSet<>();
     private final EmergencyContact emergencyContact;
     private final PaymentStatus paymentStatus;
     private final Set<Tag> tags = new HashSet<>();
@@ -31,14 +33,17 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(Name name, Email email, Address address,
-                  Set<Subject> subjects, EmergencyContact emergencyContact,
+                  Set<Subject> subjects, Set<Day> days, Set<Time> times,
+                  EmergencyContact emergencyContact,
                   PaymentStatus paymentStatus, Set<Tag> tags) {
-        requireAllNonNull(name, email, address, subjects,
+        requireAllNonNull(name, email, address, subjects, days, times,
                 emergencyContact, paymentStatus, tags);
         this.name = name;
         this.email = email;
         this.address = address;
         this.subjects.addAll(subjects);
+        this.days.addAll(days);
+        this.times.addAll(times);
         this.emergencyContact = emergencyContact;
         this.paymentStatus = paymentStatus;
         this.tags.addAll(tags);
@@ -81,6 +86,22 @@ public class Person {
     }
 
     /**
+     * Returns an immutable day set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
+     */
+    public Set<Day> getDays() {
+        return Collections.unmodifiableSet(days);
+    }
+
+    /**
+     * Returns an immutable time set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
+     */
+    public Set<Time> getTimes() {
+        return Collections.unmodifiableSet(times);
+    }
+
+    /**
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.
      */
@@ -113,6 +134,8 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && subjects.equals(otherPerson.subjects)
+                && days.equals(otherPerson.days)
+                && times.equals(otherPerson.times)
                 && emergencyContact.equals(otherPerson.emergencyContact)
                 && paymentStatus.equals(otherPerson.paymentStatus)
                 && tags.equals(otherPerson.tags);
@@ -121,7 +144,7 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(name, email, address, subjects,
-                emergencyContact, paymentStatus, tags);
+                days, times, emergencyContact, paymentStatus, tags);
     }
 
     @Override
@@ -131,6 +154,8 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("subjects", subjects)
+                .add("days", days)
+                .add("times", times)
                 .add("emergencyContact", emergencyContact)
                 .add("paymentStatus", paymentStatus)
                 .add("tags", tags)
