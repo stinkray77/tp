@@ -182,6 +182,10 @@ public class MainWindow extends UiPart<Stage> {
                 handleHelp();
             }
 
+            if (commandResult.isShowView()) {
+                PersonViewDialog.show(commandResult.getPersonToView());
+            }
+
             if (commandResult.isExit()) {
                 handleExit();
             }

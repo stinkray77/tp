@@ -1,11 +1,13 @@
 package seedu.address.ui;
 
 import java.io.IOException;
+import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,7 +23,7 @@ public class PersonViewDialog {
     private Label nameLabel;
 
     @FXML
-    private Label phoneLabel;
+    private Label emergencyContactLabel;
 
     @FXML
     private Label emailLabel;
@@ -34,6 +36,15 @@ public class PersonViewDialog {
 
     @FXML
     private Label paymentLabel;
+
+    @FXML
+    private FlowPane subjects;
+
+    @FXML
+    private FlowPane days;
+
+    @FXML
+    private FlowPane times;
 
     // Add other fields as needed (e.g., student ID, class, etc.)
 
@@ -69,7 +80,7 @@ public class PersonViewDialog {
 
     private void setPerson(Person person) {
         nameLabel.setText(person.getName().fullName);
-        phoneLabel.setText(person.getEmergencyContact().value);
+        emergencyContactLabel.setText(person.getEmergencyContact().value);
         emailLabel.setText(person.getEmail().value);
         addressLabel.setText(person.getAddress().value);
 
@@ -82,6 +93,21 @@ public class PersonViewDialog {
 
         PaymentStatus hasPaid = person.getPaymentStatus();
         paymentLabel.setText(hasPaid.toString());
+
+        // Populate subjects
+        person.getSubjects().stream()
+                .sorted(Comparator.comparing(s -> s.subjectName))
+                .forEach(s -> subjects.getChildren().add(new Label(s.subjectName)));
+
+        // Populate days
+        person.getDays().stream()
+                .sorted(Comparator.comparing(d -> d.dayName))
+                .forEach(d -> days.getChildren().add(new Label(d.dayName)));
+
+        // Populate times
+        person.getTimes().stream()
+                .sorted(Comparator.comparing(t -> t.timeValue))
+                .forEach(t -> times.getChildren().add(new Label(t.timeValue)));
     }
 
     @FXML
