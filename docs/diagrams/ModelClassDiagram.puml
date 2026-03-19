@@ -17,7 +17,11 @@ Class Person
 Class Address
 Class Email
 Class Name
-Class Phone
+Class Subject
+Class Day
+Class Time
+Class EmergencyContact
+Class PaymentStatus
 Class Tag
 
 Class I #FFFFFF
@@ -38,17 +42,22 @@ UserPrefs .up.|> ReadOnlyUserPrefs
 AddressBook *--> "1" UniquePersonList
 UniquePersonList --> "~* all" Person
 Person *--> Name
-Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> "*" Subject
+Person *--> "*" Day
+Person *--> "*" Time
+Person *--> EmergencyContact
+Person *--> PaymentStatus
 Person *--> "*" Tag
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Name -[hidden]right-> Email
+Email -[hidden]right-> Address
+Address -[hidden]right-> EmergencyContact
+EmergencyContact -[hidden]right-> PaymentStatus
 
 ModelManager --> "~* filtered" Person
 @enduml

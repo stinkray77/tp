@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# Tutor Central Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -123,10 +123,22 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the student list data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+
+Each `Person` in Tutor Central currently contains:
+
+* `Name`
+* `Email`
+* `Address`
+* `Set<Subject>`
+* `Set<Day>`
+* `Set<Time>`
+* `EmergencyContact`
+* `PaymentStatus`
+* `Set<Tag>`
 
 <box type="info" seamless>
 
@@ -144,7 +156,7 @@ The `Model` component,
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* can save both student list data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -281,135 +293,154 @@ _{Explain here how the data archiving feature will be implemented}_
 * prefers typing to mouse interactions to avoid disrupting the flow of a lesson.
 * is reasonably comfortable using CLI apps.
 
-**Value proposition**: TutorCentral provides a centralized, keyboard-driven platform for freelance tuition teachers to manage student contacts, track lesson progress, and monitor payment statuses significantly faster than navigating multiple GUI-based tools like Excel or Google Calendar.
+**Value proposition**: TutorCentral provides a centralized, keyboard-driven platform for freelance tuition teachers to manage students, track lesson progress, and monitor payment statuses significantly faster than navigating multiple GUI-based tools like Excel or Google Calendar.
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​                  | I want to …​                                           | So that I can…​                                              |
+|----------|--------------------------|---------------------------------------------------------|--------------------------------------------------------------|
+| `* * *`  | new user                 | see usage instructions                                  | refer to instructions when I forget how to use Tutor Central |
+| `* * *`  | tutor                    | add a student with schedule and payment details         | maintain complete student records                             |
+| `* * *`  | tutor                    | search for students                                     | find a target student quickly                                 |
+| `* * *`  | tutor                    | view a student's full details                           | check information before a lesson                             |
+| `* * *`  | tutor                    | delete a student                                        | remove entries that I no longer need                          |
+| `* *`    | tutor                    | update a student's details                              | correct outdated records when needed                          |
 
 *{More to be added}*
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `Tutor Central` and the **Actor** is the `tutor`, unless specified otherwise)
 
-**Use Case 01: Delete a person**
+**Use Case 01: Delete a student**
 
 **MSS**
 
-1.  User performs <u>Search for contacts (UC 04).</u>
-2.  User requests to delete the target contact from the shown results.
-3.  AB3 deletes the target contact.
-4.  AB3 shows a success message with the deleted contact's details.
+1.  Tutor performs <u>Search for students (UC02).</u>
+2.  Tutor requests to delete the target student from the shown results.
+3.  Tutor Central deletes the target student.
+4.  Tutor Central shows a success message with the deleted student's details.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The specified contact to delete is invalid.
-    * 2a1. AB3 shows an error message.
+* 2a. The specified student to delete is invalid.
+    * 2a1. Tutor Central shows an error message.
 
         Use case resumes from step 1.
 
 
 
-**Use Case 02: Search for contacts**
+**Use Case 02: Search for students**
 
 **MSS**
 
-1. User requests to search for a contact.
-2. AB3 prompts for the search criteria to search by.
-3. User inputs the search criteria.
-4. AB3 shows a list of contacts that match the criteria.
+1.  Tutor requests to search for students.
+2.  Tutor Central prompts for the search criteria.
+3.  Tutor inputs the search criteria.
+4.  Tutor Central shows a list of students that match the criteria.
 
     Use case ends.
 
 **Extensions**
 
-* 3a. AB3 detects invalid search input.
-    * 3a1. AB3 shows an error message.
+* 3a. Tutor Central detects invalid search input.
+    * 3a1. Tutor Central shows an error message.
 
         Use case resumes from step 1.
 
 
-* 3b. No contacts match the criteria.
-    * 3b1. AB3 shows an empty list.
+* 3b. No students match the criteria.
+    * 3b1. Tutor Central shows an empty list.
 
         Use case ends.
 
 
-**Use Case 03: Add a contact**
+**Use Case 03: Add a student**
 
 **MSS**
 
-1. User requests to add a contact.
-2. AB3 shows the required details to be input.
-3. User provides new contact's details.
-4. AB3 records the new contact and shows a success message with the added contact's details.
+1.  Tutor requests to add a student.
+2.  Tutor Central shows the required details to be input.
+3.  Tutor provides the student's details: name, email, address, emergency contact, subjects, days, times, payment status, and tags.
+4.  Tutor Central validates the input.
+5.  Tutor Central records the new student and shows a success message with the added student's details.
 
-   Use case ends.
+    Use case ends.
 
 **Extensions**
 
-* 3a. The provided details are invalid.
-    * 3a1. AB3 shows an error message.
+* 4a. The provided details are invalid.
+    * 4a1. Tutor Central shows an error message.
 
-      Use case resumes from step 2.
-
-
-* 3b. There are missing compulsory details.
-    * 3b1. AB3 shows an error message.
-
-      Use case resumes from step 2.
+        Use case resumes from step 2.
 
 
-* 3c. A matching contact already exists.
-    * 3b1. AB3 shows an error message.
+* 4b. The number of days does not match the number of times.
+    * 4b1. Tutor Central shows an error message.
 
-      Use case resumes from step 2.
+        Use case resumes from step 2.
 
 
-**Use Case 04: Update a contact's attribute**
+* 4c. A matching student already exists.
+    * 4c1. Tutor Central shows an error message.
+
+        Use case resumes from step 2.
+
+
+**Use Case 04: Update a student**
 
 **MSS**
 
-1. User performs <u>Search for contacts (UC02)</u>.
-2. User requests to update an attribute of the target contact from the search results.
-3. AB3 shows the required details to be input.
-4. User provides the new value for the selected attribute.
-5. AB3 updates the target contact with the new attribute value.
-6. AB3 shows a success message with the updated contact details.
+1.  Tutor performs <u>Search for students (UC02).</u>
+2.  Tutor requests to update the target student from the search results.
+3.  Tutor Central shows the details that can be updated.
+4.  Tutor provides updated values for one or more fields.
+5.  Tutor Central validates the updated values.
+6.  Tutor Central updates the student and shows a success message with the updated details.
 
-   Use case ends.
+    Use case ends.
 
 **Extensions**
 
-* 2a. The specified contact is invalid.
-    * 2a1. AB3 shows an error message.
+* 2a. The specified student is invalid.
+    * 2a1. Tutor Central shows an error message.
 
-      Use case resumes from step 2.
-
-
-* 2b. The requested attribute is not supported for update.
-    * 2b1. AB3 shows an error message.
-
-      Use case resumes from step 2.
+        Use case resumes from step 2.
 
 
-* 4a. The provided attribute value is invalid.
-    * 4a1. AB3 shows an error message.
+* 5a. The provided update details are invalid.
+    * 5a1. Tutor Central shows an error message.
 
-      Use case resumes from step 3.
+        Use case resumes from step 3.
+
+
+* 5b. Tutor updates `days` without `times`, or `times` without `days`.
+    * 5b1. Tutor Central shows an error message.
+
+        Use case resumes from step 3.
+
+
+**Use Case 05: View a student**
+
+**MSS**
+
+1.  Tutor requests to view a student using `view INDEX`.
+2.  Tutor Central locates the target student in the currently shown list.
+3.  Tutor Central shows the full student details in a popup dialog.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The specified student index is invalid.
+    * 2a1. Tutor Central shows an error message.
+
+        Use case ends.
 
 
 ### Non-Functional Requirements
@@ -427,8 +458,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
-* **Field**: A piece of data within a student record(e.g., Name, Phone Number)
+* **Private student detail**: A student detail that is not meant to be shared with others
+* **Field**: A piece of data within a student record (e.g., Name, Emergency Contact)
 * **List View**: The graphical display showing all student records in a scrollable table or grid format
 * **Timeslot**: The scheduled day and time of the tuition for a student
 * **Rate**: Tuition fee that is agreed upon
@@ -457,7 +488,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file Expected: Shows the GUI with a set of sample students. The window size may not be optimum.
 
 1. Saving window preferences
 
@@ -470,15 +501,15 @@ testers are expected to do more *exploratory* testing.
 
 ### Deleting a person
 
-1. Deleting a person while all persons are being shown
+1. Deleting a student while all students are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: List all students using the `list` command. Multiple students in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
