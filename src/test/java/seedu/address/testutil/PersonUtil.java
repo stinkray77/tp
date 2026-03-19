@@ -1,19 +1,23 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
 import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -38,6 +42,12 @@ public class PersonUtil {
         sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
         person.getSubjects().stream().forEach(
             s -> sb.append(PREFIX_SUBJECT + s.subjectName + " ")
+        );
+        person.getDays().stream().forEach(
+            d -> sb.append(PREFIX_DAY + d.dayName + " ")
+        );
+        person.getTimes().stream().forEach(
+            t -> sb.append(PREFIX_TIME + t.timeValue + " ")
         );
         sb.append(PREFIX_EMERGENCY_CONTACT
                 + person.getEmergencyContact().value + " ");
@@ -69,6 +79,24 @@ public class PersonUtil {
             } else {
                 subjects.forEach(s -> sb.append(PREFIX_SUBJECT)
                         .append(s.subjectName).append(" "));
+            }
+        }
+        if (descriptor.getDays().isPresent()) {
+            Set<Day> days = descriptor.getDays().get();
+            if (days.isEmpty()) {
+                sb.append(PREFIX_DAY).append(" ");
+            } else {
+                days.forEach(d -> sb.append(PREFIX_DAY)
+                        .append(d.dayName).append(" "));
+            }
+        }
+        if (descriptor.getTimes().isPresent()) {
+            Set<Time> times = descriptor.getTimes().get();
+            if (times.isEmpty()) {
+                sb.append(PREFIX_TIME).append(" ");
+            } else {
+                times.forEach(t -> sb.append(PREFIX_TIME)
+                        .append(t.timeValue).append(" "));
             }
         }
         descriptor.getEmergencyContact().ifPresent(ec

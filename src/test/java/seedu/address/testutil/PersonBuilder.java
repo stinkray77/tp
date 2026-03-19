@@ -4,12 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -28,6 +30,8 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Subject> subjects;
+    private Set<Day> days;
+    private Set<Time> times;
     private EmergencyContact emergencyContact;
     private PaymentStatus paymentStatus;
     private Set<Tag> tags;
@@ -40,6 +44,8 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         subjects = new HashSet<>();
+        days = new HashSet<>();
+        times = new HashSet<>();
         emergencyContact = new EmergencyContact(DEFAULT_EMERGENCY_CONTACT);
         paymentStatus = new PaymentStatus(DEFAULT_PAYMENT_STATUS);
         tags = new HashSet<>();
@@ -53,6 +59,8 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         subjects = new HashSet<>(personToCopy.getSubjects());
+        days = new HashSet<>(personToCopy.getDays());
+        times = new HashSet<>(personToCopy.getTimes());
         emergencyContact = personToCopy.getEmergencyContact();
         paymentStatus = personToCopy.getPaymentStatus();
         tags = new HashSet<>(personToCopy.getTags());
@@ -79,6 +87,22 @@ public class PersonBuilder {
      */
     public PersonBuilder withSubjects(String ... subjects) {
         this.subjects = SampleDataUtil.getSubjectSet(subjects);
+        return this;
+    }
+
+    /**
+     * Parses the {@code days} into a {@code Set<Day>} and set it to the {@code Person}.
+     */
+    public PersonBuilder withDays(String ... days) {
+        this.days = SampleDataUtil.getDaySet(days);
+        return this;
+    }
+
+    /**
+     * Parses the {@code times} into a {@code Set<Time>} and set it to the {@code Person}.
+     */
+    public PersonBuilder withTimes(String ... times) {
+        this.times = SampleDataUtil.getTimeSet(times);
         return this;
     }
 
@@ -119,7 +143,7 @@ public class PersonBuilder {
      */
     public Person build() {
         return new Person(name, email, address, subjects,
-                new HashSet<>(), new HashSet<>(),
+                days, times,
                 emergencyContact, paymentStatus, tags);
     }
 
