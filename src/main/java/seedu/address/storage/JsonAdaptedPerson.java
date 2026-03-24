@@ -11,12 +11,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Remark;
 import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -32,6 +35,9 @@ class JsonAdaptedPerson {
     private final List<String> subjects = new ArrayList<>();
     private final String emergencyContact;
     private final String paymentStatus;
+    private final List<String> days = new ArrayList<>();
+    private final List<String> times = new ArrayList<>();
+    private final String remark;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -44,6 +50,9 @@ class JsonAdaptedPerson {
             @JsonProperty("subjects") List<String> subjects,
             @JsonProperty("emergencyContact") String emergencyContact,
             @JsonProperty("paymentStatus") String paymentStatus,
+            @JsonProperty("days") List<String> days,
+            @JsonProperty("times") List<String> times,
+            @JsonProperty("remark") String remark,
             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
         this.email = email;
@@ -53,6 +62,13 @@ class JsonAdaptedPerson {
         }
         this.emergencyContact = emergencyContact;
         this.paymentStatus = paymentStatus;
+        if (days != null) {
+            this.days.addAll(days);
+        }
+        if (times != null) {
+            this.times.addAll(times);
+        }
+        this.remark = remark;
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -68,7 +84,14 @@ class JsonAdaptedPerson {
         subjects.addAll(source.getSubjects().stream()
                 .map(s -> s.subjectName)
                 .collect(Collectors.toList()));
+        days.addAll(source.getDays().stream()
+                .map(d -> d.dayName)
+                .toList());
+        times.addAll(source.getTimes().stream()
+                .map(t -> t.timeValue)
+                .toList());
         emergencyContact = source.getEmergencyContact().value;
+        remark = source.getRemark().value;
         paymentStatus = source.getPaymentStatus().value;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -148,10 +171,28 @@ class JsonAdaptedPerson {
         final PaymentStatus modelPaymentStatus =
                 new PaymentStatus(paymentStatus);
 
+        final Set<Day> modelDays = new HashSet<>();
+        for (String dayName : days) {
+            if (!Day.isValidDay(dayName)) {
+                throw new IllegalValueException(Day.MESSAGE_CONSTRAINTS);
+            }
+            modelDays.add(new Day(dayName));
+        }
+
+        final Set<Time> modelTimes = new HashSet<>();
+        for (String timeValue : times) {
+            if (!Time.isValidTime(timeValue)) {
+                throw new IllegalValueException(Time.MESSAGE_CONSTRAINTS);
+            }
+            modelTimes.add(new Time(timeValue));
+        }
+
+        final Remark modelRemark = new Remark(remark != null ? remark : "");
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelEmail, modelAddress,
-                modelSubjects, new HashSet<>(), new HashSet<>(),
-                modelEmergencyContact, modelPaymentStatus, modelTags);
+                modelSubjects, modelDays, modelTimes,
+                modelEmergencyContact, modelPaymentStatus, modelRemark, modelTags);
     }
 
 }

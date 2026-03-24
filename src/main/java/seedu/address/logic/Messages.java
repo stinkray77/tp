@@ -49,6 +49,12 @@ public class Messages {
                 .append(person.getAddress())
                 .append("; Subjects: ");
         person.getSubjects().forEach(builder::append);
+        builder.append("; Days: ");
+        person.getDays().forEach(builder::append);
+        builder.append("; Times: ");
+        person.getTimes().forEach(builder::append);
+        builder.append("; Remark: ")
+                .append(person.getRemark());
         builder.append("; Emergency Contact: ")
                 .append(person.getEmergencyContact())
                 .append("; Payment Status: ")

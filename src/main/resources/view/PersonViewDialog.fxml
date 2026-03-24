@@ -38,6 +38,7 @@
             <RowConstraints minHeight="25.0" />
             <RowConstraints minHeight="25.0" />
             <RowConstraints minHeight="25.0" />
+            <RowConstraints minHeight="25.0" />
         </rowConstraints>
 
         <Label text="Emergency Contact:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
@@ -63,6 +64,9 @@
 
         <Label text="Times:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
         <FlowPane fx:id="times" hgap="5.0" vgap="5.0" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+
+        <Label text="Remark:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+        <Label fx:id="remarkLabel" wrapText="true" GridPane.rowIndex="8" GridPane.columnIndex="1" />
     </GridPane>
 
     <!-- Close Button -->
