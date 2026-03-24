@@ -32,6 +32,7 @@ import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Remark;
 import seedu.address.model.person.Subject;
 import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
@@ -142,7 +143,8 @@ public class EditCommand extends Command {
 
         return new Person(updatedName, updatedEmail, updatedAddress,
                 updatedSubjects, updatedDays, updatedTimes,
-                updatedEmergencyContact, updatedPaymentStatus, updatedTags);
+                updatedEmergencyContact, updatedPaymentStatus,
+                personToEdit.getRemark(), updatedTags);
     }
 
     @Override
@@ -183,6 +185,7 @@ public class EditCommand extends Command {
         private Set<Time> times;
         private EmergencyContact emergencyContact;
         private PaymentStatus paymentStatus;
+        private Remark remark;
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {}
@@ -200,6 +203,7 @@ public class EditCommand extends Command {
             setTimes(toCopy.times);
             setEmergencyContact(toCopy.emergencyContact);
             setPaymentStatus(toCopy.paymentStatus);
+            setRemark(toCopy.remark);
             setTags(toCopy.tags);
         }
 
@@ -209,7 +213,7 @@ public class EditCommand extends Command {
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, email, address,
                     subjects, days, times, emergencyContact,
-                    paymentStatus, tags);
+                    paymentStatus, remark, tags);
         }
 
         public void setName(Name name) {
@@ -311,6 +315,10 @@ public class EditCommand extends Command {
 
         public Optional<PaymentStatus> getPaymentStatus() {
             return Optional.ofNullable(paymentStatus);
+        }
+
+        public void setRemark(Remark remark) {
+            this.remark = remark;
         }
 
         /**

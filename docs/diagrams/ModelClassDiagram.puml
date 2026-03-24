@@ -49,6 +49,7 @@ Person *--> "*" Day
 Person *--> "*" Time
 Person *--> EmergencyContact
 Person *--> PaymentStatus
+Person *--> Remark
 Person *--> "*" Tag
 
 Person -[hidden]up--> I

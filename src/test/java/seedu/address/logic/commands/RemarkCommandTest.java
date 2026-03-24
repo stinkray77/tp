@@ -38,7 +38,7 @@ public class RemarkCommandTest {
                 firstPerson.getAddress(), firstPerson.getSubjects(),
                 firstPerson.getDays(), firstPerson.getTimes(),
                 firstPerson.getEmergencyContact(),
-                firstPerson.getPaymentStatus(), firstPerson.getTags());
+                firstPerson.getPaymentStatus(), new Remark(REMARK_STUB), firstPerson.getTags());
 
         RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
                 new Remark(REMARK_STUB));
@@ -62,7 +62,7 @@ public class RemarkCommandTest {
                 firstPerson.getAddress(), firstPerson.getSubjects(),
                 firstPerson.getDays(), firstPerson.getTimes(),
                 firstPerson.getEmergencyContact(),
-                firstPerson.getPaymentStatus(), firstPerson.getTags());
+                firstPerson.getPaymentStatus(), new Remark(""), firstPerson.getTags());
 
         RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
                 new Remark(""));

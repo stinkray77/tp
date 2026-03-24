@@ -38,6 +38,9 @@ public class PersonViewDialog {
     private Label paymentLabel;
 
     @FXML
+    private Label remarkLabel;
+
+    @FXML
     private FlowPane subjects;
 
     @FXML
@@ -83,6 +86,8 @@ public class PersonViewDialog {
         emergencyContactLabel.setText(person.getEmergencyContact().value);
         emailLabel.setText(person.getEmail().value);
         addressLabel.setText(person.getAddress().value);
+        String remarkText = person.getRemark().value;
+        remarkLabel.setText(remarkText.isEmpty() ? "None" : remarkText);
 
         // Format tags nicely
         String tags = person.getTags().stream()

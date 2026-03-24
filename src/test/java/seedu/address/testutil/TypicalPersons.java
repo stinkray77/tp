@@ -28,28 +28,33 @@ public class TypicalPersons {
     public static final Person ALICE = new PersonBuilder().withName("Alice Pauline")
             .withAddress("123, Jurong West Ave 6, #08-111").withEmail("alice@example.com")
             .withSubjects("Mathematics").withEmergencyContact("94351253")
-            .withPaymentStatus("Paid").withTags("friends").build();
+            .withPaymentStatus("Paid").withDays().withTimes().withRemark("")
+            .withTags("friends").build();
     public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withEmail("johnd@example.com").withSubjects("English")
             .withEmergencyContact("98765432").withPaymentStatus("Due")
-            .withTags("owesMoney", "friends").build();
+            .withDays().withTimes().withRemark("").withTags("owesMoney", "friends").build();
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz")
             .withEmail("heinz@example.com").withAddress("wall street")
-            .withEmergencyContact("95352563").withPaymentStatus("Paid").build();
+            .withEmergencyContact("95352563").withDays().withTimes().withRemark("")
+            .withPaymentStatus("Paid").build();
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier")
             .withEmail("cornelia@example.com").withAddress("10th street")
             .withEmergencyContact("87652533").withPaymentStatus("Due")
-            .withTags("friends").build();
+            .withDays().withTimes().withRemark("").withTags("friends").build();
     public static final Person ELLE = new PersonBuilder().withName("Elle Meyer")
             .withEmail("werner@example.com").withAddress("michegan ave")
-            .withEmergencyContact("94822240").withPaymentStatus("Paid").build();
+            .withEmergencyContact("94822240").withPaymentStatus("Paid")
+            .withDays().withTimes().withRemark("").build();
     public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz")
             .withEmail("lydia@example.com").withAddress("little tokyo")
-            .withEmergencyContact("94824270").withPaymentStatus("Due").build();
+            .withEmergencyContact("94824270").withPaymentStatus("Due")
+            .withDays().withTimes().withRemark("").build();
     public static final Person GEORGE = new PersonBuilder().withName("George Best")
             .withEmail("anna@example.com").withAddress("4th street")
-            .withEmergencyContact("94824420").withPaymentStatus("Overdue").build();
+            .withEmergencyContact("94824420").withPaymentStatus("Overdue")
+            .withDays().withTimes().withRemark("").build();
 
     // Manually added
     public static final Person HOON = new PersonBuilder().withName("Hoon Meier")

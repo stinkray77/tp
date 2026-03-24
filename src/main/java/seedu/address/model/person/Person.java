@@ -27,6 +27,7 @@ public class Person {
     private final Set<Time> times = new HashSet<>();
     private final EmergencyContact emergencyContact;
     private final PaymentStatus paymentStatus;
+    private final Remark remark;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
@@ -35,9 +36,9 @@ public class Person {
     public Person(Name name, Email email, Address address,
                   Set<Subject> subjects, Set<Day> days, Set<Time> times,
                   EmergencyContact emergencyContact,
-                  PaymentStatus paymentStatus, Set<Tag> tags) {
+                  PaymentStatus paymentStatus, Remark remark, Set<Tag> tags) {
         requireAllNonNull(name, email, address, subjects, days, times,
-                emergencyContact, paymentStatus, tags);
+                emergencyContact, paymentStatus, remark, tags);
         this.name = name;
         this.email = email;
         this.address = address;
@@ -46,6 +47,7 @@ public class Person {
         this.times.addAll(times);
         this.emergencyContact = emergencyContact;
         this.paymentStatus = paymentStatus;
+        this.remark = remark;
         this.tags.addAll(tags);
     }
 
@@ -75,6 +77,10 @@ public class Person {
 
     public PaymentStatus getPaymentStatus() {
         return paymentStatus;
+    }
+
+    public Remark getRemark() {
+        return remark;
     }
 
     /**
@@ -138,13 +144,14 @@ public class Person {
                 && times.equals(otherPerson.times)
                 && emergencyContact.equals(otherPerson.emergencyContact)
                 && paymentStatus.equals(otherPerson.paymentStatus)
+                && remark.equals(otherPerson.remark)
                 && tags.equals(otherPerson.tags);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name, email, address, subjects,
-                days, times, emergencyContact, paymentStatus, tags);
+                days, times, emergencyContact, paymentStatus, remark, tags);
     }
 
     @Override
@@ -158,6 +165,7 @@ public class Person {
                 .add("times", times)
                 .add("emergencyContact", emergencyContact)
                 .add("paymentStatus", paymentStatus)
+                .add("remark", remark)
                 .add("tags", tags)
                 .toString();
     }

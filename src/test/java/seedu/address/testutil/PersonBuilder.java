@@ -10,6 +10,7 @@ import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Remark;
 import seedu.address.model.person.Subject;
 import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
@@ -34,6 +35,7 @@ public class PersonBuilder {
     private Set<Time> times;
     private EmergencyContact emergencyContact;
     private PaymentStatus paymentStatus;
+    private Remark remark;
     private Set<Tag> tags;
 
     /**
@@ -48,6 +50,7 @@ public class PersonBuilder {
         times = new HashSet<>();
         emergencyContact = new EmergencyContact(DEFAULT_EMERGENCY_CONTACT);
         paymentStatus = new PaymentStatus(DEFAULT_PAYMENT_STATUS);
+        remark = new Remark("");
         tags = new HashSet<>();
     }
 
@@ -63,6 +66,7 @@ public class PersonBuilder {
         times = new HashSet<>(personToCopy.getTimes());
         emergencyContact = personToCopy.getEmergencyContact();
         paymentStatus = personToCopy.getPaymentStatus();
+        remark = personToCopy.getRemark();
         tags = new HashSet<>(personToCopy.getTags());
     }
 
@@ -139,12 +143,20 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code Remark} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withRemark(String remark) {
+        this.remark = new Remark(remark);
+        return this;
+    }
+
+    /**
      * Builds and returns the {@code Person}.
      */
     public Person build() {
         return new Person(name, email, address, subjects,
                 days, times,
-                emergencyContact, paymentStatus, tags);
+                emergencyContact, paymentStatus, remark, tags);
     }
 
 }

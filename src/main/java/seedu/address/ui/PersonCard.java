@@ -41,6 +41,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label paymentStatus;
     @FXML
+    private Label remark;
+    @FXML
     private FlowPane subjects;
     @FXML
     private FlowPane days;
@@ -63,6 +65,10 @@ public class PersonCard extends UiPart<Region> {
                 + person.getEmergencyContact().value);
         paymentStatus.setText("Payment: "
                 + person.getPaymentStatus().value);
+        String remarkText = person.getRemark().value;
+        remark.setText(remarkText.isEmpty() ? "" : "Remark: " + remarkText);
+        remark.setVisible(!remarkText.isEmpty());
+        remark.setManaged(!remarkText.isEmpty());
         person.getSubjects().stream()
                 .sorted(Comparator.comparing(s -> s.subjectName))
                 .forEach(s -> subjects.getChildren()

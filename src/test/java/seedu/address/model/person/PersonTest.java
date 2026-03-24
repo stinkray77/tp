@@ -102,6 +102,7 @@ public class PersonTest {
                 + ", times=" + ALICE.getTimes()
                 + ", emergencyContact=" + ALICE.getEmergencyContact()
                 + ", paymentStatus=" + ALICE.getPaymentStatus()
+                + ", remark=" + ALICE.getRemark()
                 + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
