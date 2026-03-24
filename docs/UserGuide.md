@@ -165,6 +165,35 @@ Examples:
 * `view 1` shows the full details of the 1st student in the current list.
 * `find Alex` followed by `view 1` shows the full details of the 1st student in the filtered results.
 
+### Adding a remark to a student: `remark`
+
+Adds or updates a free-text remark for the student at the given index. Useful for notes like "needs help with algebra" or "prefers morning lessons".
+
+Format: `remark INDEX r/REMARK`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* The remark replaces any existing remark for that student.
+* To remove a remark, use `remark INDEX r/` with nothing after `r/`.
+
+Examples:
+* `remark 1 r/Needs extra help with algebra` adds a remark to the 1st student.
+* `remark 2 r/` removes the remark from the 2nd student.
+
+### Updating payment status: `mark`
+
+Quickly updates the payment status of a student.
+
+Format: `mark INDEX ps/PAYMENT_STATUS`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* Payment status must be one of: `Paid`, `Due`, `Overdue`.
+
+Examples:
+* `mark 1 ps/Paid` marks the 1st student's payment as Paid.
+* `mark 3 ps/Overdue` marks the 3rd student's payment as Overdue.
+
 ### Deleting a student : `delete`
 
 Deletes the specified student from Tutor Central.
