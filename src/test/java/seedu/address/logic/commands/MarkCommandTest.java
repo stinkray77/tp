@@ -82,6 +82,7 @@ public class MarkCommandTest {
         assertFalse(markFirstCommand.equals(1));
         assertFalse(markFirstCommand.equals(null));
         assertFalse(markFirstCommand.equals(markSecondCommand));
+        assertFalse(markFirstCommand.equals(new MarkCommand(INDEX_FIRST_PERSON, STATUS_OVERDUE)));
     }
 
     private static Person createMarkedPerson(Person personToMark, PaymentStatus newStatus) {
