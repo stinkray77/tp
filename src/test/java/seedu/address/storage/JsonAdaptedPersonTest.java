@@ -13,10 +13,12 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
+import seedu.address.model.person.Time;
 
 public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "R@chel";
@@ -25,6 +27,8 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_EMERGENCY_CONTACT = "+651234";
     private static final String INVALID_PAYMENT_STATUS = "Unknown";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_DAY = "!v@lid";
+    private static final String INVALID_TIME = "7654321";
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_EMAIL = BENSON.getEmail().toString();
@@ -182,6 +186,34 @@ public class JsonAdaptedPersonTest {
         String expectedMessage = String.format(
                 MISSING_FIELD_MESSAGE_FORMAT,
                 PaymentStatus.class.getSimpleName());
+        assertThrows(IllegalValueException.class,
+                expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidDay_throwsIllegalValueException() {
+        List<String> invalidDays = new ArrayList<>(VALID_DAYS);
+        invalidDays.add(INVALID_DAY);
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                invalidDays, VALID_TIMES, VALID_REMARK, VALID_TAGS);
+        String expectedMessage = Day.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class,
+                expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidTime_throwsIllegalValueException() {
+        List<String> invalidTimes = new ArrayList<>(VALID_TIMES);
+        invalidTimes.add(INVALID_TIME);
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                VALID_DAYS, invalidTimes, VALID_REMARK, VALID_TAGS);
+        String expectedMessage = Time.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class,
                 expectedMessage, person::toModelType);
     }

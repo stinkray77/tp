@@ -317,10 +317,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(paymentStatus);
         }
 
-        public Optional<Remark> getRemark() {
-            return Optional.ofNullable(remark);
-        }
-
         public void setRemark(Remark remark) {
             this.remark = remark;
         }
