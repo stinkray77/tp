@@ -115,23 +115,25 @@ Examples:
 *  `edit 1 e/johndoe@example.com` Edits the email address of the 1st student to be `johndoe@example.com`.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
-### Locating students by name: `find`
+### Locating students: `find`
 
-Finds students whose names contain any of the given keywords.
+Finds students matching the given criteria.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find [n/NAME_KEYWORDS] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Students matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* **Backward compatible:** `find KEYWORD [MORE_KEYWORDS]` (without prefixes) still searches by name.
+* When using prefixes, multiple criteria use AND logic.
+* Name search is case-insensitive and matches full words only.
+* Subject, day, and tag searches are case-insensitive.
+* Payment status must be one of: `Paid`, `Due`, `Overdue`.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find John` returns `john` and `John Doe` (backward compatible)
+* `find s/Mathematics` returns all students taking Mathematics
+* `find d/Monday` returns all students with Monday lessons
+* `find ps/Due` returns all students with unpaid fees
+* `find s/Math d/Monday` returns students taking Math on Mondays
+* `find t/priority` returns students tagged as priority
 
 ### Viewing a student : `view`
 
