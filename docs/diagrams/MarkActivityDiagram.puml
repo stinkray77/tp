@@ -1,0 +1,18 @@
+@startuml
+start
+:User enters mark INDEX ps/STATUS;
+if (Index valid in filtered list?) then (yes)
+  if (Payment status valid?) then (yes)
+    :Fetch person at INDEX;
+    :Create new Person with updated PaymentStatus;
+    :model.setPerson(old, new);
+    :model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    :Return success message;
+  else (no)
+    :Return payment status constraint error;
+  endif
+else (no)
+  :Return invalid index error;
+endif
+stop
+@enduml
