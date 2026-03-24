@@ -6,6 +6,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Time;
 
 public class JsonAdaptedPersonTest {
@@ -205,6 +207,32 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_multipleDays_success() throws Exception {
+        List<String> multipleDays = Arrays.asList("Monday", "Wednesday", "Friday");
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                multipleDays, VALID_TIMES, VALID_REMARK, VALID_TAGS);
+
+        Person modelPerson = person.toModelType();
+        assertEquals(3, modelPerson.getDays().size());
+    }
+
+    @Test
+    public void toModelType_duplicateDays_deduplicated() throws Exception {
+        List<String> duplicateDays = Arrays.asList("Monday", "Monday", "Tuesday");
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                duplicateDays, VALID_TIMES, VALID_REMARK, VALID_TAGS);
+
+        Person modelPerson = person.toModelType();
+        assertEquals(2, modelPerson.getDays().size());
+    }
+
+    @Test
     public void toModelType_invalidTime_throwsIllegalValueException() {
         List<String> invalidTimes = new ArrayList<>(VALID_TIMES);
         invalidTimes.add(INVALID_TIME);
@@ -216,6 +244,19 @@ public class JsonAdaptedPersonTest {
         String expectedMessage = Time.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class,
                 expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_multipleTimes_success() throws Exception {
+        List<String> multipleTimes = Arrays.asList("0800", "1200", "1600");
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                VALID_DAYS, multipleTimes, VALID_REMARK, VALID_TAGS);
+
+        Person modelPerson = person.toModelType();
+        assertEquals(3, modelPerson.getTimes().size());
     }
 
     @Test
