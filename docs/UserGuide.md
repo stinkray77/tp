@@ -18,7 +18,7 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/tutorcentral-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T09-2/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your TutorCentral.
 
@@ -66,6 +66,23 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
+
+**Parameter constraints:**
+
+| Prefix | Field | Rules |
+|--------|-------|-------|
+| `n/` | Name | Alphanumeric characters and spaces, cannot be blank |
+| `e/` | Email | Valid email format (e.g., `user@example.com`) |
+| `a/` | Address | Any text, cannot be blank |
+| `ec/` | Emergency Contact | Exactly 8 digits |
+| `s/` | Subject | Alphanumeric characters, no spaces |
+| `d/` | Day | Monday-Sunday (or Mon-Sun), case-insensitive |
+| `ti/` | Time | 4-digit 24-hour format, 0000-2359 |
+| `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` |
+| `t/` | Tag | Alphanumeric characters, no spaces |
+| `r/` | Remark | Any text (free-form) |
+
+**Important:** Days and times must be specified in matching pairs. If you provide 2 days, you must provide exactly 2 times.
 
 ### Viewing help : `help`
 
@@ -115,23 +132,25 @@ Examples:
 *  `edit 1 e/johndoe@example.com` Edits the email address of the 1st student to be `johndoe@example.com`.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
-### Locating students by name: `find`
+### Locating students: `find`
 
-Finds students whose names contain any of the given keywords.
+Finds students matching the given criteria.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find [n/NAME_KEYWORDS] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Students matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* **Backward compatible:** `find KEYWORD [MORE_KEYWORDS]` (without prefixes) still searches by name.
+* When using prefixes, multiple criteria use AND logic.
+* Name search is case-insensitive and matches full words only.
+* Subject, day, and tag searches are case-insensitive.
+* Payment status must be one of: `Paid`, `Due`, `Overdue`.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find John` returns `john` and `John Doe` (backward compatible)
+* `find s/Mathematics` returns all students taking Mathematics
+* `find d/Monday` returns all students with Monday lessons
+* `find ps/Due` returns all students with unpaid fees
+* `find s/Math d/Monday` returns students taking Math on Mondays
+* `find t/priority` returns students tagged as priority
 
 ### Viewing a student : `view`
 
@@ -145,6 +164,35 @@ Format: `view INDEX`
 Examples:
 * `view 1` shows the full details of the 1st student in the current list.
 * `find Alex` followed by `view 1` shows the full details of the 1st student in the filtered results.
+
+### Adding a remark to a student: `remark`
+
+Adds or updates a free-text remark for the student at the given index. Useful for notes like "needs help with algebra" or "prefers morning lessons".
+
+Format: `remark INDEX r/REMARK`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* The remark replaces any existing remark for that student.
+* To remove a remark, use `remark INDEX r/` with nothing after `r/`.
+
+Examples:
+* `remark 1 r/Needs extra help with algebra` adds a remark to the 1st student.
+* `remark 2 r/` removes the remark from the 2nd student.
+
+### Updating payment status: `mark`
+
+Quickly updates the payment status of a student.
+
+Format: `mark INDEX ps/PAYMENT_STATUS`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* Payment status must be one of: `Paid`, `Due`, `Overdue`.
+
+Examples:
+* `mark 1 ps/Paid` marks the 1st student's payment as Paid.
+* `mark 3 ps/Overdue` marks the 3rd student's payment as Overdue.
 
 ### Deleting a student : `delete`
 
@@ -210,13 +258,15 @@ _Details coming soon ..._
 ## Command summary
 
 | Action     | Format, Examples |
-|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add**    | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]… [d/DAY]… [ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due` |
-| **Clear**  | `clear`|
-| **Delete** | `delete INDEX`<br> e.g., `delete 3`|
-| **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT]… [d/DAY]… [ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`<br> e.g., `edit 1 e/johndoe@example.com`|
-| **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`|
+|------------|------------------|
+| **Add**    | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]... [d/DAY]... [ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due` |
+| **Clear**  | `clear` |
+| **Delete** | `delete INDEX` <br> e.g., `delete 3` |
+| **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT]... [d/DAY]... [ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com` |
+| **Find**   | `find [n/NAME] [s/SUBJECT] [d/DAY] [ps/STATUS] [t/TAG]` <br> e.g., `find s/Mathematics d/Monday` |
+| **Help**   | `help` |
 | **List**   | `list` |
-| **View**   | `view INDEX`<br> e.g., `view 1`|
-| **Help**   | `help`|
+| **Mark**   | `mark INDEX ps/PAYMENT_STATUS` <br> e.g., `mark 1 ps/Paid` |
+| **Remark** | `remark INDEX r/REMARK` <br> e.g., `remark 1 r/Needs help with algebra` |
+| **View**   | `view INDEX` <br> e.g., `view 1` |
 

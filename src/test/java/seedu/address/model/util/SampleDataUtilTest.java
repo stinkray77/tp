@@ -1,0 +1,63 @@
+package seedu.address.model.util;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.person.Day;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Subject;
+import seedu.address.model.person.Time;
+import seedu.address.model.tag.Tag;
+
+public class SampleDataUtilTest {
+
+    @Test
+    public void getSamplePersons_returnsExpectedCount() {
+        Person[] persons = SampleDataUtil.getSamplePersons();
+        assertEquals(5, persons.length);
+    }
+
+    @Test
+    public void getSamplePersons_allPersonsNotNull() {
+        for (Person person : SampleDataUtil.getSamplePersons()) {
+            assertNotNull(person);
+        }
+    }
+
+    @Test
+    public void getSamplePersons_firstPersonIsAlexTan() {
+        Person[] persons = SampleDataUtil.getSamplePersons();
+        assertEquals(new Name("Alex Tan"), persons[0].getName());
+    }
+
+    @Test
+    public void getSampleAddressBook_containsAllSamplePersons() {
+        ReadOnlyAddressBook addressBook = SampleDataUtil.getSampleAddressBook();
+        assertEquals(5, addressBook.getPersonList().size());
+    }
+
+    @Test
+    public void getTagSet_singleTag_returnsCorrectSet() {
+        assertTrue(SampleDataUtil.getTagSet("friends").contains(new Tag("friends")));
+    }
+
+    @Test
+    public void getSubjectSet_singleSubject_returnsCorrectSet() {
+        assertTrue(SampleDataUtil.getSubjectSet("Mathematics").contains(new Subject("Mathematics")));
+    }
+
+    @Test
+    public void getDaySet_singleDay_returnsCorrectSet() {
+        assertTrue(SampleDataUtil.getDaySet("Monday").contains(new Day("Monday")));
+    }
+
+    @Test
+    public void getTimeSet_singleTime_returnsCorrectSet() {
+        assertTrue(SampleDataUtil.getTimeSet("1400").contains(new Time("1400")));
+    }
+}

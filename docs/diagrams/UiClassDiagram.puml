@@ -15,7 +15,17 @@ Class PersonListPanel
 Class PersonCard
 Class StatusBarFooter
 Class CommandBox
+Class PersonViewDialog
 }
+
+note right of PersonCard
+  Two-column GridPane layout:
+  Left: name, FlowPane(subjects),
+        FlowPane(days), FlowPane(times),
+        FlowPane(tags)
+  Right: email, address,
+         emergencyContact, paymentStatus
+end note
 
 package Model <<Rectangle>> {
 Class HiddenModel #FFFFFF
@@ -50,6 +60,7 @@ HelpWindow --|> UiPart
 PersonCard ..> Model
 UiManager -right-> Logic
 MainWindow -left-> Logic
+MainWindow --> "0..1" PersonViewDialog
 
 PersonListPanel -[hidden]left- HelpWindow
 HelpWindow -[hidden]left- CommandBox
