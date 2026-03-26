@@ -500,7 +500,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to view a student using `view INDEX`.
+1.  Tutor requests to view a student.
 2.  Tutor Central locates the target student in the currently shown list.
 3.  Tutor Central shows the full student details in a popup dialog.
 
@@ -508,8 +508,90 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. The specified student index is invalid.
+* 1a. The specified student index is invalid.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+**Use Case 06: Find students by field**
+
+**MSS**
+
+1.  Tutor requests to search for students.
+2.  Tutor Central parses the search criteria.
+3.  Tutor Central filters the student list using the specified field predicates.
+4.  Tutor Central displays the matching students.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Tutor provides no criteria to search by.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 1a. Tutor provides invalid search input.
     * 2a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 3a. No students match the criteria.
+    * 3a1. Tutor Central shows `0 persons listed!`.
+
+        Use case ends.
+
+
+**Use Case 07: Mark payment status**
+
+**MSS**
+
+1.  Tutor requests to update a student's payment status.
+2.  Tutor Central locates the target student in the currently shown list.
+3.  Tutor Central updates the student's payment status.
+4.  Tutor Central shows a success message confirming the new payment status.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The specified student index is invalid.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 1b. Tutor provides multiple payment statuses.
+    * 1b1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+**Use Case 08: Add a remark to a student**
+
+**MSS**
+
+1.  Tutor requests to update a student's remark.
+2.  Tutor Central locates the target student in the currently shown list.
+3.  Tutor Central updates the student's remark.
+4.  Tutor Central shows a success message with the updated student details.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The specified student is invalid.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 3a. Tutor provides an empty remark.
+    * 3a1. Tutor Central removes the student's existing remark.
+    * 3a2. Tutor Central shows a success message with the updated student details.
 
         Use case ends.
 
