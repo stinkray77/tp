@@ -376,9 +376,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | new user                 | see usage instructions                                  | refer to instructions when I forget how to use Tutor Central |
 | `* * *`  | tutor                    | add a student with schedule and payment details         | maintain complete student records                             |
 | `* * *`  | tutor                    | search for students                                     | find a target student quickly                                 |
+| `* * *`  | tutor                    | search students by subject, day, or payment status      | quickly find relevant students                                |
 | `* * *`  | tutor                    | view a student's full details                           | check information before a lesson                             |
 | `* * *`  | tutor                    | delete a student                                        | remove entries that I no longer need                          |
+| `* *`    | tutor                    | quickly mark a student's payment as paid                | track payments efficiently                                     |
 | `* *`    | tutor                    | update a student's details                              | correct outdated records when needed                          |
+| `* *`    | tutor                    | add remarks to a student                                | remember important notes about them                           |
 
 *{More to be added}*
 
