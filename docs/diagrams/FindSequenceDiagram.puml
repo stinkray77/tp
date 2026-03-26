@@ -1,0 +1,87 @@
+@startuml FindSequenceDiagram
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 5
+skinparam maxmessagesize 60
+skinparam SequenceGroupBodyBackgroundColor transparent
+
+actor User
+participant ":LogicManager" as Logic
+participant ":AddressBookParser" as ABParser
+participant ":FindCommandParser" as Parser
+participant ":ArgumentTokenizer" as Tokenizer
+participant "combinedPredicate:Predicate<Person>" as Pred
+participant ":FindCommand" as Command
+participant ":Model" as Model
+
+User -> Logic : execute("find s/Math d/Monday")
+activate Logic
+
+Logic -> ABParser : parseCommand("find s/Math d/Monday")
+activate ABParser
+
+ABParser -> Parser : parse("s/Math d/Monday")
+activate Parser
+
+Parser -> Tokenizer : tokenize(args, PREFIX_NAME, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_PAYMENT_STATUS, PREFIX_TAG)
+activate Tokenizer
+Tokenizer --> Parser : argMultimap
+deactivate Tokenizer
+
+note over Parser
+preamble is empty ->
+use prefix-based search mode
+end note
+
+Parser -> Pred : initialise as (person -> true)
+activate Pred
+
+alt n/ prefix present
+Parser -> Pred : .and(new NameContainsKeywordsPredicate(names))
+end
+
+alt s/ prefix present
+Parser -> Pred : .and(new SubjectContainsKeywordsPredicate(subjects))
+end
+
+alt d/ prefix present
+Parser -> Pred : .and(new DayMatchesPredicate(days))
+end
+
+alt ps/ prefix present
+Parser -> Pred : .and(new PaymentStatusMatchesPredicate(status))
+end
+
+alt t/ prefix present
+Parser -> Pred : .and(new TagContainsKeywordsPredicate(tags))
+end
+
+Pred --> Parser : combinedPredicate
+deactivate Pred
+
+Parser --> ABParser : new FindCommand(combinedPredicate)
+deactivate Parser
+
+ABParser --> Logic : findCommand
+deactivate ABParser
+
+Logic -> Command : execute(model)
+activate Command
+
+Command -> Model : updateFilteredPersonList(combinedPredicate)
+activate Model
+
+note over Model
+for each Person p,
+combinedPredicate.test(p) evaluates
+each chained predicate with AND logic
+end note
+
+Model --> Command : (filtered list updated)
+deactivate Model
+
+Command --> Logic : CommandResult("X persons listed!")
+deactivate Command
+
+Logic --> User : CommandResult
+deactivate Logic
+@enduml
