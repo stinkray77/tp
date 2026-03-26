@@ -138,6 +138,7 @@ Each `Person` in Tutor Central currently contains:
 * `Set<Time>`
 * `EmergencyContact`
 * `PaymentStatus`
+* `Remark`
 * `Set<Tag>`
 
 <box type="info" seamless>
