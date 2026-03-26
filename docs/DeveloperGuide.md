@@ -536,8 +536,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
         Use case ends.
 
 
-* 1a. Tutor provides invalid search input.
-    * 2a1. Tutor Central shows an error message.
+* 1b. Tutor provides invalid search input.
+    * 1b1. Tutor Central shows an error message.
 
         Use case ends.
 
