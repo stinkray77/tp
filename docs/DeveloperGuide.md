@@ -170,6 +170,53 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Find by field feature
+
+The extended `find` command supports prefix-based filtering across multiple
+student fields. `FindCommandParser` tokenizes the user input with the supported
+prefixes `n/`, `s/`, `d/`, `ps/`, and `t/`, then checks whether the command is
+using prefixed search or the original name-only search format.
+
+The parser builds a `Predicate<Person>`, which is a yes/no matching rule applied
+to each student in the list:
+
+* if the predicate returns `true`, that student remains in the filtered list
+* if the predicate returns `false`, that student is excluded
+
+For example, `PaymentStatusMatchesPredicate("Paid")` returns `true` for a
+student whose payment status is `Paid`, and `false` otherwise.
+
+When no supported prefix is present, the parser falls back to the command
+preamble and creates a `NameContainsKeywordsPredicate`. This preserves backward
+compatibility for inputs such as `find alice bob`.
+
+When one or more supported prefixes are present, the parser creates one or more
+field-specific predicates:
+
+* `NameContainsKeywordsPredicate`
+  Matches when the student's name contains any of the given keywords.
+* `SubjectContainsKeywordsPredicate`
+  Matches when any of the student's subjects contains any of the given keywords.
+* `DayMatchesPredicate`
+  Matches when any of the student's lesson days matches one of the provided days.
+* `PaymentStatusMatchesPredicate`
+  Matches when the student's payment status matches the provided status.
+* `TagContainsKeywordsPredicate`
+  Matches when any of the student's tags contains any of the given keywords.
+
+If multiple prefixed fields are provided, the parser combines them using
+`Predicate.and()` so that all specified conditions must match. If exactly one
+prefixed field is provided, the parser returns that single predicate directly
+instead of returning a chained predicate.
+
+During execution, `FindCommand#execute()` passes the constructed predicate to
+`Model#updateFilteredPersonList()`, which refreshes the displayed student list.
+
+The following sequence diagram shows how a `find` command flows through the
+parser, command, and model components.
+
+<puml src="diagrams/FindSequenceDiagram.puml" alt="Sequence diagram for the extended find feature" />
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
