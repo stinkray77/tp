@@ -1,47 +1,87 @@
 @startuml FindSequenceDiagram
-!include style.puml
-skinparam ArrowFontStyle plain
-title Extended Find Command Flow
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 5
+skinparam maxmessagesize 60
+skinparam SequenceGroupBodyBackgroundColor transparent
 
 actor User
-participant "UI" as UI
-participant "LogicManager" as Logic
-participant "FindCommandParser" as Parser
-participant "FindCommand" as Command
-participant "Model" as Model
-participant "Person" as Person
+participant ":LogicManager" as Logic
+participant ":AddressBookParser" as ABParser
+participant ":FindCommandParser" as Parser
+participant ":ArgumentTokenizer" as Tokenizer
+participant "combinedPredicate:Predicate<Person>" as Pred
+participant ":FindCommand" as Command
+participant ":Model" as Model
 
-User -> UI: "find s/Math d/Monday"
-UI -> Logic: executeCommand("find s/Math d/Monday")
-Logic -> Parser: parse("find s/Math d/Monday")
+User -> Logic : execute("find s/Math d/Monday")
+activate Logic
 
-note right of Parser: Parse arguments with ArgumentTokenizer
-Parser -> Parser: tokenize(args, PREFIX_NAME, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_PAYMENT_STATUS, PREFIX_TAG)
-Parser -> Parser: Check if prefixes are present
-Parser -> Parser: Create SubjectContainsKeywordsPredicate(["Math"])
-Parser -> Parser: Create DayMatchesPredicate(["Monday"])
-Parser -> Parser: Combine predicates with AND logic
-Parser --> Logic: FindCommand(combinedPredicate)
+Logic -> ABParser : parseCommand("find s/Math d/Monday")
+activate ABParser
 
-Logic -> Command: execute(model)
-Command -> Model: updateFilteredPersonList(combinedPredicate)
+ABParser -> Parser : parse("s/Math d/Monday")
+activate Parser
 
-loop for each Person in address book
-    Model -> Person: getSubjects()
-    Person --> Model: Set<Subject>
-    Model -> Person: getDays()
-    Person --> Model: Set<Day>
-    
-    note right of Model: Apply SubjectContainsKeywordsPredicate
-    Model -> Model: test(subjects, "Math")
-    note right of Model: Apply DayMatchesPredicate
-    Model -> Model: test(days, "Monday")
-    Model -> Model: Combine results with AND logic
+Parser -> Tokenizer : tokenize(args, PREFIX_NAME, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_PAYMENT_STATUS, PREFIX_TAG)
+activate Tokenizer
+Tokenizer --> Parser : argMultimap
+deactivate Tokenizer
+
+note over Parser
+preamble is empty ->
+use prefix-based search mode
+end note
+
+Parser -> Pred : initialise as (person -> true)
+activate Pred
+
+alt n/ prefix present
+Parser -> Pred : .and(new NameContainsKeywordsPredicate(names))
 end
 
-Model --> Command: filteredPersonList
-Command --> Logic: CommandResult with count
-Logic --> UI: CommandResult
-UI --> User: "X persons listed!"
+alt s/ prefix present
+Parser -> Pred : .and(new SubjectContainsKeywordsPredicate(subjects))
+end
 
+alt d/ prefix present
+Parser -> Pred : .and(new DayMatchesPredicate(days))
+end
+
+alt ps/ prefix present
+Parser -> Pred : .and(new PaymentStatusMatchesPredicate(status))
+end
+
+alt t/ prefix present
+Parser -> Pred : .and(new TagContainsKeywordsPredicate(tags))
+end
+
+Pred --> Parser : combinedPredicate
+deactivate Pred
+
+Parser --> ABParser : new FindCommand(combinedPredicate)
+deactivate Parser
+
+ABParser --> Logic : findCommand
+deactivate ABParser
+
+Logic -> Command : execute(model)
+activate Command
+
+Command -> Model : updateFilteredPersonList(combinedPredicate)
+activate Model
+
+note over Model
+for each Person p,
+combinedPredicate.test(p) evaluates
+each chained predicate with AND logic
+end note
+
+Model --> Command : (filtered list updated)
+deactivate Model
+
+Command --> Logic : CommandResult("X persons listed!")
+deactivate Command
+
+Logic --> User : CommandResult
+deactivate Logic
 @enduml
