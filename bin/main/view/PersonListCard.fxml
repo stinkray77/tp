@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <GridPane HBox.hgrow="ALWAYS">
+    <columnConstraints>
+      <ColumnConstraints hgrow="ALWAYS" minWidth="10" percentWidth="55" />
+      <ColumnConstraints hgrow="ALWAYS" minWidth="10" percentWidth="45" />
+    </columnConstraints>
+
+    <!-- Left column -->
+    <VBox alignment="CENTER_LEFT" spacing="3" GridPane.columnIndex="0">
+      <padding>
+        <Insets top="8" right="5" bottom="8" left="15" />
+      </padding>
+      <HBox spacing="0.5" alignment="CENTER_LEFT">
+        <Label fx:id="id" styleClass="cell_big_label">
+          <minWidth>
+            <Region fx:constant="USE_PREF_SIZE" />
+          </minWidth>
+        </Label>
+        <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
+      </HBox>
+      <FlowPane fx:id="subjects" />
+      <FlowPane fx:id="days" />
+      <FlowPane fx:id="times" />
+      <FlowPane fx:id="tags" />
+    </VBox>
+
+    <!-- Right column -->
+    <VBox alignment="CENTER_LEFT" spacing="3" GridPane.columnIndex="1">
+      <padding>
+        <Insets top="8" right="15" bottom="8" left="5" />
+      </padding>
+      <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
+      <Label fx:id="address" styleClass="cell_small_label" text="\$address" />
+      <Label fx:id="emergencyContact" styleClass="cell_small_label" text="\$emergencyContact" />
+      <Label fx:id="paymentStatus" styleClass="cell_small_label" text="\$paymentStatus" />
+      <Label fx:id="remark" styleClass="cell_small_label" text="\$remark" />
+    </VBox>
+  </GridPane>
+</HBox>

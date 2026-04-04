@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
@@ -14,35 +13,33 @@ import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 
 /**
- * Marks the payment status of an existing person in the address book.
+ * Updates the payment status of an existing student in the address book.
  */
 public class MarkCommand extends Command {
 
     public static final String COMMAND_WORD = "mark";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Marks the payment status of the person identified "
-            + "by the index number used in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_PAYMENT_STATUS + "PAYMENT_STATUS\n"
-            + "Payment status must be one of: Paid, Due, Overdue (case-insensitive)\n"
-            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_PAYMENT_STATUS + "Paid";
+            + ": Updates the payment status of the student identified "
+            + "by the index number used in the displayed student list.\n"
+            + "Parameters: INDEX (must be a positive integer) ps/PAYMENT_STATUS\n"
+            + "Example: " + COMMAND_WORD + " 1 ps/Paid";
 
-    public static final String MESSAGE_MARK_SUCCESS = "Marked %1$s as %2$s.";
+    public static final String MESSAGE_MARK_SUCCESS = "Updated payment status of %1$s to %2$s";
 
-    private final Index index;
-    private final PaymentStatus paymentStatus;
+    private final Index targetIndex;
+    private final PaymentStatus newStatus;
 
     /**
-     * @param index         of the person in the filtered person list to mark
-     * @param paymentStatus the new payment status to set
+     * @param targetIndex of the person in the filtered person list to edit
+     * @param newStatus new payment status of the person
      */
-    public MarkCommand(Index index, PaymentStatus paymentStatus) {
-        requireNonNull(index);
-        requireNonNull(paymentStatus);
+    public MarkCommand(Index targetIndex, PaymentStatus newStatus) {
+        requireNonNull(targetIndex);
+        requireNonNull(newStatus);
 
-        this.index = index;
-        this.paymentStatus = paymentStatus;
+        this.targetIndex = targetIndex;
+        this.newStatus = newStatus;
     }
 
     @Override
@@ -50,23 +47,27 @@ public class MarkCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
+        if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Person personToMark = lastShownList.get(index.getZeroBased());
+        Person personToMark = lastShownList.get(targetIndex.getZeroBased());
         Person markedPerson = new Person(
-                personToMark.getName(), personToMark.getEmail(),
-                personToMark.getAddress(), personToMark.getSubjects(),
-                personToMark.getDays(), personToMark.getTimes(),
+                personToMark.getName(),
+                personToMark.getEmail(),
+                personToMark.getAddress(),
+                personToMark.getSubjects(),
+                personToMark.getDays(),
+                personToMark.getTimes(),
                 personToMark.getEmergencyContact(),
-                paymentStatus, personToMark.getRemark(), personToMark.getTags());
+                newStatus,
+                personToMark.getRemark(),
+                personToMark.getTags()
+        );
 
         model.setPerson(personToMark, markedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-
-        return new CommandResult(
-                String.format(MESSAGE_MARK_SUCCESS, markedPerson.getName(), paymentStatus));
+        return new CommandResult(String.format(MESSAGE_MARK_SUCCESS, personToMark.getName(), newStatus.value));
     }
 
     @Override
@@ -74,18 +75,11 @@ public class MarkCommand extends Command {
         if (other == this) {
             return true;
         }
-
-        if (!(other instanceof MarkCommand)) {
+        if (!(other instanceof MarkCommand otherMarkCommand)) {
             return false;
         }
 
-        MarkCommand otherMarkCommand = (MarkCommand) other;
-        return index.equals(otherMarkCommand.index)
-                && paymentStatus.equals(otherMarkCommand.paymentStatus);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getCanonicalName() + "{index=" + index + ", paymentStatus=" + paymentStatus + "}";
+        return targetIndex.equals(otherMarkCommand.targetIndex)
+                && newStatus.equals(otherMarkCommand.newStatus);
     }
 }

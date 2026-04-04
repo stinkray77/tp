@@ -25,120 +25,89 @@ import seedu.address.model.person.Person;
  */
 public class MarkCommandTest {
 
-    private static final PaymentStatus PAYMENT_STATUS_PAID = new PaymentStatus("Paid");
-    private static final PaymentStatus PAYMENT_STATUS_DUE = new PaymentStatus("Due");
-    private static final PaymentStatus PAYMENT_STATUS_OVERDUE = new PaymentStatus("Overdue");
+    private static final PaymentStatus STATUS_PAID = new PaymentStatus("Paid");
+    private static final PaymentStatus STATUS_OVERDUE = new PaymentStatus("Overdue");
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void execute_markPaidUnfilteredList_success() {
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person markedPerson = new Person(
-                firstPerson.getName(), firstPerson.getEmail(),
-                firstPerson.getAddress(), firstPerson.getSubjects(),
-                firstPerson.getDays(), firstPerson.getTimes(),
-                firstPerson.getEmergencyContact(),
-                PAYMENT_STATUS_PAID, firstPerson.getRemark(), firstPerson.getTags());
+    public void execute_validIndexUnfilteredList_success() {
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person markedPerson = createMarkedPerson(personToMark, STATUS_PAID);
 
-        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, PAYMENT_STATUS_PAID);
+        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, STATUS_PAID);
 
-        String expectedMessage = String.format(
-                MarkCommand.MESSAGE_MARK_SUCCESS, markedPerson.getName(), PAYMENT_STATUS_PAID);
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
+                personToMark.getName(), STATUS_PAID.value);
 
-        Model expectedModel = new ModelManager(
-                new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, markedPerson);
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
 
         assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_markOverdueUnfilteredList_success() {
-        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person markedPerson = new Person(
-                firstPerson.getName(), firstPerson.getEmail(),
-                firstPerson.getAddress(), firstPerson.getSubjects(),
-                firstPerson.getDays(), firstPerson.getTimes(),
-                firstPerson.getEmergencyContact(),
-                PAYMENT_STATUS_OVERDUE, firstPerson.getRemark(), firstPerson.getTags());
-
-        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, PAYMENT_STATUS_OVERDUE);
-
-        String expectedMessage = String.format(
-                MarkCommand.MESSAGE_MARK_SUCCESS, markedPerson.getName(), PAYMENT_STATUS_OVERDUE);
-
-        Model expectedModel = new ModelManager(
-                new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(firstPerson, markedPerson);
-
-        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_markDueFilteredList_success() {
+    public void execute_validIndexFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
-        Person personInFilteredList = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person markedPerson = new Person(
-                personInFilteredList.getName(), personInFilteredList.getEmail(),
-                personInFilteredList.getAddress(), personInFilteredList.getSubjects(),
-                personInFilteredList.getDays(), personInFilteredList.getTimes(),
-                personInFilteredList.getEmergencyContact(),
-                PAYMENT_STATUS_DUE, personInFilteredList.getRemark(), personInFilteredList.getTags());
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person markedPerson = createMarkedPerson(personToMark, STATUS_OVERDUE);
 
-        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, PAYMENT_STATUS_DUE);
+        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, STATUS_OVERDUE);
 
-        String expectedMessage = String.format(
-                MarkCommand.MESSAGE_MARK_SUCCESS, markedPerson.getName(), PAYMENT_STATUS_DUE);
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
+                personToMark.getName(), STATUS_OVERDUE.value);
 
-        Model expectedModel = new ModelManager(
-                new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(personInFilteredList, markedPerson);
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
 
         assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_invalidPersonIndexUnfilteredList_failure() {
+    public void execute_invalidIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        MarkCommand markCommand = new MarkCommand(outOfBoundIndex, PAYMENT_STATUS_PAID);
+        MarkCommand markCommand = new MarkCommand(outOfBoundIndex, STATUS_PAID);
 
         assertCommandFailure(markCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
-    public void execute_invalidPersonIndexFilteredList_failure() {
+    public void execute_invalidIndexFilteredList_failure() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         Index outOfBoundIndex = INDEX_SECOND_PERSON;
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
 
-        MarkCommand markCommand = new MarkCommand(outOfBoundIndex, PAYMENT_STATUS_PAID);
+        MarkCommand markCommand = new MarkCommand(outOfBoundIndex, STATUS_PAID);
 
         assertCommandFailure(markCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void equals() {
-        final MarkCommand standardCommand = new MarkCommand(INDEX_FIRST_PERSON, PAYMENT_STATUS_PAID);
+        MarkCommand markFirstCommand = new MarkCommand(INDEX_FIRST_PERSON, STATUS_PAID);
+        MarkCommand markSecondCommand = new MarkCommand(INDEX_SECOND_PERSON, STATUS_OVERDUE);
 
-        // same values -> returns true
-        MarkCommand commandWithSameValues = new MarkCommand(INDEX_FIRST_PERSON, PAYMENT_STATUS_PAID);
-        assertTrue(standardCommand.equals(commandWithSameValues));
+        assertTrue(markFirstCommand.equals(markFirstCommand));
+        assertTrue(markFirstCommand.equals(new MarkCommand(INDEX_FIRST_PERSON, STATUS_PAID)));
+        assertFalse(markFirstCommand.equals(1));
+        assertFalse(markFirstCommand.equals(null));
+        assertFalse(markFirstCommand.equals(markSecondCommand));
+        assertFalse(markFirstCommand.equals(new MarkCommand(INDEX_FIRST_PERSON, STATUS_OVERDUE)));
+    }
 
-        // same object -> returns true
-        assertTrue(standardCommand.equals(standardCommand));
-
-        // null -> returns false
-        assertFalse(standardCommand.equals(null));
-
-        // different types -> returns false
-        assertFalse(standardCommand.equals(new ClearCommand()));
-
-        // different index -> returns false
-        assertFalse(standardCommand.equals(new MarkCommand(INDEX_SECOND_PERSON, PAYMENT_STATUS_PAID)));
-
-        // different payment status -> returns false
-        assertFalse(standardCommand.equals(new MarkCommand(INDEX_FIRST_PERSON, PAYMENT_STATUS_DUE)));
+    private static Person createMarkedPerson(Person personToMark, PaymentStatus newStatus) {
+        return new Person(
+                personToMark.getName(),
+                personToMark.getEmail(),
+                personToMark.getAddress(),
+                personToMark.getSubjects(),
+                personToMark.getDays(),
+                personToMark.getTimes(),
+                personToMark.getEmergencyContact(),
+                newStatus,
+                personToMark.getRemark(),
+                personToMark.getTags()
+        );
     }
 }

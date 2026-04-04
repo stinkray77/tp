@@ -138,11 +138,12 @@ Each `Person` in Tutor Central currently contains:
 * `Set<Time>`
 * `EmergencyContact`
 * `PaymentStatus`
+* `Remark`
 * `Set<Tag>`
 
 <box type="info" seamless>
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model class to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
@@ -170,23 +171,75 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Mark command
+### Find by field feature
 
-The `mark` command allows a tutor to quickly update a student's payment status without editing other fields.
+The extended `find` command supports prefix-based filtering across multiple
+student fields. `FindCommandParser` tokenizes the user input with the supported
+prefixes `n/`, `s/`, `d/`, `ps/`, and `t/`, then checks whether the command is
+using prefixed search or the original name-only search format.
 
-**Format:** `mark INDEX ps/PAYMENT_STATUS`
+The parser builds a `Predicate<Person>`, which is a yes/no matching rule applied
+to each student in the list:
 
-**Implementation:**
+* if the predicate returns `true`, that student remains in the filtered list
+* if the predicate returns `false`, that student is excluded
 
-1. `AddressBookParser` dispatches the input to `MarkCommandParser`.
-2. `MarkCommandParser` tokenises the arguments to extract the `Index` and `PaymentStatus` using `ArgumentTokenizer` and `ParserUtil.parsePaymentStatus()`.
-3. A `MarkCommand` is constructed with the validated `Index` and `PaymentStatus`.
-4. `MarkCommand#execute(Model)` retrieves the target `Person` from the filtered list, creates a new `Person` with the updated payment status (preserving all other fields), and calls `model.setPerson()` to replace the old entry.
+For example, `PaymentStatusMatchesPredicate("Paid")` returns `true` for a
+student whose payment status is `Paid`, and `false` otherwise.
 
-**Design considerations:**
+When no supported prefix is present, the parser falls back to the command
+preamble and creates a `NameContainsKeywordsPredicate`. This preserves backward
+compatibility for inputs such as `find alice bob`.
 
-* **Why a dedicated `mark` command instead of reusing `edit`:** The `mark` command provides a shorter, more focused syntax for the common task of updating payment status — a frequent operation for tutors. `edit 1 ps/Paid` requires remembering the `ps/` prefix semantics; `mark 1 ps/Paid` is more discoverable.
-* `PaymentStatus` accepts `Paid`, `Due`, or `Overdue` case-insensitively, normalised to title case on construction.
+When one or more supported prefixes are present, the parser creates one or more
+field-specific predicates:
+
+* `NameContainsKeywordsPredicate`
+  Matches when the student's name contains any of the given keywords.
+* `SubjectContainsKeywordsPredicate`
+  Matches when any of the student's subjects contains any of the given keywords.
+* `DayMatchesPredicate`
+  Matches when any of the student's lesson days matches one of the provided days.
+* `PaymentStatusMatchesPredicate`
+  Matches when the student's payment status matches the provided status.
+* `TagContainsKeywordsPredicate`
+  Matches when any of the student's tags contains any of the given keywords.
+
+If multiple prefixed fields are provided, the parser combines them using
+`Predicate.and()` so that all specified conditions must match. If exactly one
+prefixed field is provided, the parser returns that single predicate directly
+instead of returning a chained predicate.
+
+During execution, `FindCommand#execute()` passes the constructed predicate to
+`Model#updateFilteredPersonList()`, which refreshes the displayed student list.
+
+The following sequence diagram shows how a `find` command flows through the
+parser, command, and model components.
+
+<puml src="diagrams/FindSequenceDiagram.puml" alt="Sequence diagram for the extended find feature" />
+
+### Mark payment status feature
+
+The `mark` command updates a student's payment status without requiring the
+full `edit` command flow.
+
+`MarkCommandParser` tokenizes the user input with the `ps/` prefix and checks
+that the command contains both:
+
+* a non-empty preamble that can be parsed into an index
+* exactly one `ps/` value
+
+If the input is valid, the parser creates a `MarkCommand` containing the target
+index and the new `PaymentStatus`.
+
+During execution, `MarkCommand` retrieves the target student from the filtered
+list and validates that the provided index is in range. It then creates a new
+`Person` object with the updated `PaymentStatus` while preserving the student's
+name, email, address, subjects, lesson days, lesson times, emergency contact,
+remark, and tags. The updated student replaces the original student in the
+model, and the filtered list is refreshed.
+
+<puml src="diagrams/MarkSequenceDiagram.puml" alt="Sequence diagram for the mark payment status feature" />
 
 ### \[Proposed\] Undo/redo feature
 
@@ -194,40 +247,40 @@ The `mark` command allows a tutor to quickly update a student's payment status w
 
 The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+* `VersionedAddressBook#commit()` — Saves the current Tutor Central data state in its history.
+* `VersionedAddressBook#undo()` — Restores the previous Tutor Central data state from its history.
+* `VersionedAddressBook#redo()` — Restores a previously undone Tutor Central data state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial Tutor Central data state, and the `currentStatePointer` pointing to that single saved state.
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th person in the student list. The `delete` command calls `Model#commitAddressBook()`, causing the modified Tutor Central data state after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted saved state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified Tutor Central data state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the updated Tutor Central data state will not be saved into the `addressBookStateList`.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous saved state, and restores Tutor Central data to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial saved state, then there are no previous states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
 than attempting to perform the undo.
 
 </box>
@@ -246,19 +299,19 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 <puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores Tutor Central data to that state.
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest saved state, then there are no undone states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </box>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify Tutor Central data, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
 <puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all saved states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
 
 <puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
 
@@ -330,13 +383,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | new user                 | see usage instructions                                  | refer to instructions when I forget how to use Tutor Central |
 | `* * *`  | tutor                    | add a student with schedule and payment details         | maintain complete student records                             |
 | `* * *`  | tutor                    | search for students                                     | find a target student quickly                                 |
+| `* * *`  | tutor                    | search students by subject, day, or payment status      | quickly find relevant students                                |
 | `* * *`  | tutor                    | view a student's full details                           | check information before a lesson                             |
 | `* * *`  | tutor                    | delete a student                                        | remove entries that I no longer need                          |
+| `* *`    | tutor                    | quickly mark a student's payment as paid                | track payments efficiently                                     |
 | `* *`    | tutor                    | update a student's details                              | correct outdated records when needed                          |
 | `* * *`  | tutor                    | mark a student's payment status                         | track who has paid without editing the full student record    |
 | `* * *`  | tutor                    | add a free-text remark to a student                     | record lesson notes, progress, or reminders quickly           |
 | `* *`    | tutor with many students | filter students by payment status                       | follow up with students who owe payment                       |
 | `* *`    | tutor                    | filter students by subject or day                       | plan my weekly schedule at a glance                           |
+| `* *`    | tutor                    | add remarks to a student                                | remember important notes about them                           |
 | `*`      | tutor                    | view a summary dialog of one student's full details     | quickly review all information before a lesson starts         |
 
 ### Use cases
@@ -457,7 +513,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to view a student using `view INDEX`.
+1.  Tutor requests to view a student.
 2.  Tutor Central locates the target student in the currently shown list.
 3.  Tutor Central shows the full student details in a popup dialog.
 
@@ -465,8 +521,90 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. The specified student index is invalid.
-    * 2a1. Tutor Central shows an error message.
+* 1a. The specified student index is invalid.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+**Use Case 06: Find students by field**
+
+**MSS**
+
+1.  Tutor requests to search for students.
+2.  Tutor Central parses the search criteria.
+3.  Tutor Central filters the student list using the specified field predicates.
+4.  Tutor Central displays the matching students.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Tutor provides no criteria to search by.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 1b. Tutor provides invalid search input.
+    * 1b1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 3a. No students match the criteria.
+    * 3a1. Tutor Central shows `0 persons listed!`.
+
+        Use case ends.
+
+
+**Use Case 07: Mark payment status**
+
+**MSS**
+
+1.  Tutor requests to update a student's payment status.
+2.  Tutor Central locates the target student in the currently shown list.
+3.  Tutor Central updates the student's payment status.
+4.  Tutor Central shows a success message confirming the new payment status.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The specified student index is invalid.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 1b. Tutor provides multiple payment statuses.
+    * 1b1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+**Use Case 08: Add a remark to a student**
+
+**MSS**
+
+1.  Tutor requests to update a student's remark.
+2.  Tutor Central locates the target student in the currently shown list.
+3.  Tutor Central updates the student's remark.
+4.  Tutor Central shows a success message with the updated student details.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The specified student is invalid.
+    * 1a1. Tutor Central shows an error message.
+
+        Use case ends.
+
+
+* 3a. Tutor provides an empty remark.
+    * 3a1. Tutor Central removes the student's existing remark.
+    * 3a2. Tutor Central shows a success message with the updated student details.
 
         Use case ends.
 

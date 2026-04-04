@@ -8,6 +8,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.MarkCommand;
 import seedu.address.model.person.PaymentStatus;
 
@@ -16,14 +17,13 @@ public class MarkCommandParserTest {
     private MarkCommandParser parser = new MarkCommandParser();
 
     @Test
-    public void parse_validArgs_returnsMarkCommand() {
-        assertParseSuccess(parser,
-                "1 " + PREFIX_PAYMENT_STATUS + "Paid",
+    public void parse_allFieldsPresent_success() {
+        assertParseSuccess(parser, "1 ps/Paid",
                 new MarkCommand(INDEX_FIRST_PERSON, new PaymentStatus("Paid")));
     }
 
     @Test
-    public void parse_caseInsensitiveStatus_returnsMarkCommand() {
+    public void parse_caseInsensitiveStatus_success() {
         assertParseSuccess(parser,
                 "1 " + PREFIX_PAYMENT_STATUS + "paid",
                 new MarkCommand(INDEX_FIRST_PERSON, new PaymentStatus("Paid")));
@@ -35,33 +35,37 @@ public class MarkCommandParserTest {
 
     @Test
     public void parse_missingIndex_failure() {
-        assertParseFailure(parser,
-                PREFIX_PAYMENT_STATUS + "Paid",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "ps/Paid", expectedMessage);
     }
 
     @Test
     public void parse_missingPaymentStatus_failure() {
-        assertParseFailure(parser,
-                "1",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "1", expectedMessage);
     }
 
     @Test
     public void parse_invalidPaymentStatus_failure() {
-        assertParseFailure(parser,
-                "1 " + PREFIX_PAYMENT_STATUS + "invalid",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "1 ps/Invalid", PaymentStatus.MESSAGE_CONSTRAINTS);
     }
 
     @Test
     public void parse_invalidIndex_failure() {
-        assertParseFailure(parser,
-                "abc " + PREFIX_PAYMENT_STATUS + "Paid",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "0 ps/Paid", expectedMessage);
+        assertParseFailure(parser, "-1 ps/Paid", expectedMessage);
+    }
 
-        assertParseFailure(parser,
-                "0 " + PREFIX_PAYMENT_STATUS + "Paid",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+    @Test
+    public void parse_emptyArgs_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "", expectedMessage);
+    }
+
+    @Test
+    public void parse_duplicatePaymentStatus_failure() {
+        assertParseFailure(parser, "1 ps/Paid ps/Due",
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PAYMENT_STATUS));
     }
 }
