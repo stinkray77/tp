@@ -7,7 +7,8 @@
     "subjects" : [ "Mathematics" ],
     "emergencyContact" : "94351253",
     "paymentStatus" : "Paid",
-    "tags" : [ "friends" ]
+    "tags" : [ "friends" ],
+    "attendanceRecords" : { }
   }, {
     "name" : "Benson Meier",
     "email" : "johnd@example.com",
@@ -15,7 +16,8 @@
     "subjects" : [ "English" ],
     "emergencyContact" : "98765432",
     "paymentStatus" : "Due",
-    "tags" : [ "owesMoney", "friends" ]
+    "tags" : [ "owesMoney", "friends" ],
+    "attendanceRecords" : { }
   }, {
     "name" : "Carl Kurz",
     "email" : "heinz@example.com",
@@ -23,7 +25,8 @@
     "subjects" : [ ],
     "emergencyContact" : "95352563",
     "paymentStatus" : "Paid",
-    "tags" : [ ]
+    "tags" : [ ],
+    "attendanceRecords" : { }
   }, {
     "name" : "Daniel Meier",
     "email" : "cornelia@example.com",
@@ -31,7 +34,8 @@
     "subjects" : [ ],
     "emergencyContact" : "87652533",
     "paymentStatus" : "Due",
-    "tags" : [ "friends" ]
+    "tags" : [ "friends" ],
+    "attendanceRecords" : { }
   }, {
     "name" : "Elle Meyer",
     "email" : "werner@example.com",
@@ -39,7 +43,8 @@
     "subjects" : [ ],
     "emergencyContact" : "94822240",
     "paymentStatus" : "Paid",
-    "tags" : [ ]
+    "tags" : [ ],
+    "attendanceRecords" : { }
   }, {
     "name" : "Fiona Kunz",
     "email" : "lydia@example.com",
@@ -47,7 +52,8 @@
     "subjects" : [ ],
     "emergencyContact" : "94824270",
     "paymentStatus" : "Due",
-    "tags" : [ ]
+    "tags" : [ ],
+    "attendanceRecords" : { }
   }, {
     "name" : "George Best",
     "email" : "anna@example.com",
@@ -55,6 +61,7 @@
     "subjects" : [ ],
     "emergencyContact" : "94824420",
     "paymentStatus" : "Overdue",
-    "tags" : [ ]
+    "tags" : [ ],
+    "attendanceRecords" : { }
   } ]
 }

@@ -2,7 +2,9 @@ package seedu.address.storage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
@@ -39,6 +42,7 @@ class JsonAdaptedPerson {
     private final List<String> times = new ArrayList<>();
     private final String remark;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final Map<String, Map<String, String>> attendanceRecords = new LinkedHashMap<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -53,7 +57,8 @@ class JsonAdaptedPerson {
             @JsonProperty("days") List<String> days,
             @JsonProperty("times") List<String> times,
             @JsonProperty("remark") String remark,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("attendanceRecords") Map<String, Map<String, String>> attendanceRecords) {
         this.name = name;
         this.email = email;
         this.address = address;
@@ -71,6 +76,12 @@ class JsonAdaptedPerson {
         this.remark = remark;
         if (tags != null) {
             this.tags.addAll(tags);
+        }
+        if (attendanceRecords != null) {
+            attendanceRecords.forEach((subject, lessons) -> {
+                Map<String, String> lessonCopy = new LinkedHashMap<>(lessons);
+                this.attendanceRecords.put(subject, lessonCopy);
+            });
         }
     }
 
@@ -96,6 +107,11 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        source.getAttendanceRecords().forEach((subject, lessons) -> {
+            Map<String, String> lessonMap = new LinkedHashMap<>();
+            lessons.forEach((lesson, status) -> lessonMap.put(lesson, status.value));
+            attendanceRecords.put(subject, lessonMap);
+        });
     }
 
     /**
@@ -189,10 +205,23 @@ class JsonAdaptedPerson {
 
         final Remark modelRemark = new Remark(remark != null ? remark : "");
 
+        final Map<String, Map<String, AttendanceStatus>> modelAttendanceRecords = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, String>> subjectEntry : attendanceRecords.entrySet()) {
+            Map<String, AttendanceStatus> lessonMap = new LinkedHashMap<>();
+            for (Map.Entry<String, String> lessonEntry : subjectEntry.getValue().entrySet()) {
+                if (!AttendanceStatus.isValidStatus(lessonEntry.getValue())) {
+                    throw new IllegalValueException(AttendanceStatus.MESSAGE_CONSTRAINTS);
+                }
+                lessonMap.put(lessonEntry.getKey(), AttendanceStatus.fromString(lessonEntry.getValue()));
+            }
+            modelAttendanceRecords.put(subjectEntry.getKey(), lessonMap);
+        }
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelEmail, modelAddress,
                 modelSubjects, modelDays, modelTimes,
-                modelEmergencyContact, modelPaymentStatus, modelRemark, modelTags);
+                modelEmergencyContact, modelPaymentStatus, modelRemark, modelTags,
+                modelAttendanceRecords);
     }
 
 }
