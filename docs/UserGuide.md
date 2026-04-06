@@ -274,6 +274,21 @@ _Details coming soon ..._
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TutorCentral home folder.
 
+**Q**: Where is the data file stored?<br>
+**A**: By default, TutorCentral saves data in a `data` folder next to the JAR file, in a file called `tutorcentral.json` (or `addressbook.json` depending on your configuration). Check the status bar at the bottom of the app to see the exact path. Keep dated backups so you can revert if needed.
+
+**Q**: What if I accidentally corrupt the data file?<br>
+**A**: If the data file contains invalid JSON, TutorCentral will start with an empty data set. Keep dated backups so you can revert if needed.
+
+**Q**: Can I import data from Excel?<br>
+**A**: TutorCentral does not currently support CSV/Excel import. Students need to be added using the `add` command. CSV import is planned for a future release.
+
+**Q**: The app window disappeared from my screen. What do I do?<br>
+**A**: Delete the `preferences.json` file in the same folder as the JAR and restart the app. This resets the window position.
+
+**Q**: Is TutorCentral free?<br>
+**A**: Yes, TutorCentral is free and open-source, built by NUS students for the tutor community.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known issues
