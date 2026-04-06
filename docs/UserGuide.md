@@ -82,6 +82,8 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 | `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` |
 | `t/` | Tag | Alphanumeric characters, no spaces |
 | `r/` | Remark | Any text (free-form) |
+| `l/` | Lesson | Alphanumeric characters and spaces, cannot be blank |
+| `st/` | Attendance Status | One of: `Present`, `Absent`, `Excused` |
 
 **Important:** Days and times must be specified in matching pairs. If you provide 2 days, you must provide exactly 2 times.
 
@@ -194,6 +196,31 @@ Format: `mark INDEX ps/PAYMENT_STATUS`
 Examples:
 * `mark 1 ps/Paid` marks the 1st student's payment as Paid.
 * `mark 3 ps/Overdue` marks the 3rd student's payment as Overdue.
+
+### Marking attendance: `markattendance`
+
+Records a student's attendance for a specific lesson within a subject.
+
+Format: `markattendance INDEX s/SUBJECT l/LESSON st/STATUS`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* The subject must match one of the student's existing enrolled subjects (case-insensitive).
+* If an attendance record already exists for that subject and lesson combination, it is updated.
+* If no record exists, a new one is created.
+
+</box type="caution" seamless>
+
+**Caution:**
+* The student must be enrolled in the specified subject before attendance can be marked.
+* The `INDEX` refers to the position in the **currently displayed list** — use `list` or `find` first if needed.
+* Attendance status (`st/`) is case-insensitive (e.g., `present`, `Present`, and `PRESENT` are all accepted).
+</box>
+
+Examples:
+* `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present` marks the 1st student as Present for Algebra Lesson 5 in Mathematics.
+* `markattendance 3 s/Science l/Chemistry Lab 2 st/Absent` marks the 3rd student as Absent for Chemistry Lab 2 in Science.
+* `markattendance 3 s/Science l/Chemistry Lab 2 st/Excused` updates the same record to Excused (e.g., after receiving an MC).
 
 ### Deleting a student : `delete`
 
