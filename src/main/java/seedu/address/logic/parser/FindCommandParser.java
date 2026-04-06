@@ -84,10 +84,12 @@ public class FindCommandParser implements Parser<FindCommand> {
 
             java.util.List<String> paymentStatuses = argMultimap.getAllValues(PREFIX_PAYMENT_STATUS);
             if (!paymentStatuses.isEmpty()) {
-                Predicate<Person> paymentPredicate = paymentStatuses.stream()
-                        .map(PaymentStatusMatchesPredicate::new)
-                        .map(p -> (Predicate<Person>) p)
-                        .reduce(person -> false, Predicate::or);
+                Predicate<Person> paymentPredicate = paymentStatuses.size() == 1
+                        ? new PaymentStatusMatchesPredicate(paymentStatuses.get(0))
+                        : paymentStatuses.stream()
+                                .map(PaymentStatusMatchesPredicate::new)
+                                .map(p -> (Predicate<Person>) p)
+                                .reduce(person -> false, Predicate::or);
                 combinedPredicate = combinedPredicate.and(paymentPredicate);
                 predicateCount++;
             }
@@ -116,10 +118,12 @@ public class FindCommandParser implements Parser<FindCommand> {
                     return new FindCommand(new DayMatchesPredicate(Arrays.asList(dayKeywords)));
                 } else if (!argMultimap.getAllValues(PREFIX_PAYMENT_STATUS).isEmpty()) {
                     java.util.List<String> statuses = argMultimap.getAllValues(PREFIX_PAYMENT_STATUS);
-                    Predicate<Person> paymentPredicate = statuses.stream()
-                            .map(PaymentStatusMatchesPredicate::new)
-                            .map(p -> (Predicate<Person>) p)
-                            .reduce(person -> false, Predicate::or);
+                    Predicate<Person> paymentPredicate = statuses.size() == 1
+                            ? new PaymentStatusMatchesPredicate(statuses.get(0))
+                            : statuses.stream()
+                                    .map(PaymentStatusMatchesPredicate::new)
+                                    .map(p -> (Predicate<Person>) p)
+                                    .reduce(person -> false, Predicate::or);
                     return new FindCommand(paymentPredicate);
                 } else if (argMultimap.getValue(PREFIX_TAG).isPresent()) {
                     String tagArgs = argMultimap.getValue(PREFIX_TAG).get();
