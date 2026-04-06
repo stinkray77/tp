@@ -263,6 +263,27 @@ Examples:
 * `markattendance 3 s/Science l/Chemistry Lab 2 st/Absent` marks the 3rd student as Absent for Chemistry Lab 2 in Science.
 * `markattendance 3 s/Science l/Chemistry Lab 2 st/Excused` updates the same record to Excused (e.g., after receiving an MC).
 
+### Viewing attendance records: `listattendance`
+
+Displays a student's attendance records, optionally filtered by subject.
+
+Format: `listattendance INDEX [s/SUBJECT]`
+
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* If `s/SUBJECT` is provided, only attendance records for that subject are shown (case-insensitive).
+* Results are organised by subject and lesson in the result display area.
+* If no attendance records exist, a message indicates this.
+
+</box type="tip" seamless>
+
+**Tip:** This is useful before parent meetings to quickly review a student's attendance history. Use after `markattendance` to verify attendance was recorded correctly.
+</box>
+
+Examples:
+* `listattendance 1` shows all attendance records for the 1st student.
+* `listattendance 1 s/Mathematics` shows only Mathematics attendance records for the 1st student.
+
 ### Deleting a student : `delete`
 
 Deletes the specified student from Tutor Central.
@@ -335,6 +356,7 @@ _Details coming soon ..._
 | **Find**   | `find [n/NAME] [s/SUBJECT] [d/DAY] [ps/STATUS] [t/TAG]` <br> e.g., `find s/Mathematics d/Monday` |
 | **Help**   | `help` |
 | **List**   | `list` |
+| **ListAttendance** | `listattendance INDEX [s/SUBJECT]` <br> e.g., `listattendance 1 s/Mathematics` |
 | **Mark**   | `mark INDEX ps/PAYMENT_STATUS` <br> e.g., `mark 1 ps/Paid` |
 | **MarkAttendance** | `markattendance INDEX s/SUBJECT l/LESSON st/STATUS` <br> e.g., `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present` |
 | **Remark** | `remark INDEX r/REMARK` <br> e.g., `remark 1 r/Needs help with algebra` |
