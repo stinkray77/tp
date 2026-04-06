@@ -16,8 +16,10 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. Ensure you have Java `17` installed in your Computer. Follow the instructions for your OS:
+   * **Windows:** Download and install [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) or [Adoptium Temurin 17](https://adoptium.net/temurin/releases/?version=17).
+   * **Mac:** Follow the precise installation steps in the [Mac installation guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) on se-education.org. Alternatively, download [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) or [Adoptium Temurin 17](https://adoptium.net/temurin/releases/?version=17).
+   * **Linux:** Run `sudo apt install openjdk-17-jdk`, or download binaries from [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) or [Adoptium Temurin 17](https://adoptium.net/temurin/releases/?version=17).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T09-2/tp/releases).
 
