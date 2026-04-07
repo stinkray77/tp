@@ -23,7 +23,24 @@ public class Day {
     public Day(String day) {
         requireNonNull(day);
         checkArgument(isValidDay(day), MESSAGE_CONSTRAINTS);
-        dayName = day;
+        dayName = normalize(day);
+    }
+
+    /**
+     * Normalizes day abbreviations to their full names so that "Mon" and "Monday" are treated
+     * as the same day and deduplicate correctly in a Set.
+     */
+    private static String normalize(String day) {
+        switch (day.toLowerCase()) {
+        case "mon": return "Monday";
+        case "tue": return "Tuesday";
+        case "wed": return "Wednesday";
+        case "thu": return "Thursday";
+        case "fri": return "Friday";
+        case "sat": return "Saturday";
+        case "sun": return "Sunday";
+        default: return day.substring(0, 1).toUpperCase() + day.substring(1).toLowerCase();
+        }
     }
 
     /**
