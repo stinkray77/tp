@@ -90,7 +90,8 @@ public class ListAttendanceCommandTest {
     public void execute_subjectFilterNotFound_returnsSubjectSpecificNoRecordsMessage() {
         // EP: valid index with attendance records but non-matching subject filter
         Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person personWithAttendance = originalPerson.markAttendance(VALID_SUBJECT, FIRST_LESSON, AttendanceStatus.PRESENT);
+        Person personWithAttendance = originalPerson.markAttendance(VALID_SUBJECT,
+                FIRST_LESSON, AttendanceStatus.PRESENT);
         model.setPerson(originalPerson, personWithAttendance);
 
         ListAttendanceCommand command = new ListAttendanceCommand(INDEX_FIRST_PERSON, OTHER_SUBJECT);
