@@ -9,8 +9,10 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Day {
     public static final String MESSAGE_CONSTRAINTS =
-            "Days should be valid day names (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)";
-    public static final String VALIDATION_REGEX = "^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)(\\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday))*$";
+            "Days should be valid day names (Monday/Mon, Tuesday/Tue, Wednesday/Wed, "
+            + "Thursday/Thu, Friday/Fri, Saturday/Sat, Sunday/Sun) in any case";
+    public static final String VALIDATION_REGEX = "^(?i)(Monday|Mon|Tuesday|Tue|Wednesday|Wed|Thursday|Thu|"
+            + "Friday|Fri|Saturday|Sat|Sunday|Sun)$";
     public final String dayName;
 
     /**
