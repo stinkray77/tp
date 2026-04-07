@@ -132,6 +132,8 @@ public class MainApp extends Application {
             ConfigUtil.saveConfig(initializedConfig, configFilePathUsed);
         } catch (IOException e) {
             logger.warning("Failed to save config file : " + StringUtil.getDetails(e));
+            logger.severe("Unable to save configuration. Please check file permissions and disk space.");
+            // Continue with default config rather than failing completely
         }
         return initializedConfig;
     }
@@ -162,7 +164,9 @@ public class MainApp extends Application {
         try {
             storage.saveUserPrefs(initializedPrefs);
         } catch (IOException e) {
-            logger.warning("Failed to save config file : " + StringUtil.getDetails(e));
+            logger.warning("Failed to save preferences file: " + StringUtil.getDetails(e));
+            logger.severe("Unable to save user preferences. Please check file permissions and disk space.");
+            // Continue with default preferences rather than failing completely
         }
 
         return initializedPrefs;
@@ -180,7 +184,8 @@ public class MainApp extends Application {
         try {
             storage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {
-            logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
+            logger.severe("Failed to save preferences on shutdown: " + StringUtil.getDetails(e));
+            logger.severe("Some user preferences may not be saved. Please check file permissions and disk space.");
         }
     }
 }
