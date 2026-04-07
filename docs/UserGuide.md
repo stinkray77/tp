@@ -9,8 +9,6 @@ pageNav: 3
 
 TutorCentral is a **desktop app for freelance tutors in Singapore** to manage student information, optimised for use via a **Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). Whether you are tracking payments, recording attendance, or scheduling lessons, TutorCentral keeps everything organised in one place. If you can type fast, TutorCentral can get your student management tasks done faster than traditional GUI apps.
 
-TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage student information**, optimized for use via a **Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Tutor Central can get your student management tasks done faster than traditional GUI apps.
-
 ### Key Features
 
 - Manage student profiles (add, edit, delete, view)
@@ -60,15 +58,15 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
    * **Mac:** Follow the precise installation steps in the [Mac installation guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) on se-education.org. Alternatively, download [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) or [Adoptium Temurin 17](https://adoptium.net/temurin/releases/?version=17).
    * **Linux:** Run `sudo apt install openjdk-17-jdk`, or download binaries from [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) or [Adoptium Temurin 17](https://adoptium.net/temurin/releases/?version=17).
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T09-2/tp/releases).
+2. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T09-2/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your TutorCentral.
+3. Copy the file to the folder you want to use as the _home folder_ for your TutorCentral.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar tutorcentral.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar tutorcentral.jar` command to run the application.<br>
+   The initial app state after launch is shown below. Note how the app contains some sample data.<br>
+   ![startup](images/startup.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all students.
@@ -81,7 +79,7 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6.Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -95,7 +93,7 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g. `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
@@ -132,9 +130,9 @@ TutorCentral Level 3 (TC3) is a **desktop app for freelance tutors to manage stu
 
 Shows a message explaining how to access the help page.
 
-![help message](images/helpMessage.png)
-
 Format: `help`
+
+Example result: A pop-up window will show you a link to this user guide with more detailed instructions.
 
 
 ### Adding a student: `add`
@@ -151,11 +149,18 @@ Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]… [d/DAY
 Examples:
 * `add n/John Doe e/johnd@example.com a/311, Clementi Ave 2, #02-25 ec/98765432 s/Mathematics s/English d/Monday d/Wednesday ti/1400 ti/1600 ps/Due`
 
+Example result after adding a student:
+![add result](images/add-result.png)
+
+
 ### Listing all students : `list`
 
 Shows a list of all students in Tutor Central.
 
 Format: `list`
+
+Example result:
+![list result](images/list-result.png)
 
 ### Editing a student : `edit`
 
@@ -163,12 +168,16 @@ Edits an existing student in Tutor Central.
 
 Format: `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT]… [d/DAY]… [ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
 
+<box type="warning" seamless>
+
 **Caution:** If you edit days (`d/`), you must also edit times (`ti/`), and vice versa.
+
+</box>
 
 * Edits the student at the specified `INDEX`. The index refers to the index number shown in the displayed student list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the student will be removed i.e adding of tags is not cumulative.
+* When editing tags, the existing tags of the student will be removed i.e. adding of tags is not cumulative.
 * You can remove all the student’s tags by typing `t/` without
     specifying any tags after it.
 
@@ -176,29 +185,40 @@ Examples:
 *  `edit 1 e/johndoe@example.com` Edits the email address of the 1st student to be `johndoe@example.com`.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student to be `Betsy Crower` and clears all existing tags.
 
+Example result:
+![edit result](images/edit-result.png)
+
 ### Locating students: `find`
 
 Finds students matching the given criteria.
 
 Format: `find [n/NAME_KEYWORDS] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG]`
 
-* **Backward compatible:** `find KEYWORD [MORE_KEYWORDS]` (without prefixes) still searches by name.
+* You can still search by name without prefixes using `find KEYWORD [MORE_KEYWORDS]`.
 * When using prefixes, multiple criteria use AND logic.
 * Name search is case-insensitive and matches full words only.
 * Subject, day, and tag searches are case-insensitive.
 * Payment status must be one of: `Paid`, `Due`, `Overdue`.
 
 Examples:
-* `find John` returns `john` and `John Doe` (backward compatible)
+* `find John` returns `john` and `John Doe`
 * `find s/Mathematics` returns all students taking Mathematics
 * `find d/Monday` returns all students with Monday lessons
 * `find ps/Due` returns all students with unpaid fees
 * `find s/Math d/Monday` returns students taking Math on Mondays
 * `find t/priority` returns students tagged as priority
 
+Example result for name-based search: `find John`
+![find by name result](images/find-name-result.png)
+
+Example result for payment-status search: `find ps/Overdue`
+![find by payment result](images/find-payment-result.png)
+
+We can use the `list` command to go back to the default layout showing the details of all students.
+
 ### Viewing a student : `view`
 
-Shows the full details of the student at the given index.
+Shows the full details of the student at the given index, in a pop-up window.
 
 Format: `view INDEX`
 
@@ -208,6 +228,9 @@ Format: `view INDEX`
 Examples:
 * `view 1` shows the full details of the 1st student in the current list.
 * `find Alex` followed by `view 1` shows the full details of the 1st student in the filtered results.
+
+Example result:
+![view result](images/view-result.png)
 
 ### Adding a remark to a student: `remark`
 
@@ -224,6 +247,9 @@ Examples:
 * `remark 1 r/Needs extra help with algebra` adds a remark to the 1st student.
 * `remark 2 r/` removes the remark from the 2nd student.
 
+Example result:
+![remark result](images/remark-result.png)
+
 ### Updating payment status: `mark`
 
 Quickly updates the payment status of a student.
@@ -235,8 +261,11 @@ Format: `mark INDEX ps/PAYMENT_STATUS`
 * Payment status must be one of: `Paid`, `Due`, `Overdue`.
 
 Examples:
-* `mark 1 ps/Paid` marks the 1st student's payment as Paid.
-* `mark 3 ps/Overdue` marks the 3rd student's payment as Overdue.
+* `mark 1 ps/Overdue` marks the 1st student's payment as Overdue.
+* `mark 3 ps/Paid` marks the 3rd student's payment as Paid.
+
+Example result:
+![mark result](images/mark-result.png)
 
 ### Marking attendance: `markattendance`
 
@@ -250,18 +279,24 @@ Format: `markattendance INDEX s/SUBJECT l/LESSON st/STATUS`
 * If an attendance record already exists for that subject and lesson combination, it is updated.
 * If no record exists, a new one is created.
 
-</box type="caution" seamless>
+<box type="warning" seamless>
 
 **Caution:**
-* The student must be enrolled in the specified subject before attendance can be marked.
+* The student must be enrolled in the specified subject before attendance can be marked. Else, the command is blocked.
 * The `INDEX` refers to the position in the **currently displayed list** — use `list` or `find` first if needed.
 * Attendance status (`st/`) is case-insensitive (e.g., `present`, `Present`, and `PRESENT` are all accepted).
 </box>
 
 Examples:
-* `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present` marks the 1st student as Present for Algebra Lesson 5 in Mathematics.
-* `markattendance 3 s/Science l/Chemistry Lab 2 st/Absent` marks the 3rd student as Absent for Chemistry Lab 2 in Science.
-* `markattendance 3 s/Science l/Chemistry Lab 2 st/Excused` updates the same record to Excused (e.g., after receiving an MC).
+* `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Absent` marks the 1st student as Absent for Algebra Lesson 5 in Mathematics.
+
+Example result:
+![view result](images/markattendance-result.png)
+* `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Excused` can update the same record to Excused (e.g., after receiving an MC).
+* `markattendance 3 s/Science l/Chemistry Lab 2 st/Absent`  is blocked, since the third student is not enrolled in the Science subject.
+
+Example result:
+![view result](images/markattendance-error.png)
 
 ### Viewing attendance records: `listattendance`
 
@@ -275,14 +310,18 @@ Format: `listattendance INDEX [s/SUBJECT]`
 * Results are organised by subject and lesson in the result display area.
 * If no attendance records exist, a message indicates this.
 
-</box type="tip" seamless>
+<box type="tip" seamless>
 
 **Tip:** This is useful before parent meetings to quickly review a student's attendance history. Use after `markattendance` to verify attendance was recorded correctly.
+
 </box>
 
 Examples:
 * `listattendance 1` shows all attendance records for the 1st student.
 * `listattendance 1 s/Mathematics` shows only Mathematics attendance records for the 1st student.
+
+Example result:
+![view result](images/listattendance-result.png)
 
 ### Deleting a student : `delete`
 
@@ -297,6 +336,9 @@ Format: `delete INDEX`
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in Tutor Central.
 * `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
+
+Example result:
+![delete result](images/delete-result.png)
 
 ### Clearing all entries : `clear`
 
@@ -379,4 +421,3 @@ _Details coming soon ..._
 | **MarkAttendance** | `markattendance INDEX s/SUBJECT l/LESSON st/STATUS` <br> e.g., `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present` |
 | **Remark** | `remark INDEX r/REMARK` <br> e.g., `remark 1 r/Needs help with algebra` |
 | **View**   | `view INDEX` <br> e.g., `view 1` |
-
