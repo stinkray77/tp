@@ -76,4 +76,16 @@ public class FindCommandParserTest {
         assertNotNull(parser.parse(" s/Math ps/Due"));
     }
 
+    @Test
+    public void parse_multiplePaymentStatusesWithOtherPrefix_returnsFindCommand() throws Exception {
+        // multiple ps/ values AND-ed with another predicate -> hits the OR-reduce path in combined predicate
+        assertNotNull(parser.parse(" n/Alice ps/Paid ps/Due"));
+    }
+
+    @Test
+    public void parse_multiplePrefixes_returnsCombinedPredicate() throws Exception {
+        // name + subject + day combined -> exercises the combined predicate path (predicateCount > 1)
+        assertNotNull(parser.parse(" n/Alice s/Math d/Monday"));
+    }
+
 }
