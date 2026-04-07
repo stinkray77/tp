@@ -77,20 +77,25 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         parseSubjectsForEdit(argMultimap.getAllValues(PREFIX_SUBJECT))
                 .ifPresent(editPersonDescriptor::setSubjects);
-        Optional<Set<Day>> parsedDays =
-                parseDaysForEdit(argMultimap.getAllValues(PREFIX_DAY));
-        Optional<Set<Time>> parsedTimes =
-                parseTimesForEdit(argMultimap.getAllValues(PREFIX_TIME));
+        java.util.List<String> rawDays = argMultimap.getAllValues(PREFIX_DAY);
+        java.util.List<String> rawTimes = argMultimap.getAllValues(PREFIX_TIME);
 
-        if (parsedDays.isPresent() != parsedTimes.isPresent()) {
+        boolean hasRawDays = !rawDays.isEmpty()
+                && !(rawDays.size() == 1 && rawDays.get(0).isEmpty());
+        boolean hasRawTimes = !rawTimes.isEmpty()
+                && !(rawTimes.size() == 1 && rawTimes.get(0).isEmpty());
+
+        if (hasRawDays != hasRawTimes) {
             throw new ParseException(MESSAGE_DAY_TIME_INCOMPLETE);
         }
-        if (parsedDays.isPresent() && parsedTimes.isPresent()
-                && parsedDays.get().size() != parsedTimes.get().size()) {
+        if (hasRawDays && rawDays.size() != rawTimes.size()) {
             throw new ParseException(String.format(
                     MESSAGE_DAY_TIME_MISMATCH,
-                    parsedDays.get().size(), parsedTimes.get().size()));
+                    rawDays.size(), rawTimes.size()));
         }
+
+        Optional<Set<Day>> parsedDays = parseDaysForEdit(rawDays);
+        Optional<Set<Time>> parsedTimes = parseTimesForEdit(rawTimes);
 
         parsedDays.ifPresent(editPersonDescriptor::setDays);
         parsedTimes.ifPresent(editPersonDescriptor::setTimes);

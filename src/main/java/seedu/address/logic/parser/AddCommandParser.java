@@ -67,21 +67,21 @@ public class AddCommandParser implements Parser<AddCommand> {
                 argMultimap.getValue(PREFIX_ADDRESS).get());
         Set<Subject> subjectList = ParserUtil.parseSubjects(
                 argMultimap.getAllValues(PREFIX_SUBJECT));
-        Set<Day> dayList = ParserUtil.parseDays(
-                argMultimap.getAllValues(PREFIX_DAY));
-        Set<Time> timeList = ParserUtil.parseTimes(
-                argMultimap.getAllValues(PREFIX_TIME));
+        java.util.List<String> rawDays = argMultimap.getAllValues(PREFIX_DAY);
+        java.util.List<String> rawTimes = argMultimap.getAllValues(PREFIX_TIME);
 
-        boolean hasDays = !dayList.isEmpty();
-        boolean hasTimes = !timeList.isEmpty();
+        boolean hasDays = !rawDays.isEmpty();
+        boolean hasTimes = !rawTimes.isEmpty();
         if (hasDays != hasTimes) {
             throw new ParseException(MESSAGE_DAY_TIME_INCOMPLETE);
         }
-        if (hasDays && dayList.size() != timeList.size()) {
+        if (hasDays && rawDays.size() != rawTimes.size()) {
             throw new ParseException(String.format(
                     MESSAGE_DAY_TIME_MISMATCH,
-                    dayList.size(), timeList.size()));
+                    rawDays.size(), rawTimes.size()));
         }
+        Set<Day> dayList = ParserUtil.parseDays(rawDays);
+        Set<Time> timeList = ParserUtil.parseTimes(rawTimes);
 
         EmergencyContact emergencyContact =
                 ParserUtil.parseEmergencyContact(
