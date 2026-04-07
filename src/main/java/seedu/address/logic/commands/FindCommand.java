@@ -22,7 +22,7 @@ public class FindCommand extends Command {
             + "as a list with index numbers.\n"
             + "Parameters: [n/NAME] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG] [KEYWORDS...]\n"
             + "Examples:\n"
-            + "  " + COMMAND_WORD + " alice bob charlie          -> find by name (backward compatible)\n"
+            + "  " + COMMAND_WORD + " alice bob charlie          -> find by name without prefixes\n"
             + "  " + COMMAND_WORD + " n/alice                    -> find by name\n"
             + "  " + COMMAND_WORD + " s/Mathematics              -> find by subject\n"
             + "  " + COMMAND_WORD + " d/Monday                   -> find by day\n"
