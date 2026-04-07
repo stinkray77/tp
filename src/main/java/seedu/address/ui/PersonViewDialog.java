@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Map;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 
@@ -49,7 +52,8 @@ public class PersonViewDialog {
     @FXML
     private FlowPane times;
 
-    // Add other fields as needed (e.g., student ID, class, etc.)
+    @FXML
+    private VBox attendanceRecordsBox;
 
     private Stage dialogStage;
 
@@ -63,9 +67,9 @@ public class PersonViewDialog {
             VBox page = loader.load();
 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("View Person");
+            dialogStage.setTitle("Student Details");
             dialogStage.initModality(Modality.APPLICATION_MODAL);
-            dialogStage.setResizable(false);
+            dialogStage.setResizable(true);
 
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
@@ -113,6 +117,27 @@ public class PersonViewDialog {
         person.getTimes().stream()
                 .sorted(Comparator.comparing(t -> t.timeValue))
                 .forEach(t -> times.getChildren().add(new Label(t.timeValue)));
+
+        // Populate attendance records
+        Map<String, Map<String, AttendanceStatus>> records = person.getAttendanceRecords();
+        if (records.isEmpty()) {
+            attendanceRecordsBox.getChildren().add(new Label("None"));
+        } else {
+            records.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(subjectEntry -> {
+                        Label subjectLabel = new Label(subjectEntry.getKey());
+                        subjectLabel.setFont(Font.font("System Bold", 12));
+                        attendanceRecordsBox.getChildren().add(subjectLabel);
+                        subjectEntry.getValue().entrySet().stream()
+                                .sorted(Map.Entry.comparingByKey())
+                                .forEach(lessonEntry -> {
+                                    Label lessonLabel = new Label(
+                                            "  " + lessonEntry.getKey() + ": " + lessonEntry.getValue().value);
+                                    attendanceRecordsBox.getChildren().add(lessonLabel);
+                                });
+                    });
+        }
     }
 
     @FXML

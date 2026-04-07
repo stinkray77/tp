@@ -4,15 +4,15 @@
 
 # Tutor Central
 
-**Tutor Central** is a desktop application for managing tutor information and student-tutor matching. It is designed as a sample project for Software Engineering (SE) students.
+**Tutor Central** is a desktop application for freelance tutors to manage their students' information. It is optimised for use via a Command Line Interface (CLI) while still providing the benefits of a Graphical User Interface (GUI).
 
 ## Features
 
-* **Tutor Management**: Add, edit, delete, and view tutor profiles with comprehensive details
-* **Student-Tutor Matching**: Find suitable tutors based on subject expertise, availability, and location
-* **Search and Filter**: Powerful search functionality to quickly find tutors by various criteria
-* **Data Persistence**: Automatic saving and loading of tutor data
-* **Command-Line Interface**: Intuitive command-based interface for efficient operation
+* **Student Management**: Add, edit, delete, and view student profiles with comprehensive details
+* **Attendance Tracking**: Record and view per-subject, per-lesson attendance for each student
+* **Payment Tracking**: Monitor each student's payment status (Paid / Due / Overdue)
+* **Search and Filter**: Find students quickly by name, subject, payment status, or day
+* **Data Persistence**: Automatic saving and loading of student data
 
 ## Getting Started
 
@@ -47,11 +47,13 @@
 
 Tutor Central uses a command-line interface. Here are some basic commands:
 
-* `add`: Add a new tutor
-* `list`: List all tutors
-* `find`: Search for tutors by criteria
-* `delete`: Delete a tutor
-* `edit`: Edit tutor information
+* `add`: Add a new student
+* `list`: List all students
+* `find`: Search for students by criteria
+* `delete`: Delete a student
+* `edit`: Edit student information
+* `markattendance`: Record a student's attendance for a lesson
+* `mark`: Update a student's payment status
 * `help`: Show help information
 
 For detailed usage instructions, see the [User Guide](docs/UserGuide.md).
