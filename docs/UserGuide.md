@@ -51,6 +51,14 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Notes for Users
+
+* **Launching the app:** Use `java -jar TutorCentral.jar` in a terminal rather than double-clicking the file, as double-clicking may not work on some systems.
+* **Folder permissions:** The app needs to create and update files such as `preferences.json` and the `data/` folder. Place the JAR in a normal user-writable folder such as `Documents`, `Desktop`, or a personal project folder. Avoid protected system folders or read-only shared folders.
+* **macOS fullscreen:** macOS users running the app in fullscreen mode may experience unexpected behaviour when opening secondary dialogs such as the Help window or the student view dialog. Use windowed mode instead.
+
+--------------------------------------------------------------------------------------------------------------------
+
 ## Quick start
 
 1. Ensure you have Java `17` installed in your Computer. Follow the instructions for your OS:
@@ -79,7 +87,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
    * `exit` : Exits the app.
 
-6.Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -148,6 +156,8 @@ Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]… [d/DAY
 
 Examples:
 * `add n/John Doe e/johnd@example.com a/311, Clementi Ave 2, #02-25 ec/98765432 s/Mathematics s/English d/Monday d/Wednesday ti/1400 ti/1600 ps/Due`
+
+If `ps/PAYMENT_STATUS` is omitted, the student's payment status defaults to `Due`.
 
 Example result after adding a student:
 ![add result](images/add-result.png)
@@ -243,6 +253,7 @@ Format: `remark INDEX r/REMARK`
 * The index **must be a positive integer** 1, 2, 3, ...
 * The remark replaces any existing remark for that student.
 * To remove a remark, use `remark INDEX r/` with nothing after `r/`.
+* `remark INDEX` without `r/` is also treated as removing the student's remark.
 
 Examples:
 * `remark 1 r/Needs extra help with algebra` adds a remark to the 1st student.
@@ -403,6 +414,7 @@ _Details coming soon ..._
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 3. **When using the `find` command with multiple prefixes** (e.g., `find s/Math d/Monday`), the results use AND logic. There is currently no way to perform OR searches across different fields.
 4. **The `markattendance` command creates attendance records even if the lesson name doesn't match a previously used lesson name.** This means typos in lesson names (e.g., "Algbera" vs "Algebra") will create separate attendance records. Attendance records are currently not displayed in the student list cards in the GUI. Use the `listattendance` command to view them in the result display area.
+5. **On macOS fullscreen mode, secondary dialogs may behave unexpectedly.** Commands that open separate windows, such as `help` and `view`, may not display as expected while the app is in fullscreen. Use windowed mode if this happens.
 
 --------------------------------------------------------------------------------------------------------------------
 
