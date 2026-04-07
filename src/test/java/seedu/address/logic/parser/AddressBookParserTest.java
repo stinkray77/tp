@@ -21,10 +21,13 @@ import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.ListAttendanceCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.logic.commands.MarkCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.ViewCommand;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.PaymentStatus;
@@ -155,6 +158,22 @@ public class AddressBookParserTest {
         MarkCommand mixedCaseCommand = (MarkCommand) parser.parseCommand(
                 "MaRk " + INDEX_FIRST_PERSON.getOneBased() + " ps/Paid");
         assertEquals(new MarkCommand(INDEX_FIRST_PERSON, new PaymentStatus("Paid")), mixedCaseCommand);
+    }
+
+    @Test
+    public void parseCommand_listAttendance() throws Exception {
+        ListAttendanceCommand command = (ListAttendanceCommand) parser.parseCommand(
+                ListAttendanceCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new ListAttendanceCommand(INDEX_FIRST_PERSON, null), command);
+    }
+
+    @Test
+    public void parseCommand_markAttendance() throws Exception {
+        MarkAttendanceCommand command = (MarkAttendanceCommand) parser.parseCommand(
+                MarkAttendanceCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
+                        + " s/Mathematics l/Lesson 1 st/Present");
+        assertEquals(new MarkAttendanceCommand(
+                INDEX_FIRST_PERSON, "Mathematics", "Lesson 1", AttendanceStatus.PRESENT), command);
     }
 
 }
