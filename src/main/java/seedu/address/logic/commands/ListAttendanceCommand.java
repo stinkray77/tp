@@ -49,9 +49,105 @@ public class ListAttendanceCommand extends Command {
         this.subject = subject;
     }
 
+    /**
+     * Retrieves the target student from the filtered person list and formats the student's
+     * attendance records for display. If the student has no attendance records, or if the
+     * requested subject has no matching records, a no-records message is returned instead.
+     *
+     * @param model Model containing the currently displayed student list.
+     * @return A {@code CommandResult} containing formatted attendance information or a
+     *         no-records message.
+     * @throws CommandException If the target index is out of range of the displayed student list.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        return null; // Placeholder
+        requireNonNull(model);
+        List<Person> lastShownList = model.getFilteredPersonList();
+
+        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        }
+
+        Person personToList = lastShownList.get(targetIndex.getZeroBased());
+        Map<String, Map<String, AttendanceStatus>> attendanceRecords = personToList.getAttendanceRecords();
+
+        if (attendanceRecords.isEmpty()) {
+            return new CommandResult(String.format(MESSAGE_NO_ATTENDANCE_RECORDS, personToList.getName()));
+        }
+
+        String filteredSubject = findMatchingSubject(attendanceRecords);
+        if (subject != null && filteredSubject == null) {
+            return new CommandResult(String.format(
+                    MESSAGE_NO_ATTENDANCE_RECORDS_FOR_SUBJECT, personToList.getName(), subject));
+        }
+
+        String formattedAttendance = formatAttendanceRecords(personToList, attendanceRecords, filteredSubject);
+        return new CommandResult(formattedAttendance);
+    }
+
+    /**
+     * Returns the stored subject key that matches the requested subject filter, preserving the
+     * original subject casing used in the attendance records.
+     *
+     * @param attendanceRecords Attendance records grouped by subject name.
+     * @return The matching stored subject key, or {@code null} if no subject filter was provided
+     *         or no matching subject exists.
+     */
+    private String findMatchingSubject(Map<String, Map<String, AttendanceStatus>> attendanceRecords) {
+        if (subject == null) {
+            return null;
+        }
+
+        return attendanceRecords.keySet().stream()
+                .filter(recordedSubject -> recordedSubject.equalsIgnoreCase(subject))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Formats attendance records into a readable text block grouped by subject.
+     * If a subject filter is applied, only that subject section is included.
+     *
+     * @param person Student whose attendance records are being formatted.
+     * @param attendanceRecords Attendance records grouped by subject and lesson.
+     * @param filteredSubject Matching stored subject key if a subject filter was applied, or
+     *                        {@code null} if all subjects should be included.
+     * @return A formatted text block suitable for display in the command result area.
+     */
+    private String formatAttendanceRecords(Person person, Map<String, Map<String, AttendanceStatus>> attendanceRecords,
+                                           String filteredSubject) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Attendance for ").append(person.getName());
+
+        if (filteredSubject != null) {
+            appendSubjectAttendance(builder, filteredSubject, attendanceRecords.get(filteredSubject));
+            return builder.toString();
+        }
+
+        attendanceRecords.forEach((recordedSubject, lessons) ->
+                appendSubjectAttendance(builder, recordedSubject, lessons));
+        return builder.toString();
+    }
+
+    /**
+     * Appends one subject section to the formatted attendance output. Lesson order follows the
+     * underlying map iteration order stored on the {@code Person}.
+     *
+     * @param builder String builder accumulating the formatted attendance output.
+     * @param recordedSubject Stored subject name to display as the section heading.
+     * @param lessons Attendance records for the subject, keyed by lesson name.
+     */
+    private void appendSubjectAttendance(StringBuilder builder, String recordedSubject,
+                                         Map<String, AttendanceStatus> lessons) {
+        builder.append(System.lineSeparator())
+                .append(System.lineSeparator())
+                .append(recordedSubject);
+        lessons.forEach((lessonName, attendanceStatus) ->
+                builder.append(System.lineSeparator())
+                        .append("  ")
+                        .append(lessonName)
+                        .append(": ")
+                        .append(attendanceStatus.value));
     }
 
     @Override
