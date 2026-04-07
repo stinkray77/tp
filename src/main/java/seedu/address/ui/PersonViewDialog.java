@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Map;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 
@@ -49,7 +52,8 @@ public class PersonViewDialog {
     @FXML
     private FlowPane times;
 
-    // Add other fields as needed (e.g., student ID, class, etc.)
+    @FXML
+    private VBox attendanceRecordsBox;
 
     private Stage dialogStage;
 
