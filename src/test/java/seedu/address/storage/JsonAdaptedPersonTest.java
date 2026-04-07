@@ -378,6 +378,38 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_invalidAttendanceSubjectKey_throwsIllegalValueException() {
+        Map<String, Map<String, String>> invalidRecords = new LinkedHashMap<>();
+        Map<String, String> lessons = new LinkedHashMap<>();
+        lessons.put("Lesson 1", "Present");
+        invalidRecords.put("!InvalidSubject", lessons);
+
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                VALID_DAYS, VALID_TIMES, VALID_REMARK, VALID_TAGS, invalidRecords);
+        assertThrows(IllegalValueException.class,
+                seedu.address.model.person.Subject.MESSAGE_CONSTRAINTS, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidAttendanceLessonKey_throwsIllegalValueException() {
+        Map<String, Map<String, String>> invalidRecords = new LinkedHashMap<>();
+        Map<String, String> lessons = new LinkedHashMap<>();
+        lessons.put("!InvalidLesson", "Present");
+        invalidRecords.put("Mathematics", lessons);
+
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_SUBJECTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                VALID_DAYS, VALID_TIMES, VALID_REMARK, VALID_TAGS, invalidRecords);
+        assertThrows(IllegalValueException.class,
+                seedu.address.model.person.Lesson.MESSAGE_CONSTRAINTS, person::toModelType);
+    }
+
+    @Test
     public void constructor_personWithDaysAndTimes_serialisesCorrectly() throws Exception {
         Person personWithDaysAndTimes = new seedu.address.testutil.PersonBuilder()
                 .withName("Test Person").withEmail("test@example.com")

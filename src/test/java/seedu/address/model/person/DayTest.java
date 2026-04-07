@@ -74,5 +74,22 @@ public class DayTest {
         Day anotherDay = new Day("Monday");
         assertEquals(day.hashCode(), anotherDay.hashCode());
     }
+
+    @Test
+    public void constructor_abbreviationsNormalisedToFullName() {
+        assertEquals("Monday", new Day("Mon").dayName);
+        assertEquals("Tuesday", new Day("Tue").dayName);
+        assertEquals("Wednesday", new Day("Wed").dayName);
+        assertEquals("Thursday", new Day("Thu").dayName);
+        assertEquals("Friday", new Day("Fri").dayName);
+        assertEquals("Saturday", new Day("Sat").dayName);
+        assertEquals("Sunday", new Day("Sun").dayName);
+        // lowercase abbreviations
+        assertEquals("Monday", new Day("mon").dayName);
+        assertEquals("Tuesday", new Day("tue").dayName);
+        // full names are also normalised (capitalised)
+        assertEquals("Monday", new Day("monday").dayName);
+        assertEquals("Friday", new Day("FRIDAY").dayName);
+    }
 }
 
