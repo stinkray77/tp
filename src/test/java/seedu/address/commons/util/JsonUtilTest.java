@@ -39,7 +39,21 @@ public class JsonUtilTest {
         assertEquals(serializableTestClass.getMapOfIntegerToString(), SerializableTestClass.getHashMapTestValues());
     }
 
-    //TODO: @Test jsonUtil_readJsonStringToObjectInstance_correctObject()
+    @Test
+    public void jsonUtil_readJsonStringToObjectInstance_correctObject() throws Exception {
+        // Test reading valid JSON string to object
+        String jsonString = "{\"name\":\"Test\"}";
+        SerializableTestClass result = JsonUtil.fromJsonString(jsonString, SerializableTestClass.class);
+        assertEquals("Test", result.getName());
+    }
 
-    //TODO: @Test jsonUtil_writeThenReadObjectToJson_correctObject()
+    @Test
+    public void jsonUtil_writeThenReadObjectToJson_correctObject() throws Exception {
+        // Test writing object to JSON then reading back
+        SerializableTestClass original = new SerializableTestClass();
+        original.setTestValues();
+        String jsonString = JsonUtil.toJsonString(original);
+        SerializableTestClass result = JsonUtil.fromJsonString(jsonString, SerializableTestClass.class);
+        assertEquals(original.getName(), result.getName());
+    }
 }
