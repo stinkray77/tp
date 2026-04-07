@@ -17,6 +17,7 @@ import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
+import seedu.address.model.person.Lesson;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
@@ -207,14 +208,22 @@ class JsonAdaptedPerson {
 
         final Map<String, Map<String, AttendanceStatus>> modelAttendanceRecords = new LinkedHashMap<>();
         for (Map.Entry<String, Map<String, String>> subjectEntry : attendanceRecords.entrySet()) {
+            String subjectKey = subjectEntry.getKey();
+            if (!Subject.isValidSubject(subjectKey)) {
+                throw new IllegalValueException(Subject.MESSAGE_CONSTRAINTS);
+            }
             Map<String, AttendanceStatus> lessonMap = new LinkedHashMap<>();
             for (Map.Entry<String, String> lessonEntry : subjectEntry.getValue().entrySet()) {
+                String lessonKey = lessonEntry.getKey();
+                if (!Lesson.isValidLessonName(lessonKey)) {
+                    throw new IllegalValueException(Lesson.MESSAGE_CONSTRAINTS);
+                }
                 if (!AttendanceStatus.isValidStatus(lessonEntry.getValue())) {
                     throw new IllegalValueException(AttendanceStatus.MESSAGE_CONSTRAINTS);
                 }
-                lessonMap.put(lessonEntry.getKey(), AttendanceStatus.fromString(lessonEntry.getValue()));
+                lessonMap.put(lessonKey, AttendanceStatus.fromString(lessonEntry.getValue()));
             }
-            modelAttendanceRecords.put(subjectEntry.getKey(), lessonMap);
+            modelAttendanceRecords.put(subjectKey, lessonMap);
         }
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
