@@ -89,6 +89,35 @@ public class AddressBookTest {
         assertEquals(expected, addressBook.toString());
     }
 
+    @Test
+    public void equals() {
+        // same object -> returns true
+        assertTrue(addressBook.equals(addressBook));
+
+        // null -> returns false
+        assertFalse(addressBook.equals(null));
+
+        // different type -> returns false
+        assertFalse(addressBook.equals(5));
+
+        // same persons -> returns true
+        AddressBook other = new AddressBook();
+        assertTrue(addressBook.equals(other));
+
+        // different persons -> returns false
+        other.addPerson(ALICE);
+        assertFalse(addressBook.equals(other));
+    }
+
+    @Test
+    public void hashcode() {
+        AddressBook other = new AddressBook();
+        assertEquals(addressBook.hashCode(), other.hashCode());
+
+        other.addPerson(ALICE);
+        assertFalse(addressBook.hashCode() == other.hashCode());
+    }
+
     /**
      * A stub ReadOnlyAddressBook whose persons list can violate interface constraints.
      */
