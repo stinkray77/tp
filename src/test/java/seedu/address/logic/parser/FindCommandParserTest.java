@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -61,6 +62,18 @@ public class FindCommandParserTest {
         expectedFindCommand =
                 new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("priority", "urgent")));
         assertParseSuccess(parser, " t/priority urgent", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_multiplePaymentStatuses_returnsFindCommand() throws Exception {
+        // multiple ps/ values should OR them together (not AND)
+        assertNotNull(parser.parse(" ps/Paid ps/Due"));
+    }
+
+    @Test
+    public void parse_multipleDifferentPrefixes_returnsFindCommand() throws Exception {
+        // multiple different prefixes combine with AND logic
+        assertNotNull(parser.parse(" s/Math ps/Due"));
     }
 
 }

@@ -364,4 +364,27 @@ public class JsonAdaptedPersonTest {
         assertEquals(AttendanceStatus.ABSENT,
                 modelPerson.getAttendanceRecords().get("Mathematics").get("Lesson 2"));
     }
+
+    @Test
+    public void toModelType_invalidSubject_throwsIllegalValueException() {
+        List<String> invalidSubjects = new ArrayList<>(Arrays.asList("!InvalidSubject"));
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                invalidSubjects, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                VALID_DAYS, VALID_TIMES, VALID_REMARK, VALID_TAGS, null);
+        assertThrows(IllegalValueException.class,
+                seedu.address.model.person.Subject.MESSAGE_CONSTRAINTS, person::toModelType);
+    }
+
+    @Test
+    public void constructor_personWithDaysAndTimes_serialisesCorrectly() throws Exception {
+        Person personWithDaysAndTimes = new seedu.address.testutil.PersonBuilder()
+                .withName("Test Person").withEmail("test@example.com")
+                .withAddress("123 Test Street").withEmergencyContact("91234567")
+                .withPaymentStatus("Paid").withDays("Monday", "Wednesday")
+                .withTimes("1000", "1200").build();
+        JsonAdaptedPerson adapted = new JsonAdaptedPerson(personWithDaysAndTimes);
+        assertEquals(personWithDaysAndTimes, adapted.toModelType());
+    }
 }

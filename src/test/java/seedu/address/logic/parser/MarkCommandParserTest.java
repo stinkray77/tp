@@ -52,7 +52,8 @@ public class MarkCommandParserTest {
 
     @Test
     public void parse_invalidIndex_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
+        String expectedMessage = "Invalid index: " + ParserUtil.MESSAGE_INVALID_INDEX
+                + "\n" + MarkCommand.MESSAGE_USAGE;
         assertParseFailure(parser, "0 ps/Paid", expectedMessage);
         assertParseFailure(parser, "-1 ps/Paid", expectedMessage);
     }
