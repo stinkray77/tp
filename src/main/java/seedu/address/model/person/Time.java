@@ -9,8 +9,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Time {
     public static final String MESSAGE_CONSTRAINTS =
-            "Times should only contain numeric characters, and should not be blank";
-    public static final String VALIDATION_REGEX = "[0-9]{4}";
+            "Times should be in 24-hour format (0000-2359)";
+    public static final String VALIDATION_REGEX = "^(0[0-9]|1[0-9]|2[0-3])[0-5][0-9]$";
     public final String timeValue;
 
     /**
