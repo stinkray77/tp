@@ -370,6 +370,7 @@ _Details coming soon ..._
 | **Clear**  | `clear` |
 | **Delete** | `delete INDEX` <br> e.g., `delete 3` |
 | **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT]... [d/DAY]... [ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com` |
+| **Exit**   | `exit` |
 | **Find**   | `find [n/NAME] [s/SUBJECT] [d/DAY] [ps/STATUS] [t/TAG]` <br> e.g., `find s/Mathematics d/Monday` |
 | **Help**   | `help` |
 | **List**   | `list` |
