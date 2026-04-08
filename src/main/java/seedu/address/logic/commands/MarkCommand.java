@@ -56,13 +56,12 @@ public class MarkCommand extends Command {
                 personToMark.getName(),
                 personToMark.getEmail(),
                 personToMark.getAddress(),
-                personToMark.getSubjects(),
-                personToMark.getDays(),
-                personToMark.getTimes(),
+                personToMark.getLessonSlots(),
                 personToMark.getEmergencyContact(),
                 newStatus,
                 personToMark.getRemark(),
-                personToMark.getTags()
+                personToMark.getTags(),
+                personToMark.getAttendanceRecords()
         );
 
         model.setPerson(personToMark, markedPerson);

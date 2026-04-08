@@ -42,34 +42,39 @@ public class DayMatchesPredicateTest {
     public void test_dayMatches_returnsTrue() {
         // One keyword
         DayMatchesPredicate predicate = new DayMatchesPredicate(Collections.singletonList("Monday"));
-        assertTrue(predicate.test(new PersonBuilder().withDays("Monday", "Tuesday").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Multiple keywords
         predicate = new DayMatchesPredicate(Arrays.asList("Monday", "Tuesday"));
-        assertTrue(predicate.test(new PersonBuilder().withDays("Monday", "Tuesday").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Only one matching keyword
         predicate = new DayMatchesPredicate(Arrays.asList("Wednesday", "Tuesday"));
-        assertTrue(predicate.test(new PersonBuilder().withDays("Monday", "Tuesday").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Mixed-case keywords
         predicate = new DayMatchesPredicate(Collections.singletonList("mOnDaY"));
-        assertTrue(predicate.test(new PersonBuilder().withDays("Monday", "Tuesday").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
     }
 
     @Test
     public void test_dayDoesNotMatch_returnsFalse() {
         // Zero keywords
         DayMatchesPredicate predicate = new DayMatchesPredicate(Collections.emptyList());
-        assertFalse(predicate.test(new PersonBuilder().withDays("Monday").build()));
+        assertFalse(predicate.test(new PersonBuilder().withLessonSlots("Mathematics", "Monday", "1400").build()));
 
         // Non-matching keyword
         predicate = new DayMatchesPredicate(Arrays.asList("Wednesday"));
-        assertFalse(predicate.test(new PersonBuilder().withDays("Monday", "Tuesday").build()));
+        assertFalse(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Keywords match name, email and address, but does not match day
         predicate = new DayMatchesPredicate(Arrays.asList("Alice", "alice@email.com", "Main Street"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").withEmail("alice@email.com")
-                .withAddress("Main Street").withDays("Monday").build()));
+                .withAddress("Main Street").withLessonSlots("Mathematics", "Monday", "1400").build()));
     }
 }

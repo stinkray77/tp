@@ -46,19 +46,21 @@ public class SubjectContainsKeywordsPredicateTest {
         // One keyword
         SubjectContainsKeywordsPredicate predicate =
                 new SubjectContainsKeywordsPredicate(Collections.singletonList("Math"));
-        assertTrue(predicate.test(new PersonBuilder().withSubjects("Mathematics").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots("Mathematics", "Monday", "1400").build()));
 
         // Multiple keywords
         predicate = new SubjectContainsKeywordsPredicate(Arrays.asList("Math", "English"));
-        assertTrue(predicate.test(new PersonBuilder().withSubjects("Mathematics", "English").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Only one matching keyword
         predicate = new SubjectContainsKeywordsPredicate(Arrays.asList("Chemistry", "English"));
-        assertTrue(predicate.test(new PersonBuilder().withSubjects("Mathematics", "English").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Mixed-case keywords
         predicate = new SubjectContainsKeywordsPredicate(Collections.singletonList("mAtH"));
-        assertTrue(predicate.test(new PersonBuilder().withSubjects("Mathematics").build()));
+        assertTrue(predicate.test(new PersonBuilder().withLessonSlots("Mathematics", "Monday", "1400").build()));
     }
 
     @Test
@@ -66,15 +68,16 @@ public class SubjectContainsKeywordsPredicateTest {
         // Zero keywords
         SubjectContainsKeywordsPredicate predicate =
                 new SubjectContainsKeywordsPredicate(Collections.emptyList());
-        assertFalse(predicate.test(new PersonBuilder().withSubjects("Mathematics").build()));
+        assertFalse(predicate.test(new PersonBuilder().withLessonSlots("Mathematics", "Monday", "1400").build()));
 
         // Non-matching keyword
         predicate = new SubjectContainsKeywordsPredicate(Arrays.asList("Chemistry"));
-        assertFalse(predicate.test(new PersonBuilder().withSubjects("Mathematics", "English").build()));
+        assertFalse(predicate.test(new PersonBuilder().withLessonSlots(
+                "Mathematics", "Monday", "1400", "English", "Tuesday", "0900").build()));
 
         // Keywords match name, email and address, but does not match subject
         predicate = new SubjectContainsKeywordsPredicate(Arrays.asList("Alice", "alice@email.com", "Main Street"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").withEmail("alice@email.com")
-                .withAddress("Main Street").withSubjects("Mathematics").build()));
+                .withAddress("Main Street").withLessonSlots("Mathematics", "Monday", "1400").build()));
     }
 }
