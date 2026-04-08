@@ -123,7 +123,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | `e/` | Email | Valid email format (e.g., `user@example.com`) |
 | `a/` | Address | Any text, cannot be blank |
 | `ec/` | Emergency Contact | Exactly 8 digits |
-| `s/` | Subject | Alphanumeric characters, no spaces |
+| `s/` | Subject | Alphanumeric characters and spaces; must not be blank |
 | `d/` | Day | Monday-Sunday (or Mon-Sun), case-insensitive |
 | `ti/` | Time | 4-digit 24-hour format, 0000-2359 |
 | `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` |
@@ -346,6 +346,7 @@ Format: `delete INDEX`
 * The index **must be a plain positive integer** 1, 2, 3, …​
 * Inputs such as `+2` and `1.0` are not supported.
 * The command only accepts one index input at a time.
+* After a successful deletion, Tutor Central shows the full student list again.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in Tutor Central.

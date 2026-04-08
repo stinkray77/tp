@@ -17,6 +17,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
 
@@ -31,6 +32,7 @@ public class RemarkCommandTest {
 
     @Test
     public void execute_addRemarkUnfilteredList_success() {
+        // EP: valid index with non-empty remark
         Person firstPerson = model.getFilteredPersonList().get(
                 INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new Person(
@@ -55,6 +57,7 @@ public class RemarkCommandTest {
 
     @Test
     public void execute_deleteRemarkUnfilteredList_success() {
+        // EP: valid index with empty remark
         Person firstPerson = model.getFilteredPersonList().get(
                 INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new Person(
@@ -80,6 +83,7 @@ public class RemarkCommandTest {
 
     @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
+        // EP: invalid out-of-range index in unfiltered list
         Index outOfBoundIndex = Index.fromOneBased(
                 model.getFilteredPersonList().size() + 1);
         RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex,
@@ -91,6 +95,7 @@ public class RemarkCommandTest {
 
     @Test
     public void execute_invalidPersonIndexFilteredList_failure() {
+        // EP: invalid out-of-range index in filtered list
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         Index outOfBoundIndex = INDEX_SECOND_PERSON;
         assertTrue(outOfBoundIndex.getZeroBased()
@@ -104,7 +109,64 @@ public class RemarkCommandTest {
     }
 
     @Test
+    public void execute_addRemarkUnfilteredList_preservesAttendanceRecords() {
+        // EP: valid remark update on a student who already has attendance records
+        Person originalFirstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person firstPerson = originalFirstPerson.markAttendance(
+                "Mathematics", "Algebra Lesson 1", AttendanceStatus.PRESENT);
+        model.setPerson(originalFirstPerson, firstPerson);
+
+        Person editedPerson = new Person(
+                firstPerson.getName(), firstPerson.getEmail(),
+                firstPerson.getAddress(), firstPerson.getSubjects(),
+                firstPerson.getDays(), firstPerson.getTimes(),
+                firstPerson.getEmergencyContact(),
+                firstPerson.getPaymentStatus(), new Remark(REMARK_STUB), firstPerson.getTags(),
+                firstPerson.getAttendanceRecords());
+
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
+                new Remark(REMARK_STUB));
+
+        String expectedMessage = String.format(
+                RemarkCommand.MESSAGE_ADD_REMARK_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(
+                new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(firstPerson, editedPerson);
+
+        assertCommandSuccess(remarkCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_addRemarkFilteredList_success() {
+        // EP: valid index with non-empty remark in filtered list
+        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedPerson = new Person(
+                firstPerson.getName(), firstPerson.getEmail(),
+                firstPerson.getAddress(), firstPerson.getSubjects(),
+                firstPerson.getDays(), firstPerson.getTimes(),
+                firstPerson.getEmergencyContact(),
+                firstPerson.getPaymentStatus(), new Remark(REMARK_STUB), firstPerson.getTags(),
+                firstPerson.getAttendanceRecords());
+
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
+                new Remark(REMARK_STUB));
+
+        String expectedMessage = String.format(
+                RemarkCommand.MESSAGE_ADD_REMARK_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(
+                new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(firstPerson, editedPerson);
+
+        assertCommandSuccess(remarkCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
+        // Utility behavior: equality partitions for command identity
         final RemarkCommand standardCommand = new RemarkCommand(
                 INDEX_FIRST_PERSON, new Remark(REMARK_STUB));
 

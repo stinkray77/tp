@@ -25,6 +25,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -39,6 +40,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
+        // EP: valid index with a fully populated replacement person
         Person editedPerson = new PersonBuilder().build();
         EditPersonDescriptor descriptor =
                 new EditPersonDescriptorBuilder(editedPerson).build();
@@ -60,6 +62,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_someFieldsSpecifiedUnfilteredList_success() {
+        // EP: valid index with some editable fields specified
         Index indexLastPerson = Index.fromOneBased(
                 model.getFilteredPersonList().size());
         Person lastPerson = model.getFilteredPersonList()
@@ -114,6 +117,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_noFieldSpecifiedUnfilteredList_success() {
+        // EP: valid index with no fields specified
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
                 new EditPersonDescriptor());
         Person editedPerson = model.getFilteredPersonList()
@@ -132,6 +136,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_filteredList_success() {
+        // EP: valid index in filtered list
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personInFilteredList = model.getFilteredPersonList()
@@ -156,7 +161,48 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_someFieldsSpecifiedUnfilteredList_preservesAttendanceRecords() {
+        // EP: valid edit on a student who already has attendance records
+        Index indexLastPerson = Index.fromOneBased(
+                model.getFilteredPersonList().size());
+        Person originalLastPerson = model.getFilteredPersonList()
+                .get(indexLastPerson.getZeroBased());
+        Person lastPerson = originalLastPerson.markAttendance(
+                "Mathematics", "Algebra Lesson 1", AttendanceStatus.PRESENT);
+        model.setPerson(originalLastPerson, lastPerson);
+
+        PersonBuilder personInList = new PersonBuilder(lastPerson);
+        Person editedPerson = personInList.withName(VALID_NAME_BOB)
+                .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
+                .withTags(VALID_TAG_HUSBAND).build();
+        editedPerson = new Person(
+                editedPerson.getName(), editedPerson.getEmail(), editedPerson.getAddress(),
+                editedPerson.getSubjects(), editedPerson.getDays(), editedPerson.getTimes(),
+                editedPerson.getEmergencyContact(), editedPerson.getPaymentStatus(),
+                editedPerson.getRemark(), editedPerson.getTags(), lastPerson.getAttendanceRecords());
+
+        EditPersonDescriptor descriptor =
+                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
+                        .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
+                        .withTags(VALID_TAG_HUSBAND).build();
+        EditCommand editCommand =
+                new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(
+                EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(
+                new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(lastPerson, editedPerson);
+
+        assertCommandSuccess(editCommand, model,
+                expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_duplicatePersonUnfilteredList_failure() {
+        // EP: edited student duplicates another student in unfiltered list
         Person firstPerson = model.getFilteredPersonList()
                 .get(INDEX_FIRST_PERSON.getZeroBased());
         EditPersonDescriptor descriptor =
@@ -170,6 +216,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_duplicatePersonFilteredList_failure() {
+        // EP: edited student duplicates another student in filtered list
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personInList = model.getAddressBook().getPersonList()
@@ -183,6 +230,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
+        // EP: invalid out-of-range index in unfiltered list
         Index outOfBoundIndex = Index.fromOneBased(
                 model.getFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor =
@@ -197,6 +245,7 @@ public class EditCommandTest {
 
     @Test
     public void execute_invalidPersonIndexFilteredList_failure() {
+        // EP: invalid out-of-range index in filtered list
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         Index outOfBoundIndex = INDEX_SECOND_PERSON;
         assertTrue(outOfBoundIndex.getZeroBased()
@@ -212,6 +261,7 @@ public class EditCommandTest {
 
     @Test
     public void equals() {
+        // Utility behavior: equality partitions for command identity
         final EditCommand standardCommand =
                 new EditCommand(INDEX_FIRST_PERSON, DESC_AMY);
 
@@ -236,6 +286,7 @@ public class EditCommandTest {
 
     @Test
     public void toStringMethod() {
+        // Utility behavior: string representation of command state
         Index index = Index.fromOneBased(1);
         EditPersonDescriptor editPersonDescriptor =
                 new EditPersonDescriptor();

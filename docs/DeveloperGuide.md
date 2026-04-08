@@ -820,10 +820,10 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all students using the `list` command. Multiple students in the list.
 
    2. Test case: `delete 1`<br>
-      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. The full student list is shown again.
 
    3. Test case: `delete 0`<br>
-      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No student is deleted. Error details shown in the status message. The student list remains unchanged.
 
    4. Test case: `delete +2`<br>
       Expected: No student is deleted. Error message explains that only plain positive integers are accepted.
@@ -839,7 +839,7 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Use `find n/Alice` to show only one student.
 
    2. Test case: `delete 1`<br>
-      Expected: That student is deleted. Status message shows deleted student's details. Running `list` confirms the student is gone.
+      Expected: That student is deleted. Status message shows deleted student's details. The full student list is shown again, and running `list` confirms the student is gone.
 
    3. Test case: `delete 2`<br>
       Expected: Error message — index out of bounds for the filtered list, even if more students exist in the full list.
