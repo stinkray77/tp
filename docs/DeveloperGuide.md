@@ -751,7 +751,8 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample students. The window size may not be optimum.
+   1. Double-click the jar file.<br>
+      Expected: Shows the GUI with a set of sample students. The window size may not be optimum.
 
 1. Saving window preferences
 
@@ -766,7 +767,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Open a terminal. Run `java -version` to confirm Java 17 is active.
 
-   1. Run `java -jar addressbook.jar`.<br>
+   1. Run `java -jar tutorcentral.jar`.<br>
       Expected: Application launches with sample student data. Window opens correctly.
 
 ### Adding a student
@@ -847,10 +848,10 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all students using the `list` command. Multiple students in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. The full student list is shown again.
 
    1. Test case: `delete 0`<br>
-      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No student is deleted. Error details shown in the status message. The student list remains unchanged.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
@@ -860,7 +861,7 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Use `find n/Alice` to show only one student.
 
    1. Test case: `delete 1`<br>
-      Expected: That student is deleted. Status message shows deleted student's details. Running `list` confirms the student is gone.
+      Expected: That student is deleted. Status message shows deleted student's details. The full student list is shown again, and running `list` confirms the student is gone.
 
    1. Test case: `delete 2`<br>
       Expected: Error message — index out of bounds for the filtered list, even if more students exist in the full list.
@@ -883,7 +884,7 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `markattendance 0 s/Mathematics l/Algebra Lesson 1 st/Present`<br>
       Expected: Error message about invalid index.
 
-### View attendance
+### Viewing attendance
 
 1. Viewing a student's attendance records
 
@@ -905,7 +906,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing data file
 
-   1. Close the application. Navigate to the data folder (default: `[home folder]/.tutorcentral/`). Delete `tutorcentral.json`.
+   1. Close the application. Navigate to the `data` folder beside the JAR file. Delete `tutorcentral.json`.
 
    1. Re-launch the application.<br>
       Expected: Application starts with sample data populated from `SampleDataUtil`.
