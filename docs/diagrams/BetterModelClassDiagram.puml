@@ -22,4 +22,8 @@ Person *--> "*" Day
 Person *--> "*" Time
 Person *--> EmergencyContact
 Person *--> PaymentStatus
+Person --> "attendanceRecords" AttendanceStatus
+
+Class "<<enum>>\nAttendanceStatus" as AttendanceStatus
+PaymentStatus -[hidden]right-> AttendanceStatus
 @enduml

@@ -22,6 +22,7 @@ Class Day
 Class Time
 Class EmergencyContact
 Class PaymentStatus
+Class "<<enum>>\nAttendanceStatus" as AttendanceStatus
 Class Tag
 
 Class I #FFFFFF
@@ -51,6 +52,7 @@ Person *--> EmergencyContact
 Person *--> PaymentStatus
 Person *--> Remark
 Person *--> "*" Tag
+Person --> "attendanceRecords" AttendanceStatus
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
@@ -59,6 +61,7 @@ Name -[hidden]right-> Email
 Email -[hidden]right-> Address
 Address -[hidden]right-> EmergencyContact
 EmergencyContact -[hidden]right-> PaymentStatus
+PaymentStatus -[hidden]right-> AttendanceStatus
 
 ModelManager --> "~* filtered" Person
 @enduml

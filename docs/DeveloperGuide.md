@@ -140,6 +140,7 @@ Each `Person` in Tutor Central currently contains:
 * `PaymentStatus`
 * `Remark`
 * `Set<Tag>`
+* `attendanceRecords` — a `Map` mapping each `Subject` to a map of lesson names to `AttendanceStatus`, tracking attendance per subject per lesson
 
 <box type="info" seamless>
 
