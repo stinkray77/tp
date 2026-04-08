@@ -344,7 +344,9 @@ Format: `delete INDEX`
 
 * Deletes the student at the specified `INDEX`.
 * The index refers to the index number shown in the displayed student list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* The index **must be a plain positive integer** 1, 2, 3, …​
+* Inputs such as `+2` and `1.0` are not supported.
+* The command only accepts one index input at a time.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in Tutor Central.
