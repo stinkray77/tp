@@ -17,6 +17,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 
@@ -32,6 +33,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
+        // EP: valid index in unfiltered list with valid payment status
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person markedPerson = createMarkedPerson(personToMark, STATUS_PAID);
 
@@ -48,6 +50,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_validIndexFilteredList_success() {
+        // EP: valid index in filtered list with valid payment status
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -66,6 +69,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_invalidIndexUnfilteredList_failure() {
+        // EP: invalid out-of-range index in unfiltered list
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         MarkCommand markCommand = new MarkCommand(outOfBoundIndex, STATUS_PAID);
 
@@ -74,6 +78,7 @@ public class MarkCommandTest {
 
     @Test
     public void execute_invalidIndexFilteredList_failure() {
+        // EP: invalid out-of-range index in filtered list
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         Index outOfBoundIndex = INDEX_SECOND_PERSON;
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
@@ -84,7 +89,45 @@ public class MarkCommandTest {
     }
 
     @Test
+    public void execute_validIndexUnfilteredList_preservesAttendanceRecords() {
+        // EP: valid update on a student who already has attendance records
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased())
+                .markAttendance("Mathematics", "Algebra Lesson 1", AttendanceStatus.PRESENT);
+        model.setPerson(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()), personToMark);
+
+        Person markedPerson = createMarkedPerson(personToMark, STATUS_PAID);
+        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, STATUS_PAID);
+
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
+                personToMark.getName(), STATUS_PAID.value);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
+
+        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_sameStatusUnfilteredList_success() {
+        // EP: valid index where the requested payment status matches the current status
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        PaymentStatus currentStatus = personToMark.getPaymentStatus();
+        Person markedPerson = createMarkedPerson(personToMark, currentStatus);
+
+        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON, currentStatus);
+
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
+                personToMark.getName(), currentStatus.value);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
+
+        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
+        // Utility behavior: equality partitions for command identity
         MarkCommand markFirstCommand = new MarkCommand(INDEX_FIRST_PERSON, STATUS_PAID);
         MarkCommand markSecondCommand = new MarkCommand(INDEX_SECOND_PERSON, STATUS_OVERDUE);
 
@@ -107,7 +150,8 @@ public class MarkCommandTest {
                 personToMark.getEmergencyContact(),
                 newStatus,
                 personToMark.getRemark(),
-                personToMark.getTags()
+                personToMark.getTags(),
+                personToMark.getAttendanceRecords()
         );
     }
 }
