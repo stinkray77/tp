@@ -241,6 +241,30 @@ model, and the filtered list is refreshed.
 
 <puml src="diagrams/MarkSequenceDiagram.puml" alt="Sequence diagram for the mark payment status feature" />
 
+### Mark attendance feature
+
+The `markattendance` command records a student's attendance for a specific lesson within a subject.
+
+`MarkAttendanceCommandParser` tokenizes the user input with the `s/`, `l/`, and `st/` prefixes and checks
+that the command contains:
+
+* a non-empty preamble that can be parsed into an index
+* exactly one `s/` value (subject)
+* exactly one `l/` value (lesson)
+* exactly one `st/` value (attendance status)
+
+If the input is valid, the parser creates a `MarkAttendanceCommand` with the target index, subject name,
+lesson name, and `AttendanceStatus`.
+
+During execution, `MarkAttendanceCommand`:
+1. Retrieves the target student from the filtered list.
+2. Validates that the provided subject is in the student's subject list (case-insensitive match).
+3. Creates a new `Person` with the updated attendance record using `Person#markAttendance()`.
+4. Replaces the original student in the model.
+5. Refreshes the filtered list.
+
+<puml src="diagrams/MarkAttendanceSequenceDiagram.puml" alt="Sequence diagram for the mark attendance feature" />
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
