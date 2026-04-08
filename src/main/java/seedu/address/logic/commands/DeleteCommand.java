@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Deletes a person identified using it's displayed index from the address book.
+ * Deletes a student identified using its displayed index from Tutor Central.
  */
 public class DeleteCommand extends Command {
 
@@ -45,6 +46,7 @@ public class DeleteCommand extends Command {
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deletePerson(personToDelete);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         int remainingStudents = model.getAddressBook().getPersonList().size();
 
