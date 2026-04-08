@@ -1,0 +1,86 @@
+@startuml MarkAttendanceSequenceDiagram
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":MarkAttendanceCommandParser" as MarkAttendanceCommandParser LOGIC_COLOR
+participant "m:MarkAttendanceCommand" as MarkAttendanceCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "model:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present")
+activate AddressBookParser
+
+create MarkAttendanceCommandParser
+AddressBookParser -> MarkAttendanceCommandParser
+activate MarkAttendanceCommandParser
+
+MarkAttendanceCommandParser --> AddressBookParser
+deactivate MarkAttendanceCommandParser
+
+AddressBookParser -> MarkAttendanceCommandParser : parse(" 1 s/Mathematics l/Algebra Lesson 5 st/Present")
+activate MarkAttendanceCommandParser
+
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : tokenize args with PREFIX_SUBJECT, PREFIX_LESSON, PREFIX_ATTENDANCE_STATUS
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse index from preamble
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse subject from s/
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse lesson from l/
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse attendance status from st/
+
+create MarkAttendanceCommand
+MarkAttendanceCommandParser -> MarkAttendanceCommand
+activate MarkAttendanceCommand
+
+MarkAttendanceCommand --> MarkAttendanceCommandParser
+deactivate MarkAttendanceCommand
+
+MarkAttendanceCommandParser --> AddressBookParser : m
+deactivate MarkAttendanceCommandParser
+MarkAttendanceCommandParser -[hidden]-> AddressBookParser
+destroy MarkAttendanceCommandParser
+
+AddressBookParser --> LogicManager : m
+deactivate AddressBookParser
+
+LogicManager -> MarkAttendanceCommand : execute(model)
+activate MarkAttendanceCommand
+
+MarkAttendanceCommand -> Model : getFilteredPersonList()
+activate Model
+Model --> MarkAttendanceCommand : lastShownList
+deactivate Model
+
+MarkAttendanceCommand -> MarkAttendanceCommand : validate subject exists in student (case-insensitive)
+MarkAttendanceCommand -> MarkAttendanceCommand : create updated Person via person.markAttendance()
+MarkAttendanceCommand -> Model : setPerson(target, updatedPerson)
+activate Model
+Model --> MarkAttendanceCommand
+deactivate Model
+
+MarkAttendanceCommand -> Model : updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)
+activate Model
+Model --> MarkAttendanceCommand
+deactivate Model
+
+create CommandResult
+MarkAttendanceCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> MarkAttendanceCommand
+deactivate CommandResult
+
+MarkAttendanceCommand --> LogicManager : r
+deactivate MarkAttendanceCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
