@@ -10,6 +10,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
@@ -24,6 +25,7 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Day;
+import seedu.address.model.person.Remark;
 import seedu.address.model.person.Subject;
 import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
@@ -44,7 +46,7 @@ public class EditCommandParser implements Parser<EditCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_SUBJECT, PREFIX_DAY,
                         PREFIX_TIME, PREFIX_EMERGENCY_CONTACT,
-                        PREFIX_PAYMENT_STATUS, PREFIX_TAG);
+                        PREFIX_PAYMENT_STATUS, PREFIX_REMARK, PREFIX_TAG);
 
         Index index;
 
@@ -58,7 +60,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_EMAIL,
                 PREFIX_ADDRESS, PREFIX_EMERGENCY_CONTACT,
-                PREFIX_PAYMENT_STATUS);
+                PREFIX_PAYMENT_STATUS, PREFIX_REMARK);
 
         EditPersonDescriptor editPersonDescriptor =
                 new EditPersonDescriptor();
@@ -110,6 +112,10 @@ public class EditCommandParser implements Parser<EditCommand> {
                     ParserUtil.parsePaymentStatus(
                             argMultimap.getValue(
                                     PREFIX_PAYMENT_STATUS).get()));
+        }
+        if (argMultimap.getValue(PREFIX_REMARK).isPresent()) {
+            editPersonDescriptor.setRemark(
+                    new Remark(argMultimap.getValue(PREFIX_REMARK).get()));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG))
                 .ifPresent(editPersonDescriptor::setTags);
