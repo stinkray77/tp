@@ -7,7 +7,7 @@
     "subjects" : [ "Mathematics" ],
     "emergencyContact" : "94351253",
     "paymentStatus" : "Paid",
-    "tags" : [ "friends" ],
+    "tags" : [ "secondary" ],
     "attendanceRecords" : { }
   }, {
     "name" : "Benson Meier",
@@ -16,7 +16,7 @@
     "subjects" : [ "English" ],
     "emergencyContact" : "98765432",
     "paymentStatus" : "Due",
-    "tags" : [ "owesMoney", "friends" ],
+    "tags" : [ "priority", "primary" ],
     "attendanceRecords" : { }
   }, {
     "name" : "Carl Kurz",
@@ -34,7 +34,7 @@
     "subjects" : [ ],
     "emergencyContact" : "87652533",
     "paymentStatus" : "Due",
-    "tags" : [ "friends" ],
+    "tags" : [ "secondary" ],
     "attendanceRecords" : { }
   }, {
     "name" : "Elle Meyer",

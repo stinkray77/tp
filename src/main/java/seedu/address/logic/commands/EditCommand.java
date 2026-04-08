@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
@@ -57,6 +58,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_TIME + "TIME]... "
             + "[" + PREFIX_EMERGENCY_CONTACT + "EMERGENCY_CONTACT] "
             + "[" + PREFIX_PAYMENT_STATUS + "PAYMENT_STATUS] "
+            + "[" + PREFIX_REMARK + "REMARK] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMERGENCY_CONTACT + "91234567 "
@@ -138,13 +140,16 @@ public class EditCommand extends Command {
         PaymentStatus updatedPaymentStatus =
                 editPersonDescriptor.getPaymentStatus()
                         .orElse(personToEdit.getPaymentStatus());
+        Remark updatedRemark = editPersonDescriptor.getRemark()
+                .orElse(personToEdit.getRemark());
         Set<Tag> updatedTags = editPersonDescriptor.getTags()
                 .orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedEmail, updatedAddress,
                 updatedSubjects, updatedDays, updatedTimes,
                 updatedEmergencyContact, updatedPaymentStatus,
-                personToEdit.getRemark(), updatedTags);
+                updatedRemark, updatedTags,
+                personToEdit.getAttendanceRecords());
     }
 
     @Override
@@ -321,6 +326,10 @@ public class EditCommand extends Command {
             this.remark = remark;
         }
 
+        public Optional<Remark> getRemark() {
+            return Optional.ofNullable(remark);
+        }
+
         /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
@@ -363,6 +372,7 @@ public class EditCommand extends Command {
                             otherDescriptor.emergencyContact)
                     && Objects.equals(paymentStatus,
                             otherDescriptor.paymentStatus)
+                    && Objects.equals(remark, otherDescriptor.remark)
                     && Objects.equals(tags, otherDescriptor.tags);
         }
 
@@ -377,6 +387,7 @@ public class EditCommand extends Command {
                     .add("times", times)
                     .add("emergencyContact", emergencyContact)
                     .add("paymentStatus", paymentStatus)
+                    .add("remark", remark)
                     .add("tags", tags)
                     .toString();
         }

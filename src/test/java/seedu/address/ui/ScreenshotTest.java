@@ -152,27 +152,20 @@ public class ScreenshotTest {
     // -------------------------------------------------------------------------
 
     /**
-     * Issue #96: mark with a negative index should produce a clear error message,
-     * not a crash or a misleading message.
-     * Expected: "Invalid command format" shown in result display.
-     * Result: PASS — MarkCommandParser rejects non-positive indices correctly.
+     * Issue #96: mark with a negative index should produce a clear error message.
+     * Fixed: MarkCommandParser now shows "Invalid index: ..." for non-positive indices.
      */
     @Test
     void issue96_markNegativeIndexShowsError(FxRobot robot) {
         runCommand(robot, "mark -1 ps/Paid");
         String result = getResultText(robot);
-        assertTrue(result.contains("Invalid command format"),
-                "Issue #96: Expected 'Invalid command format' for mark -1, but got: " + result);
+        assertTrue(result.contains("Invalid index"),
+                "Issue #96: Expected 'Invalid index' for mark -1, but got: " + result);
     }
 
     /**
-     * Issue #97: The UG documents prefix-based find (find n/NAME, find ps/STATUS, etc.)
-     * but FindCommandParser only does plain name-keyword matching — no prefix support.
-     * CONFIRMED BUG: find ps/Due treats "ps/Due" as a literal name keyword (0 results).
-     * DEEPER BUG: find n/Alice also returns 0 because "n/Alice" is not a word in any name.
-     * FindCommandParser must be updated to use ArgumentTokenizer for prefix-based filtering.
-     * Expected (correct): find ps/Due returns 3 (Benson, Daniel, Fiona).
-     * Actual: 0.
+     * Issue #97: find ps/STATUS and find n/NAME should use prefix-based filtering.
+     * Fixed: FindCommandParser now uses ArgumentTokenizer for prefix-based filtering.
      */
     @Test
     void issue97_findPrefixSyntaxNotImplemented(FxRobot robot) {
@@ -180,22 +173,19 @@ public class ScreenshotTest {
         assertEquals(TYPICAL_TOTAL, logic.getFilteredPersonList().size(),
                 "Setup: expected all typical persons listed");
 
-        // Test 1: find ps/Due — UG says this finds students with Due status
+        // Test 1: find ps/Due — should find students with Due payment status
         runCommand(robot, "find ps/Due");
         int foundByPayment = logic.getFilteredPersonList().size();
-        assertEquals(0, foundByPayment,
-                "Issue #97 (BUG CONFIRMED): find ps/Due treats 'ps/Due' as a name keyword. "
-                + "Returns " + foundByPayment + " instead of " + TYPICAL_DUE_COUNT
-                + ". FindCommandParser has no prefix-based filtering support.");
+        assertEquals(TYPICAL_DUE_COUNT, foundByPayment,
+                "Issue #97 (FIXED): find ps/Due should return " + TYPICAL_DUE_COUNT
+                + " but got " + foundByPayment);
 
-        // Test 2: find n/Alice — UG says this finds students named Alice
+        // Test 2: find n/Alice — should find student named Alice
         runCommand(robot, "list");
         runCommand(robot, "find n/Alice");
         int foundByNamePrefix = logic.getFilteredPersonList().size();
-        assertEquals(0, foundByNamePrefix,
-                "Issue #97 (BUG CONFIRMED): find n/Alice treats 'n/Alice' as a literal name keyword. "
-                + "Returns " + foundByNamePrefix + " instead of 1. "
-                + "Use 'find Alice' (no prefix) for name search to work.");
+        assertEquals(1, foundByNamePrefix,
+                "Issue #97 (FIXED): find n/Alice should return 1 but got " + foundByNamePrefix);
     }
 
     /**

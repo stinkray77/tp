@@ -81,6 +81,8 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getEmergencyContact().orElse(null)
                 + ", paymentStatus="
                 + editPersonDescriptor.getPaymentStatus().orElse(null)
+                + ", remark="
+                + editPersonDescriptor.getRemark().orElse(null)
                 + ", tags="
                 + editPersonDescriptor.getTags().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
