@@ -1,0 +1,84 @@
+@startuml ViewSequenceDiagram
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box UI UI_COLOR_T1
+participant ":MainWindow" as MainWindow UI_COLOR
+participant ":PersonViewDialog" as PersonViewDialog UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ViewCommandParser" as ViewCommandParser LOGIC_COLOR
+participant "m:ViewCommand" as ViewCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "model:Model" as Model MODEL_COLOR
+end box
+
+MainWindow -> LogicManager : execute("view 1")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("view 1")
+activate AddressBookParser
+
+create ViewCommandParser
+AddressBookParser -> ViewCommandParser
+activate ViewCommandParser
+
+ViewCommandParser --> AddressBookParser
+deactivate ViewCommandParser
+
+AddressBookParser -> ViewCommandParser : parse(" 1")
+activate ViewCommandParser
+
+ViewCommandParser -> ViewCommandParser : parse index from preamble
+
+create ViewCommand
+ViewCommandParser -> ViewCommand
+activate ViewCommand
+
+ViewCommand --> ViewCommandParser
+deactivate ViewCommand
+
+ViewCommandParser --> AddressBookParser : m
+deactivate ViewCommandParser
+ViewCommandParser -[hidden]-> AddressBookParser
+destroy ViewCommandParser
+
+AddressBookParser --> LogicManager : m
+deactivate AddressBookParser
+
+LogicManager -> ViewCommand : execute(model)
+activate ViewCommand
+
+ViewCommand -> Model : getFilteredPersonList()
+activate Model
+Model --> ViewCommand : lastShownList
+deactivate Model
+
+ViewCommand -> ViewCommand : validate index is in range
+
+create CommandResult
+ViewCommand -> CommandResult : new CommandResult(person, isShowView=true)
+activate CommandResult
+
+CommandResult --> ViewCommand
+deactivate CommandResult
+
+ViewCommand --> LogicManager : r
+deactivate ViewCommand
+
+LogicManager --> MainWindow : r
+deactivate LogicManager
+
+MainWindow -> MainWindow : check r.isShowView()
+MainWindow -> PersonViewDialog : show(person)
+activate PersonViewDialog
+note right : Displays all student fields\nin a GridPane layout
+PersonViewDialog --> MainWindow
+deactivate PersonViewDialog
+@enduml
