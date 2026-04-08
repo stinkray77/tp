@@ -189,8 +189,8 @@ For example, `PaymentStatusMatchesPredicate("Paid")` returns `true` for a
 student whose payment status is `Paid`, and `false` otherwise.
 
 When no supported prefix is present, the parser falls back to the command
-preamble and creates a `NameContainsKeywordsPredicate`. This preserves backward
-compatibility for inputs such as `find alice bob`.
+preamble and creates a `NameContainsKeywordsPredicate`. This allows name-only
+searches such as `find alice bob` to continue working without prefixes.
 
 When one or more supported prefixes are present, the parser creates one or more
 field-specific predicates:
@@ -385,7 +385,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 (current choice):** Saves the entire student data set.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
@@ -723,22 +723,23 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample students. The window size may not be optimum.
+   2. Double-click the jar file.<br>
+      Expected: Shows the GUI with a set of sample students. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. Launch via command line
+3. Launch via command line
 
    1. Prerequisites: Java 17 installed. JAR file placed in an empty folder.
 
-   1. Open a terminal. Run `java -version` to confirm Java 17 is active.
+   2. Open a terminal. Run `java -version` to confirm Java 17 is active.
 
-   1. Run `java -jar addressbook.jar`.<br>
+   3. Run `java -jar tutorcentral.jar`.<br>
       Expected: Application launches with sample student data. Window opens correctly.
 
 ### Adding a student
@@ -747,16 +748,16 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Application is running. Use `list` to view current students.
 
-   1. Test case: `add n/John Doe e/johnd@example.com a/123 Main St s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due`<br>
+   2. Test case: `add n/John Doe e/johnd@example.com a/123 Main St s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due`<br>
       Expected: New student added at the end of the list. Success message shows student's name.
 
-   1. Test case: `add n/John Doe e/johnd@example.com a/123 Main St s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due` (same name as existing student)<br>
+   3. Test case: `add n/John Doe e/johnd@example.com a/123 Main St s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due` (same name as existing student)<br>
       Expected: No student added. Error message indicating duplicate student.
 
-   1. Test case: Missing compulsory field, e.g. `add n/John Doe e/johnd@example.com`<br>
+   4. Test case: Missing compulsory field, e.g. `add n/John Doe e/johnd@example.com`<br>
       Expected: No student added. Error message showing correct usage format.
 
-   1. Test case: Mismatched days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math d/Monday d/Tuesday ti/1400 ec/91234567 ps/Paid`<br>
+   5. Test case: Mismatched days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math d/Monday d/Tuesday ti/1400 ec/91234567 ps/Paid`<br>
       Expected: No student added. Error message stating days and times count must match.
 
 ### Marking payment status
@@ -765,19 +766,19 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all students using `list`. At least one student in the list.
 
-   1. Test case: `mark 1 ps/Paid`<br>
+   2. Test case: `mark 1 ps/Paid`<br>
       Expected: First student's payment status updated to `Paid`. Success message shows name and new status.
 
-   1. Test case: `mark 1 ps/overdue` (lowercase)<br>
+   3. Test case: `mark 1 ps/overdue` (lowercase)<br>
       Expected: First student's payment status updated to `Overdue` (auto-capitalised). Success message shown.
 
-   1. Test case: `mark 0 ps/Paid`<br>
+   4. Test case: `mark 0 ps/Paid`<br>
       Expected: No change. Error details shown in status message.
 
-   1. Test case: `mark 1 ps/NotAStatus`<br>
+   5. Test case: `mark 1 ps/NotAStatus`<br>
       Expected: No change. Error message showing valid payment statuses (Paid, Due, Overdue).
 
-   1. Test case: `mark 1` (missing payment status)<br>
+   6. Test case: `mark 1` (missing payment status)<br>
       Expected: No change. Error message showing correct usage format.
 
 ### Adding/editing a remark
@@ -786,10 +787,10 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all students using `list`. At least one student in the list.
 
-   1. Test case: `remark 1 r/Needs extra help with algebra.`<br>
+   2. Test case: `remark 1 r/Needs extra help with algebra.`<br>
       Expected: Remark added to first student. Success message shown.
 
-   1. Test case: `remark 1 r/` (empty remark)<br>
+   3. Test case: `remark 1 r/` (empty remark)<br>
       Expected: Existing remark removed from first student. Success message shown.
 
 ### Finding students
@@ -798,18 +799,18 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Sample data loaded. Use `list` to confirm multiple students exist.
 
-   1. Test case: `find n/Alice`<br>
+   2. Test case: `find n/Alice`<br>
       Expected: Students whose names contain "Alice" are shown. Count shown in result message.
 
-   1. Test case: `find n/NonExistentName`<br>
+   3. Test case: `find n/NonExistentName`<br>
       Expected: 0 students listed. Result message shows `0 persons listed!`.
 
-1. Finding students by payment status
+2. Finding students by payment status
 
    1. Test case: `find ps/Due`<br>
       Expected: All students with payment status `Due` are listed.
 
-   1. Test case: `find ps/Paid ps/Overdue`<br>
+   2. Test case: `find ps/Paid ps/Overdue`<br>
       Expected: Students with either `Paid` or `Overdue` status are listed.
 
 ### Deleting a person
@@ -818,44 +819,50 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all students using the `list` command. Multiple students in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
+   2. Test case: `delete 1`<br>
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. The full student list is shown again.
 
-   1. Test case: `delete 0`<br>
-      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+   3. Test case: `delete 0`<br>
+      Expected: No student is deleted. Error details shown in the status message. The student list remains unchanged.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   4. Test case: `delete +2`<br>
+      Expected: No student is deleted. Error message explains that only plain positive integers are accepted.
+
+   5. Test case: `delete 1.0`<br>
+      Expected: No student is deleted. Error message explains that only plain positive integers are accepted.
+
+   6. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. Deleting a student when only one student is shown (filtered list)
+2. Deleting a student when only one student is shown (filtered list)
 
    1. Prerequisites: Use `find n/Alice` to show only one student.
 
-   1. Test case: `delete 1`<br>
-      Expected: That student is deleted. Status message shows deleted student's details. Running `list` confirms the student is gone.
+   2. Test case: `delete 1`<br>
+      Expected: That student is deleted. Status message shows deleted student's details. The full student list is shown again, and running `list` confirms the student is gone.
 
-   1. Test case: `delete 2`<br>
+   3. Test case: `delete 2`<br>
       Expected: Error message — index out of bounds for the filtered list, even if more students exist in the full list.
 
 ### Saving data
 
 1. Dealing with missing data file
 
-   1. Close the application. Navigate to the data folder (default: `[home folder]/.tutorcentral/`). Delete `tutorcentral.json`.
+   1. Close the application. Navigate to the `data` folder beside the JAR file. Delete `tutorcentral.json`.
 
-   1. Re-launch the application.<br>
+   2. Re-launch the application.<br>
       Expected: Application starts with sample data populated from `SampleDataUtil`.
 
-1. Dealing with corrupted data file
+2. Dealing with corrupted data file
 
    1. Close the application. Open `tutorcentral.json` in a text editor. Delete a required field (e.g. remove the `"name"` field from one entry). Save the file.
 
-   1. Re-launch the application.<br>
-      Expected: Application starts with an empty address book. A warning is logged but the application does not crash. The corrupted file is discarded.
+   2. Re-launch the application.<br>
+      Expected: Application starts with an empty student list. A warning is logged but the application does not crash. The corrupted file is discarded.
 
-1. Data persistence across sessions
+3. Data persistence across sessions
 
    1. Add a new student with `add n/Test Student e/test@example.com a/123 St s/Math ec/91234567 ps/Paid`. Close the application.
 
-   1. Re-launch the application.<br>
+   2. Re-launch the application.<br>
       Expected: The student added in the previous session is still present in the list.

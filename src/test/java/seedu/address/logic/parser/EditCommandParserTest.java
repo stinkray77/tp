@@ -16,6 +16,7 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMERGENCY_CON
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_0900;
@@ -25,7 +26,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -277,19 +277,19 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_daysWithoutTimes_failure() {
-        // Edit with day but no time
+        // Edit with day, but no time
         assertParseFailure(parser, "1" + DAY_DESC_MONDAY, MESSAGE_DAY_TIME_INCOMPLETE);
     }
 
     @Test
     public void parse_timesWithoutDays_failure() {
-        // Edit with time but no day
+        // Edit with time, but no day
         assertParseFailure(parser, "1" + TIME_DESC_1400, MESSAGE_DAY_TIME_INCOMPLETE);
     }
 
     @Test
     public void parse_dayTimeMismatch_failure() {
-        // Edit with 2 days but only 1 time
+        // Edit with 2 days, but only 1 time
         String input = "1" + DAY_DESC_MONDAY + TIME_DESC_0900 + TIME_DESC_1400;
         String expectedMessage = String.format(MESSAGE_DAY_TIME_MISMATCH, 1, 2);
         assertParseFailure(parser, input, expectedMessage);

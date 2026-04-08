@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Deletes a person identified using it's displayed index from the address book.
+ * Deletes a student identified using its displayed index from Tutor Central.
  */
 public class DeleteCommand extends Command {
 
@@ -23,7 +24,7 @@ public class DeleteCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS =
-            "Deleted student: %1$s succesfully\nTotal students now: %2$d";
+            "Deleted student: %1$s successfully\nTotal students now: %2$d";
 
     // Custom error message for out of range
     public static final String MESSAGE_OUT_OF_RANGE = "Out of range: No student found at index %1$d.";
@@ -45,6 +46,7 @@ public class DeleteCommand extends Command {
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deletePerson(personToDelete);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         int remainingStudents = model.getAddressBook().getPersonList().size();
 
