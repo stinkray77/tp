@@ -394,6 +394,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | tutor                    | filter students by subject or day                       | plan my weekly schedule at a glance                           |
 | `* *`    | tutor                    | add remarks to a student                                | remember important notes about them                           |
 | `*`      | tutor                    | view a summary dialog of one student's full details     | quickly review all information before a lesson starts         |
+| `* * *`  | tutor                    | mark a student's attendance for a lesson                | keep accurate attendance records without paper                |
+| `* * *`  | tutor                    | view a student's attendance history                     | prepare for parent meetings with concrete data                |
+| `* * *`  | tutor                    | view a student's full details in one place              | check all information before a lesson without scrolling       |
+| `* * *`  | tutor                    | filter students by multiple criteria at once            | quickly find relevant students (e.g., Math on Monday)         |
+| `* *`    | tutor                    | update attendance if a student provides an MC later     | keep attendance records accurate even after the lesson        |
+| `* *`    | tutor                    | identify students who are frequently absent             | follow up with at-risk students and notify their parents      |
+| `*`      | tutor                    | export student data                                     | share records with centre managers or parents                 |
 
 ### Use cases
 
