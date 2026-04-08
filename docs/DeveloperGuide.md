@@ -218,6 +218,22 @@ parser, command, and model components.
 
 <puml src="diagrams/FindSequenceDiagram.puml" alt="Sequence diagram for the extended find feature" />
 
+### View student feature
+
+The `view` command displays a student's full details in a popup dialog. `ViewCommandParser` parses
+the index from the input string.
+
+During execution, `ViewCommand`:
+1. Retrieves the target student from the filtered list and validates the index is in range.
+2. Returns a `CommandResult` that includes the `Person` object to view and sets `isShowView()` to `true`.
+
+The `MainWindow` checks `CommandResult#isShowView()` and, if true, calls `PersonViewDialog.show(person)`.
+
+The `PersonViewDialog` is a JavaFX dialog that displays all student fields in a structured `GridPane`
+layout: name, emergency contact, email, address, tags, payment status, subjects, days, times, and remark.
+
+<puml src="diagrams/ViewSequenceDiagram.puml" alt="Sequence diagram for the view student feature" />
+
 ### Mark payment status feature
 
 The `mark` command updates a student's payment status without requiring the
