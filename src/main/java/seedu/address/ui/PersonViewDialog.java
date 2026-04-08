@@ -44,13 +44,7 @@ public class PersonViewDialog {
     private Label remarkLabel;
 
     @FXML
-    private FlowPane subjects;
-
-    @FXML
-    private FlowPane days;
-
-    @FXML
-    private FlowPane times;
+    private FlowPane lessonSlots;
 
     @FXML
     private VBox attendanceRecordsBox;
@@ -103,20 +97,10 @@ public class PersonViewDialog {
         PaymentStatus hasPaid = person.getPaymentStatus();
         paymentLabel.setText(hasPaid.toString());
 
-        // Populate subjects
-        person.getSubjects().stream()
-                .sorted(Comparator.comparing(s -> s.subjectName))
-                .forEach(s -> subjects.getChildren().add(new Label(s.subjectName)));
-
-        // Populate days
-        person.getDays().stream()
-                .sorted(Comparator.comparing(d -> d.dayName))
-                .forEach(d -> days.getChildren().add(new Label(d.dayName)));
-
-        // Populate times
-        person.getTimes().stream()
-                .sorted(Comparator.comparing(t -> t.timeValue))
-                .forEach(t -> times.getChildren().add(new Label(t.timeValue)));
+        // Populate lesson slots
+        person.getLessonSlots().stream()
+                .sorted(Comparator.comparing(ls -> ls.toString()))
+                .forEach(ls -> lessonSlots.getChildren().add(new Label(ls.toString())));
 
         // Populate attendance records
         Map<String, Map<String, AttendanceStatus>> records = person.getAttendanceRecords();

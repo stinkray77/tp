@@ -30,7 +30,8 @@ public class FindCommandManualTest {
 
         // Test subject search
         SubjectContainsKeywordsPredicate subjectPredicate = new SubjectContainsKeywordsPredicate(Arrays.asList("Math"));
-        Person mathPerson = new PersonBuilder().withName("Alex Tan").withSubjects("Mathematics").build();
+        Person mathPerson = new PersonBuilder().withName("Alex Tan")
+                .withLessonSlots("Mathematics", "Monday", "1400").build();
         boolean subjectResult = subjectPredicate.test(mathPerson);
         System.out.println("Subject test result: " + subjectResult);
         assertTrue(subjectResult);

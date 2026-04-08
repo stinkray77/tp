@@ -18,12 +18,14 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
-    public static final String MESSAGE_DAY_TIME_MISMATCH =
-                "Number of days and times must match (each day must have exactly one time). "
-                + "Got %1$d day(s) and %2$d time(s).";
-    public static final String MESSAGE_DAY_TIME_INCOMPLETE =
-                "Days and times must be specified together. "
-                + "If you provide days, you must also provide times, and vice versa.";
+    public static final String MESSAGE_SUBJECT_DAY_TIME_MISMATCH =
+                "Number of subjects, days and times must all match. "
+                + "Got %1$d subject(s), %2$d day(s) and %3$d time(s).";
+    public static final String MESSAGE_LESSON_SLOT_INCOMPLETE =
+                "Subjects, days and times must all be specified together. "
+                + "If you provide any of s/, d/, ti/, you must provide all three.";
+    public static final String MESSAGE_LESSON_SLOT_NOT_FOUND =
+                "Student does not have a lesson for %1$s on %2$s at %3$s";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -47,12 +49,8 @@ public class Messages {
                 .append(person.getEmail())
                 .append("; Address: ")
                 .append(person.getAddress())
-                .append("; Subjects: ");
-        person.getSubjects().forEach(builder::append);
-        builder.append("; Days: ");
-        person.getDays().forEach(builder::append);
-        builder.append("; Times: ");
-        person.getTimes().forEach(builder::append);
+                .append("; Lessons: ");
+        person.getLessonSlots().forEach(ls -> builder.append("[").append(ls).append("] "));
         builder.append("; Remark: ")
                 .append(person.getRemark());
         builder.append("; Emergency Contact: ")

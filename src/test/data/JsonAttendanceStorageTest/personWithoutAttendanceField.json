@@ -3,7 +3,7 @@
     "name": "Alice Pauline",
     "email": "alice@example.com",
     "address": "123, Jurong West Ave 6, #08-111",
-    "subjects": [ "Mathematics" ],
+    "lessonSlots": [ { "subject": "Mathematics", "day": "Monday", "time": "1400" } ],
     "emergencyContact": "94351253",
     "paymentStatus": "Paid",
     "tags": []

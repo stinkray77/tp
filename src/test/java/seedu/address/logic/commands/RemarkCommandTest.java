@@ -35,8 +35,7 @@ public class RemarkCommandTest {
                 INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new Person(
                 firstPerson.getName(), firstPerson.getEmail(),
-                firstPerson.getAddress(), firstPerson.getSubjects(),
-                firstPerson.getDays(), firstPerson.getTimes(),
+                firstPerson.getAddress(), firstPerson.getLessonSlots(),
                 firstPerson.getEmergencyContact(),
                 firstPerson.getPaymentStatus(), new Remark(REMARK_STUB), firstPerson.getTags());
 
@@ -59,8 +58,7 @@ public class RemarkCommandTest {
                 INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new Person(
                 firstPerson.getName(), firstPerson.getEmail(),
-                firstPerson.getAddress(), firstPerson.getSubjects(),
-                firstPerson.getDays(), firstPerson.getTimes(),
+                firstPerson.getAddress(), firstPerson.getLessonSlots(),
                 firstPerson.getEmergencyContact(),
                 firstPerson.getPaymentStatus(), new Remark(""), firstPerson.getTags());
 

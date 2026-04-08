@@ -1,8 +1,8 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_DAY_TIME_INCOMPLETE;
-import static seedu.address.logic.Messages.MESSAGE_DAY_TIME_MISMATCH;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_LESSON_SLOT_INCOMPLETE;
+import static seedu.address.logic.Messages.MESSAGE_SUBJECT_DAY_TIME_MISMATCH;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DAY_DESC_MONDAY;
@@ -16,16 +16,16 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMERGENCY_CON
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.SUBJECT_DESC_MATH;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
-import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_0900;
 import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_1400;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -276,46 +276,51 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_daysWithoutTimes_failure() {
-        // Edit with day but no time
-        assertParseFailure(parser, "1" + DAY_DESC_MONDAY, MESSAGE_DAY_TIME_INCOMPLETE);
+    public void parse_subjectWithoutDayOrTime_failure() {
+        // Subject but no day or time
+        assertParseFailure(parser, "1" + SUBJECT_DESC_MATH, MESSAGE_LESSON_SLOT_INCOMPLETE);
     }
 
     @Test
-    public void parse_timesWithoutDays_failure() {
-        // Edit with time but no day
-        assertParseFailure(parser, "1" + TIME_DESC_1400, MESSAGE_DAY_TIME_INCOMPLETE);
+    public void parse_dayWithoutSubjectOrTime_failure() {
+        // Day but no subject or time
+        assertParseFailure(parser, "1" + DAY_DESC_MONDAY, MESSAGE_LESSON_SLOT_INCOMPLETE);
     }
 
     @Test
-    public void parse_dayTimeMismatch_failure() {
-        // Edit with 2 days but only 1 time
-        String input = "1" + DAY_DESC_MONDAY + TIME_DESC_0900 + TIME_DESC_1400;
-        String expectedMessage = String.format(MESSAGE_DAY_TIME_MISMATCH, 1, 2);
+    public void parse_timeWithoutSubjectOrDay_failure() {
+        // Time but no subject or day
+        assertParseFailure(parser, "1" + TIME_DESC_1400, MESSAGE_LESSON_SLOT_INCOMPLETE);
+    }
+
+    @Test
+    public void parse_subjectDayTimeMismatch_failure() {
+        // 1 subject, 1 day, 2 times
+        String input = "1" + SUBJECT_DESC_MATH + DAY_DESC_MONDAY
+                + TIME_DESC_1400 + " ti/0900";
+        String expectedMessage = String.format(MESSAGE_SUBJECT_DAY_TIME_MISMATCH, 1, 1, 2);
         assertParseFailure(parser, input, expectedMessage);
     }
 
     @Test
-    public void parse_matchingDaysAndTimes_success() {
-        // Edit with matching day and time
+    public void parse_matchingLessonSlots_success() {
+        // Edit with matching subject, day and time
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withDays("Monday")
-                .withTimes("1400")
+                .withLessonSlots("Mathematics", "Monday", "1400")
                 .build();
 
-        assertParseSuccess(parser, "1" + DAY_DESC_MONDAY + TIME_DESC_1400,
+        assertParseSuccess(parser, "1" + SUBJECT_DESC_MATH + DAY_DESC_MONDAY + TIME_DESC_1400,
                 new EditCommand(INDEX_FIRST_PERSON, descriptor));
     }
 
     @Test
-    public void parse_bothDaysAndTimesCleared_success() {
-        // Edit with empty day and empty time (clearing both)
+    public void parse_clearAllLessonSlots_success() {
+        // Edit with empty subject, day and time (clearing all)
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withDays()
-                .withTimes()
+                .withLessonSlots()
                 .build();
 
-        assertParseSuccess(parser, "1 d/ ti/",
+        assertParseSuccess(parser, "1 s/ d/ ti/",
                 new EditCommand(INDEX_FIRST_PERSON, descriptor));
     }
 }

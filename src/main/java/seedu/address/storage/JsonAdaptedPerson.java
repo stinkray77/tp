@@ -17,7 +17,7 @@ import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
-import seedu.address.model.person.Lesson;
+import seedu.address.model.person.LessonSlot;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
@@ -32,15 +32,15 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
+    public static final String INVALID_ATTENDANCE_KEY_FORMAT =
+            "Attendance key must be in 'Day Time' format (e.g., 'Monday 1400')";
 
     private final String name;
     private final String email;
     private final String address;
-    private final List<String> subjects = new ArrayList<>();
+    private final List<JsonAdaptedLessonSlot> lessonSlots = new ArrayList<>();
     private final String emergencyContact;
     private final String paymentStatus;
-    private final List<String> days = new ArrayList<>();
-    private final List<String> times = new ArrayList<>();
     private final String remark;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final Map<String, Map<String, String>> attendanceRecords = new LinkedHashMap<>();
@@ -52,28 +52,20 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name,
             @JsonProperty("email") String email,
             @JsonProperty("address") String address,
-            @JsonProperty("subjects") List<String> subjects,
+            @JsonProperty("lessonSlots") List<JsonAdaptedLessonSlot> lessonSlots,
             @JsonProperty("emergencyContact") String emergencyContact,
             @JsonProperty("paymentStatus") String paymentStatus,
-            @JsonProperty("days") List<String> days,
-            @JsonProperty("times") List<String> times,
             @JsonProperty("remark") String remark,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("attendanceRecords") Map<String, Map<String, String>> attendanceRecords) {
         this.name = name;
         this.email = email;
         this.address = address;
-        if (subjects != null) {
-            this.subjects.addAll(subjects);
+        if (lessonSlots != null) {
+            this.lessonSlots.addAll(lessonSlots);
         }
         this.emergencyContact = emergencyContact;
         this.paymentStatus = paymentStatus;
-        if (days != null) {
-            this.days.addAll(days);
-        }
-        if (times != null) {
-            this.times.addAll(times);
-        }
         this.remark = remark;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -93,15 +85,9 @@ class JsonAdaptedPerson {
         name = source.getName().fullName;
         email = source.getEmail().value;
         address = source.getAddress().value;
-        subjects.addAll(source.getSubjects().stream()
-                .map(s -> s.subjectName)
+        lessonSlots.addAll(source.getLessonSlots().stream()
+                .map(JsonAdaptedLessonSlot::new)
                 .collect(Collectors.toList()));
-        days.addAll(source.getDays().stream()
-                .map(d -> d.dayName)
-                .toList());
-        times.addAll(source.getTimes().stream()
-                .map(t -> t.timeValue)
-                .toList());
         emergencyContact = source.getEmergencyContact().value;
         remark = source.getRemark().value;
         paymentStatus = source.getPaymentStatus().value;
@@ -156,12 +142,9 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
-        final Set<Subject> modelSubjects = new HashSet<>();
-        for (String subjectName : subjects) {
-            if (!Subject.isValidSubject(subjectName)) {
-                throw new IllegalValueException(Subject.MESSAGE_CONSTRAINTS);
-            }
-            modelSubjects.add(new Subject(subjectName));
+        final List<LessonSlot> modelLessonSlots = new ArrayList<>();
+        for (JsonAdaptedLessonSlot adaptedSlot : lessonSlots) {
+            modelLessonSlots.add(adaptedSlot.toModelType());
         }
 
         if (emergencyContact == null) {
@@ -188,22 +171,6 @@ class JsonAdaptedPerson {
         final PaymentStatus modelPaymentStatus =
                 new PaymentStatus(paymentStatus);
 
-        final Set<Day> modelDays = new HashSet<>();
-        for (String dayName : days) {
-            if (!Day.isValidDay(dayName)) {
-                throw new IllegalValueException(Day.MESSAGE_CONSTRAINTS);
-            }
-            modelDays.add(new Day(dayName));
-        }
-
-        final Set<Time> modelTimes = new HashSet<>();
-        for (String timeValue : times) {
-            if (!Time.isValidTime(timeValue)) {
-                throw new IllegalValueException(Time.MESSAGE_CONSTRAINTS);
-            }
-            modelTimes.add(new Time(timeValue));
-        }
-
         final Remark modelRemark = new Remark(remark != null ? remark : "");
 
         final Map<String, Map<String, AttendanceStatus>> modelAttendanceRecords = new LinkedHashMap<>();
@@ -215,8 +182,8 @@ class JsonAdaptedPerson {
             Map<String, AttendanceStatus> lessonMap = new LinkedHashMap<>();
             for (Map.Entry<String, String> lessonEntry : subjectEntry.getValue().entrySet()) {
                 String lessonKey = lessonEntry.getKey();
-                if (!Lesson.isValidLessonName(lessonKey)) {
-                    throw new IllegalValueException(Lesson.MESSAGE_CONSTRAINTS);
+                if (!isValidAttendanceKey(lessonKey)) {
+                    throw new IllegalValueException(INVALID_ATTENDANCE_KEY_FORMAT);
                 }
                 if (!AttendanceStatus.isValidStatus(lessonEntry.getValue())) {
                     throw new IllegalValueException(AttendanceStatus.MESSAGE_CONSTRAINTS);
@@ -228,9 +195,20 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelEmail, modelAddress,
-                modelSubjects, modelDays, modelTimes,
+                modelLessonSlots,
                 modelEmergencyContact, modelPaymentStatus, modelRemark, modelTags,
                 modelAttendanceRecords);
+    }
+
+    /**
+     * Returns true if the attendance key is in valid "Day Time" format.
+     */
+    private static boolean isValidAttendanceKey(String key) {
+        String[] parts = key.split(" ");
+        if (parts.length != 2) {
+            return false;
+        }
+        return Day.isValidDay(parts[0]) && Time.isValidTime(parts[1]);
     }
 
 }

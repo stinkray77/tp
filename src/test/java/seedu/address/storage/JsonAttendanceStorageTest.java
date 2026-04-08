@@ -34,8 +34,8 @@ public class JsonAttendanceStorageTest {
     @Test
     public void saveAndRead_personWithAttendance_roundTrip() throws Exception {
         Person personWithAttendance = ALICE
-                .markAttendance("Mathematics", "Lesson 1", AttendanceStatus.PRESENT)
-                .markAttendance("Mathematics", "Lesson 2", AttendanceStatus.ABSENT);
+                .markAttendance("Mathematics", "Monday 1400", AttendanceStatus.PRESENT)
+                .markAttendance("Mathematics", "Wednesday 1600", AttendanceStatus.ABSENT);
 
         AddressBook original = new AddressBook();
         original.addPerson(personWithAttendance);
@@ -49,17 +49,17 @@ public class JsonAttendanceStorageTest {
 
         Person restored = readBack.getPersonList().get(0);
         assertEquals(AttendanceStatus.PRESENT,
-                restored.getAttendanceRecords().get("Mathematics").get("Lesson 1"));
+                restored.getAttendanceRecords().get("Mathematics").get("Monday 1400"));
         assertEquals(AttendanceStatus.ABSENT,
-                restored.getAttendanceRecords().get("Mathematics").get("Lesson 2"));
+                restored.getAttendanceRecords().get("Mathematics").get("Wednesday 1600"));
     }
 
     @Test
     public void saveAndRead_multipleSubjectsAndLessons_allPreserved() throws Exception {
         Person person = ALICE
-                .markAttendance("Mathematics", "Algebra Lesson 1", AttendanceStatus.PRESENT)
-                .markAttendance("Mathematics", "Algebra Lesson 2", AttendanceStatus.ABSENT)
-                .markAttendance("English", "Grammar Lesson 1", AttendanceStatus.EXCUSED);
+                .markAttendance("Mathematics", "Monday 1400", AttendanceStatus.PRESENT)
+                .markAttendance("Mathematics", "Wednesday 1600", AttendanceStatus.ABSENT)
+                .markAttendance("English", "Tuesday 0900", AttendanceStatus.EXCUSED);
 
         AddressBook original = new AddressBook();
         original.addPerson(person);
@@ -75,7 +75,7 @@ public class JsonAttendanceStorageTest {
         assertEquals(2, restored.getAttendanceRecords().get("Mathematics").size());
         assertEquals(1, restored.getAttendanceRecords().get("English").size());
         assertEquals(AttendanceStatus.EXCUSED,
-                restored.getAttendanceRecords().get("English").get("Grammar Lesson 1"));
+                restored.getAttendanceRecords().get("English").get("Tuesday 0900"));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class JsonAttendanceStorageTest {
 
     @Test
     public void saveAndRead_overwriteAttendance_updatesCorrectly() throws Exception {
-        Person original = ALICE.markAttendance("Mathematics", "Lesson 1", AttendanceStatus.ABSENT);
+        Person original = ALICE.markAttendance("Mathematics", "Monday 1400", AttendanceStatus.ABSENT);
         AddressBook ab = new AddressBook();
         ab.addPerson(original);
 
@@ -103,14 +103,14 @@ public class JsonAttendanceStorageTest {
         storage.saveAddressBook(ab, filePath);
 
         // Update attendance and save again
-        Person updated = original.markAttendance("Mathematics", "Lesson 1", AttendanceStatus.PRESENT);
+        Person updated = original.markAttendance("Mathematics", "Monday 1400", AttendanceStatus.PRESENT);
         ab.setPerson(original, updated);
         storage.saveAddressBook(ab, filePath);
 
         ReadOnlyAddressBook readBack = storage.readAddressBook(filePath).get();
         Person restored = readBack.getPersonList().get(0);
         assertEquals(AttendanceStatus.PRESENT,
-                restored.getAttendanceRecords().get("Mathematics").get("Lesson 1"));
+                restored.getAttendanceRecords().get("Mathematics").get("Monday 1400"));
     }
 
     // ==================== Backward compatibility ====================

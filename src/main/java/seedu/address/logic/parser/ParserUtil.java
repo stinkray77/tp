@@ -2,8 +2,10 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -14,7 +16,7 @@ import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
-import seedu.address.model.person.Lesson;
+import seedu.address.model.person.LessonSlot;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Subject;
@@ -226,18 +228,24 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String lesson} into a trimmed lesson name string.
-     * Leading and trailing whitespaces will be trimmed.
+     * Parses parallel lists of subjects, days, and times into a {@code List<LessonSlot>}.
+     * The lists must be the same size — each element at index i forms one LessonSlot.
      *
-     * @throws ParseException if the given {@code lesson} is invalid.
+     * @throws ParseException if any value is invalid.
      */
-    public static String parseLesson(String lesson) throws ParseException {
-        requireNonNull(lesson);
-        String trimmedLesson = lesson.trim();
-        if (!Lesson.isValidLessonName(trimmedLesson)) {
-            throw new ParseException(Lesson.MESSAGE_CONSTRAINTS);
+    public static List<LessonSlot> parseLessonSlots(List<String> subjects,
+            List<String> days, List<String> times) throws ParseException {
+        requireNonNull(subjects);
+        requireNonNull(days);
+        requireNonNull(times);
+        List<LessonSlot> result = new ArrayList<>();
+        for (int i = 0; i < subjects.size(); i++) {
+            Subject subject = parseSubject(subjects.get(i));
+            Day day = parseDay(days.get(i));
+            Time time = parseTime(times.get(i));
+            result.add(new LessonSlot(subject, day, time));
         }
-        return trimmedLesson;
+        return result;
     }
 
     /**

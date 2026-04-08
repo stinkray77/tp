@@ -29,9 +29,7 @@
         </Label>
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
-      <FlowPane fx:id="subjects" />
-      <FlowPane fx:id="days" />
-      <FlowPane fx:id="times" />
+      <FlowPane fx:id="lessonSlots" />
       <FlowPane fx:id="tags" />
     </VBox>
 

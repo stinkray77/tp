@@ -43,11 +43,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label remark;
     @FXML
-    private FlowPane subjects;
-    @FXML
-    private FlowPane days;
-    @FXML
-    private FlowPane times;
+    private FlowPane lessonSlots;
     @FXML
     private FlowPane tags;
 
@@ -69,18 +65,10 @@ public class PersonCard extends UiPart<Region> {
         remark.setText(remarkText.isEmpty() ? "" : "Remark: " + remarkText);
         remark.setVisible(!remarkText.isEmpty());
         remark.setManaged(!remarkText.isEmpty());
-        person.getSubjects().stream()
-                .sorted(Comparator.comparing(s -> s.subjectName))
-                .forEach(s -> subjects.getChildren()
-                        .add(new Label(s.subjectName)));
-        person.getDays().stream()
-                .sorted(Comparator.comparing(d -> d.dayName))
-                .forEach(d -> days.getChildren()
-                        .add(new Label(d.dayName)));
-        person.getTimes().stream()
-                .sorted(Comparator.comparing(t -> t.timeValue))
-                .forEach(t -> times.getChildren()
-                        .add(new Label(t.timeValue)));
+        person.getLessonSlots().stream()
+                .sorted(Comparator.comparing(ls -> ls.toString()))
+                .forEach(ls -> lessonSlots.getChildren()
+                        .add(new Label(ls.toString())));
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren()
