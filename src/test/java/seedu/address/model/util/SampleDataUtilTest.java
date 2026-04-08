@@ -43,7 +43,7 @@ public class SampleDataUtilTest {
 
     @Test
     public void getTagSet_singleTag_returnsCorrectSet() {
-        assertTrue(SampleDataUtil.getTagSet("friends").contains(new Tag("friends")));
+        assertTrue(SampleDataUtil.getTagSet("secondary").contains(new Tag("secondary")));
     }
 
     @Test

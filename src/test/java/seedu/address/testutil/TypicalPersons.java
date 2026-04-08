@@ -29,12 +29,12 @@ public class TypicalPersons {
             .withAddress("123, Jurong West Ave 6, #08-111").withEmail("alice@example.com")
             .withSubjects("Mathematics").withEmergencyContact("94351253")
             .withPaymentStatus("Paid").withDays().withTimes().withRemark("")
-            .withTags("friends").build();
+            .withTags("secondary").build();
     public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withEmail("johnd@example.com").withSubjects("English")
             .withEmergencyContact("98765432").withPaymentStatus("Due")
-            .withDays().withTimes().withRemark("").withTags("owesMoney", "friends").build();
+            .withDays().withTimes().withRemark("").withTags("primary", "priority").build();
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz")
             .withEmail("heinz@example.com").withAddress("wall street")
             .withEmergencyContact("95352563").withDays().withTimes().withRemark("")
@@ -42,7 +42,7 @@ public class TypicalPersons {
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier")
             .withEmail("cornelia@example.com").withAddress("10th street")
             .withEmergencyContact("87652533").withPaymentStatus("Due")
-            .withDays().withTimes().withRemark("").withTags("friends").build();
+            .withDays().withTimes().withRemark("").withTags("secondary").build();
     public static final Person ELLE = new PersonBuilder().withName("Elle Meyer")
             .withEmail("werner@example.com").withAddress("michegan ave")
             .withEmergencyContact("94822240").withPaymentStatus("Paid")
