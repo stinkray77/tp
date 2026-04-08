@@ -681,17 +681,52 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private student detail**: A student detail that is not meant to be shared with others
+#### User & Data Entities
+
+* **Tutor**: The primary user of Tutor Central, an individual providing tutoring services
+* **Student**: A learner whose information is managed in Tutor Central
+* **Subject**: An academic subject a student is enrolled in (e.g., Mathematics, English)
+* **Lesson**: A specific class session within a subject (e.g., `Algebra Lesson 5`)
+* **Attendance**: The record of a student's presence at a lesson
+* **Attendance Status**: The recorded status for attendance: `Present`, `Absent`, or `Excused`
+* **Payment Status**: The financial status of a student: `Paid`, `Due`, or `Overdue`
+* **Emergency Contact**: An 8-digit Singapore phone number for a student's parent/guardian
+* **Remark**: A free-text note attached to a student record
+* **Tag**: A label for categorizing students (e.g., `primary`, `priority`)
 * **Field**: A piece of data within a student record (e.g., Name, Emergency Contact)
-* **List View**: The graphical display showing all student records in a scrollable table or grid format
 * **Timeslot**: The scheduled day and time of the tuition for a student
 * **Rate**: Tuition fee that is agreed upon
-* **Command Box**: The text box where users type commands
-* **Command Output Area**: The display area showing the results of command entered (successes or failures)
-* **Auto-save**: Automatic saving of changes without needing any extra user action
+* **Private student detail**: A student detail that is not meant to be shared with others
 * **Duplicate Record**: A new student entry that is identical or near identical to an existing entry
+
+#### Application Logic & Architecture
+
+* **Model**: The component that holds application data in memory
+* **Logic**: The component that parses and executes user commands
+* **Storage**: The component that reads and writes data to JSON files
+* **Command**: A parsed user instruction ready for execution
+* **Predicate**: A filter condition applied to the student list
+* **JSON**: The file format used for persistent data storage
+* **Auto-save**: Automatic saving of changes without needing any extra user action
+
+#### Commands & User Input
+
+* **Prefix**: A short string that marks the beginning of a parameter (e.g., `n/`, `s/`, `ps/`)
+* **Index**: The 1-based position number of a student in the displayed list
+* **Preamble**: Text before the first prefix in a command string
+* **Parameter**: A value provided to a command via a prefix
 * **Line-break**: In multi-line commands, it is the point where the command visually wraps to the next line in the display
+
+#### Interface & Environment
+
+* **CLI**: Command Line Interface, the text-based input method
+* **GUI**: Graphical User Interface, the visual display
+* **JavaFX**: The UI framework used by Tutor Central
+* **MarkBind**: The documentation framework used for the project website
+* **List View**: The graphical display showing all student records in a scrollable table or grid format
+* **Command Box**: The text box where users type commands
+* **Command Output Area**: The display area showing the results of commands entered (successes or failures)
+* **Mainstream OS**: Windows, Linux, Unix, MacOS
 
 --------------------------------------------------------------------------------------------------------------------
 
