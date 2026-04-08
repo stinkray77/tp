@@ -49,7 +49,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 || argMultimap.getValue(PREFIX_TAG).isPresent();
 
         if (!hasPrefixes) {
-            // Backward compatible: treat as name search
+            // If no supported prefixes are provided, interpret the input as a name search.
             String[] nameKeywords = argMultimap.getPreamble().split("\\s+");
             return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
         } else {
