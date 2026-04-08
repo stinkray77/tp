@@ -266,6 +266,27 @@ During execution, `MarkAttendanceCommand`:
 
 <puml src="diagrams/MarkAttendanceSequenceDiagram.puml" alt="Sequence diagram for the mark attendance feature" />
 
+### List attendance feature
+
+The `listattendance` command displays a student's attendance records, optionally filtered by subject.
+
+`ListAttendanceCommandParser` tokenizes the user input and extracts:
+
+* the index from the preamble
+* an optional `s/` value to filter by subject
+
+During execution, `ListAttendanceCommand`:
+1. Validates the index is in range.
+2. Retrieves the target student from the filtered list.
+3. Retrieves the student's `attendanceRecords` map.
+4. If a subject filter is provided, filters to show only that subject's records.
+5. Formats the results into a human-readable string.
+6. Returns a `CommandResult` with the formatted string.
+
+The output format is: `Attendance for [NAME]: [SUBJECT]: [LESSON]: [STATUS]`
+
+<puml src="diagrams/ListAttendanceSequenceDiagram.puml" alt="Sequence diagram for the list attendance feature" />
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
