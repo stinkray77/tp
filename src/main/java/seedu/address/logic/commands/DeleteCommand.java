@@ -23,7 +23,7 @@ public class DeleteCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS =
-            "Deleted student: %1$s succesfully\nTotal students now: %2$d";
+            "Deleted student: %1$s successfully\nTotal students now: %2$d";
 
     // Custom error message for out of range
     public static final String MESSAGE_OUT_OF_RANGE = "Out of range: No student found at index %1$d.";
