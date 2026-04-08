@@ -5,7 +5,6 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Remark;
@@ -22,18 +21,23 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
      */
     public RemarkCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
-                PREFIX_REMARK);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_REMARK);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_REMARK);
 
         Index index;
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (IllegalValueException ive) {
+        } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    RemarkCommand.MESSAGE_USAGE), ive);
+                    RemarkCommand.MESSAGE_USAGE), pe);
         }
 
-        String remark = argMultimap.getValue(PREFIX_REMARK).orElse("");
+        if (argMultimap.getValue(PREFIX_REMARK).isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    RemarkCommand.MESSAGE_USAGE));
+        }
+
+        String remark = argMultimap.getValue(PREFIX_REMARK).get();
 
         return new RemarkCommand(index, new Remark(remark));
     }
