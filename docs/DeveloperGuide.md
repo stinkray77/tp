@@ -403,7 +403,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor performs <u>Search for students (UC02).</u>
+1.  Tutor list students or performs <u>Search for students (UC02).</u>
 2.  Tutor requests to delete the target student from the shown results.
 3.  Tutor Central deletes the target student.
 4.  Tutor Central shows a success message with the deleted student's details.
@@ -480,7 +480,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor performs <u>Search for students (UC02).</u>
+1.  Tutor lists students or performs <u>Search for students (UC02).</u>
 2.  Tutor requests to update the target student from the search results.
 3.  Tutor Central shows the details that can be updated.
 4.  Tutor provides updated values for one or more fields.
@@ -513,9 +513,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to view a student.
-2.  Tutor Central locates the target student in the currently shown list.
-3.  Tutor Central shows the full student details in a popup dialog.
+1. Tutor lists students or performs <u>Search for students (UC02).</u> 
+2. Tutor locates target student and requests to view the student in the currently shown list.
+3. Tutor Central shows the full student details in a popup dialog.
 
     Use case ends.
 
@@ -531,7 +531,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to search for students.
+1.  Tutor lists students or performs <u>Search for students (UC02).</u>
 2.  Tutor Central parses the search criteria.
 3.  Tutor Central filters the student list using the specified field predicates.
 4.  Tutor Central displays the matching students.
@@ -562,10 +562,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to update a student's payment status.
-2.  Tutor Central locates the target student in the currently shown list.
-3.  Tutor Central updates the student's payment status.
-4.  Tutor Central shows a success message confirming the new payment status.
+1. Tutor lists students or performs <u>Search for students (UC02).</u> 
+2. Tutor requests to update a student's payment status.
+3. Tutor Central locates the target student in the currently shown list.
+4. Tutor Central updates the student's payment status.
+5. Tutor Central shows a success message confirming the new payment status.
 
     Use case ends.
 
@@ -587,10 +588,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to update a student's remark.
-2.  Tutor Central locates the target student in the currently shown list.
-3.  Tutor Central updates the student's remark.
-4.  Tutor Central shows a success message with the updated student details.
+1. Tutor lists students or performs <u>Search for students (UC02).</u>
+2. Tutor requests to update a student's remark.
+3. Tutor Central locates the target student in the currently shown list.
+4. Tutor Central updates the student's remark.
+5. Tutor Central shows a success message with the updated student details.
 
     Use case ends.
 
@@ -605,6 +607,62 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 3a. Tutor provides an empty remark.
     * 3a1. Tutor Central removes the student's existing remark.
     * 3a2. Tutor Central shows a success message with the updated student details.
+
+        Use case ends.
+
+
+**Use Case 09: Mark student attendance**
+
+**MSS**
+
+1.  Tutor lists students or performs <u>Search for students (UC02).</u>
+2.  Tutor requests to mark attendance for a student at a specific index, specifying the subject, lesson, and status.
+3.  Tutor Central validates the index, subject, lesson, and status.
+4.  Tutor Central records the attendance and shows a success message.
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. The specified index is invalid.
+    * 3a1. Tutor Central shows an error message.
+
+        Use case resumes from step 2.
+
+
+* 3b. The specified subject does not match any of the student's subjects.
+    * 3b1. Tutor Central shows an error message indicating the subject mismatch.
+
+        Use case resumes from step 2.
+
+
+* 3c. The attendance status is not one of Present, Absent, or Excused.
+    * 3c1. Tutor Central shows an error message with valid status options.
+
+        Use case resumes from step 2.
+
+
+**Use Case 10: List student attendance**
+
+**MSS**
+
+1. Tutor lists students or performs <u>Search for students (UC02).</u>
+2. Tutor requests to list the attendance for a student at a specific index, optionally specifying a subject filter.
+3. Tutor Central validates the index, and optionally subject.
+4. Tutor Central retrieves and displays the attendance records.
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. The specified index is invalid.
+    * 3a1. Tutor Central shows an error message.
+
+        Use case resumes from step 2.
+
+
+* 4a. No attendance records exist for the student (or for the filtered subject).
+    * 4a1. Tutor Central shows a message indicating no records found.
 
         Use case ends.
 
