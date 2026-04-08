@@ -1,0 +1,77 @@
+@startuml ListAttendanceSequenceDiagram
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ListAttendanceCommandParser" as ListAttendanceCommandParser LOGIC_COLOR
+participant "m:ListAttendanceCommand" as ListAttendanceCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "model:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("listattendance 1 s/Mathematics")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("listattendance 1 s/Mathematics")
+activate AddressBookParser
+
+create ListAttendanceCommandParser
+AddressBookParser -> ListAttendanceCommandParser
+activate ListAttendanceCommandParser
+
+ListAttendanceCommandParser --> AddressBookParser
+deactivate ListAttendanceCommandParser
+
+AddressBookParser -> ListAttendanceCommandParser : parse(" 1 s/Mathematics")
+activate ListAttendanceCommandParser
+
+ListAttendanceCommandParser -> ListAttendanceCommandParser : tokenize args with PREFIX_SUBJECT
+ListAttendanceCommandParser -> ListAttendanceCommandParser : parse index from preamble
+ListAttendanceCommandParser -> ListAttendanceCommandParser : parse optional subject from s/
+
+create ListAttendanceCommand
+ListAttendanceCommandParser -> ListAttendanceCommand
+activate ListAttendanceCommand
+
+ListAttendanceCommand --> ListAttendanceCommandParser
+deactivate ListAttendanceCommand
+
+ListAttendanceCommandParser --> AddressBookParser : m
+deactivate ListAttendanceCommandParser
+ListAttendanceCommandParser -[hidden]-> AddressBookParser
+destroy ListAttendanceCommandParser
+
+AddressBookParser --> LogicManager : m
+deactivate AddressBookParser
+
+LogicManager -> ListAttendanceCommand : execute(model)
+activate ListAttendanceCommand
+
+ListAttendanceCommand -> Model : getFilteredPersonList()
+activate Model
+Model --> ListAttendanceCommand : lastShownList
+deactivate Model
+
+ListAttendanceCommand -> ListAttendanceCommand : validate index is in range
+ListAttendanceCommand -> ListAttendanceCommand : retrieve attendanceRecords from target student
+ListAttendanceCommand -> ListAttendanceCommand : filter by subject if s/ provided
+ListAttendanceCommand -> ListAttendanceCommand : format results as "Attendance for [NAME]: [SUBJECT]: [LESSON]: [STATUS]"
+
+create CommandResult
+ListAttendanceCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ListAttendanceCommand
+deactivate CommandResult
+
+ListAttendanceCommand --> LogicManager : r
+deactivate ListAttendanceCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
