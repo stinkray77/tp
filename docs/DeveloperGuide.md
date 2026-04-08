@@ -861,6 +861,42 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `delete 2`<br>
       Expected: Error message — index out of bounds for the filtered list, even if more students exist in the full list.
 
+### Marking attendance
+
+1. Marking attendance for a student
+
+   1. Prerequisites: List all students using the `list` command. Multiple students in the list. At least one student has a subject assigned.
+
+   1. Test case: `markattendance 1 s/Mathematics l/Algebra Lesson 1 st/Present` (assuming the first student has Mathematics as a subject)<br>
+      Expected: Attendance recorded successfully. Success message shown with student name, subject, lesson, and status.
+
+   1. Test case: `markattendance 1 s/NonexistentSubject l/Lesson 1 st/Present`<br>
+      Expected: Error message indicating the student is not enrolled in the specified subject.
+
+   1. Test case: `markattendance 1 s/Mathematics l/Algebra Lesson 1 st/InvalidStatus`<br>
+      Expected: Error message showing valid status options (Present, Absent, Excused).
+
+   1. Test case: `markattendance 0 s/Mathematics l/Algebra Lesson 1 st/Present`<br>
+      Expected: Error message about invalid index.
+
+### View attendance
+
+1. Viewing a student's attendance records
+
+   1. Prerequisites: Mark attendance for at least one student using `markattendance` commands.
+
+   1. Test case: `listattendance 1`<br>
+      Expected: All attendance records for the 1st student are displayed, organized by subject.
+
+   1. Test case: `listattendance 1 s/Mathematics`<br>
+      Expected: Only Mathematics attendance records for the 1st student are displayed.
+
+   1. Test case: `listattendance 0`<br>
+      Expected: Error message about invalid index.
+
+   1. Other incorrect commands to try: `listattendance`, `listattendance x` (where x is larger than the list size)<br>
+      Expected: Appropriate error messages.
+
 ### Saving data
 
 1. Dealing with missing data file
