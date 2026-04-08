@@ -347,6 +347,7 @@ Format: `delete INDEX`
 * The index **must be a plain positive integer** 1, 2, 3, …​
 * Inputs such as `+2` and `1.0` are not supported.
 * The command only accepts one index input at a time.
+* After a successful deletion, Tutor Central shows the full student list again.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in Tutor Central.
@@ -394,7 +395,7 @@ _Details coming soon ..._
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TutorCentral home folder.
 
 **Q**: Where is the data file stored?<br>
-**A**: By default, TutorCentral saves data in a `data` folder next to the JAR file, in a file called `tutorcentral.json` (or `addressbook.json` depending on your configuration). Check the status bar at the bottom of the app to see the exact path. Keep dated backups so you can revert if needed.
+**A**: By default, TutorCentral saves data in a `data` folder next to the JAR file, in a file called `tutorcentral.json`. Check the footer at the bottom of the app to see the exact path. Keep dated backups so you can revert if needed.
 
 **Q**: How do I back up my data?<br>
 **A**: Copy the data JSON file `[JAR file location]/data/tutorcentral.json` (or `addressbook.json` depending on your configuration) to a safe location such as your Downloads folder or an external drive. To restore from a backup, replace the data file with your backup copy.

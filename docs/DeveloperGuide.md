@@ -189,8 +189,8 @@ For example, `PaymentStatusMatchesPredicate("Paid")` returns `true` for a
 student whose payment status is `Paid`, and `false` otherwise.
 
 When no supported prefix is present, the parser falls back to the command
-preamble and creates a `NameContainsKeywordsPredicate`. This preserves backward
-compatibility for inputs such as `find alice bob`.
+preamble and creates a `NameContainsKeywordsPredicate`. This allows name-only
+searches such as `find alice bob` to continue working without prefixes.
 
 When one or more supported prefixes are present, the parser creates one or more
 field-specific predicates:
@@ -385,7 +385,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 (current choice):** Saves the entire student data set.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
@@ -739,7 +739,7 @@ testers are expected to do more *exploratory* testing.
 
    2. Open a terminal. Run `java -version` to confirm Java 17 is active.
 
-   3. Run `java -jar addressbook.jar`.<br>
+   3. Run `java -jar tutorcentral.jar`.<br>
       Expected: Application launches with sample student data. Window opens correctly.
 
 ### Adding a student
@@ -820,10 +820,10 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all students using the `list` command. Multiple students in the list.
 
    2. Test case: `delete 1`<br>
-      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message. The full student list is shown again.
 
    3. Test case: `delete 0`<br>
-      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No student is deleted. Error details shown in the status message. The student list remains unchanged.
 
    4. Test case: `delete +2`<br>
       Expected: No student is deleted. Error message explains that only plain positive integers are accepted.
@@ -839,7 +839,7 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Use `find n/Alice` to show only one student.
 
    2. Test case: `delete 1`<br>
-      Expected: That student is deleted. Status message shows deleted student's details. Running `list` confirms the student is gone.
+      Expected: That student is deleted. Status message shows deleted student's details. The full student list is shown again, and running `list` confirms the student is gone.
 
    3. Test case: `delete 2`<br>
       Expected: Error message — index out of bounds for the filtered list, even if more students exist in the full list.
@@ -848,7 +848,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing data file
 
-   1. Close the application. Navigate to the data folder (default: `[home folder]/.tutorcentral/`). Delete `tutorcentral.json`.
+   1. Close the application. Navigate to the `data` folder beside the JAR file. Delete `tutorcentral.json`.
 
    2. Re-launch the application.<br>
       Expected: Application starts with sample data populated from `SampleDataUtil`.
@@ -858,7 +858,7 @@ testers are expected to do more *exploratory* testing.
    1. Close the application. Open `tutorcentral.json` in a text editor. Delete a required field (e.g. remove the `"name"` field from one entry). Save the file.
 
    2. Re-launch the application.<br>
-      Expected: Application starts with an empty address book. A warning is logged but the application does not crash. The corrupted file is discarded.
+      Expected: Application starts with an empty student list. A warning is logged but the application does not crash. The corrupted file is discarded.
 
 3. Data persistence across sessions
 

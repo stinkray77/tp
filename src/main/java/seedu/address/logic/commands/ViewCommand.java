@@ -12,7 +12,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Views a person identified using its displayed index from the address book.
+ * Views a student identified using its displayed index from Tutor Central.
  */
 public class ViewCommand extends Command {
 
