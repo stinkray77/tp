@@ -62,7 +62,8 @@ public class MarkCommand extends Command {
                 personToMark.getEmergencyContact(),
                 newStatus,
                 personToMark.getRemark(),
-                personToMark.getTags()
+                personToMark.getTags(),
+                personToMark.getAttendanceRecords()
         );
 
         model.setPerson(personToMark, markedPerson);
