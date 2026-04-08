@@ -408,6 +408,23 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 Archiving would allow tutors to hide inactive students from the main list without permanently deleting them. This feature is not yet implemented.
 
+### \[Proposed\] Monthly payment tracking
+
+The current payment status field (`Paid`, `Due`, `Overdue`) is a single static value per student. In practice, tutors need to track payments on a monthly basis — a student may be `Paid` for March but `Due` for April. A future enhancement would replace the single `PaymentStatus` with a monthly payment record (e.g., `Map<YearMonth, PaymentStatus>`), allowing tutors to:
+
+* Mark payment status per month (e.g., `mark 1 ps/Paid m/2026-04`)
+* View payment history over time
+* Identify students with overdue payments for specific months
+* Generate payment summaries for a given period
+
+### \[Proposed\] Lesson duration
+
+Each `LessonSlot` currently stores only a start time. Adding a `Duration` field (e.g., 60 or 90 minutes) would enable:
+
+* Display of lesson end times in the UI (e.g., "Monday 1400–1530")
+* Detection of scheduling conflicts between overlapping lesson slots
+* Calculation of total teaching hours per week or month for workload planning
+
 
 --------------------------------------------------------------------------------------------------------------------
 
