@@ -253,7 +253,6 @@ Format: `remark INDEX r/REMARK`
 * The index **must be a positive integer** 1, 2, 3, ...
 * The remark replaces any existing remark for that student.
 * To remove a remark, use `remark INDEX r/` with nothing after `r/`.
-* `remark INDEX` without `r/` is also treated as removing the student's remark.
 
 Examples:
 * `remark 1 r/Needs extra help with algebra` adds a remark to the 1st student.
