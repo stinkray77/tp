@@ -173,9 +173,6 @@ public class EditCommand extends Command {
 
             attendanceBySlot.forEach((attendanceKey, status) -> {
                 String canonicalSubject = allowedAttendanceKeys.get(attendanceKey);
-                if (canonicalSubject == null) {
-                    return;
-                }
                 prunedRecords.computeIfAbsent(canonicalSubject, key -> new LinkedHashMap<>())
                         .put(attendanceKey, status);
             });
