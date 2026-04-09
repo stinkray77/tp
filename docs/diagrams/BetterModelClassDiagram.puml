@@ -5,11 +5,7 @@ skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
 AddressBook *-right-> "1" UniquePersonList
-AddressBook *-right-> "1" UniqueTagList
-UniqueTagList -[hidden]down- UniquePersonList
-UniqueTagList -[hidden]down- UniquePersonList
 
-UniqueTagList -right-> "*" Tag
 UniquePersonList -right-> Person
 
 Person -up-> "*" Tag
@@ -23,10 +19,12 @@ LessonSlot *--> Day
 LessonSlot *--> Time
 Person *--> EmergencyContact
 Person *--> PaymentStatus
+Person *--> Remark
 Person --> "attendanceRecords" AttendanceStatus
 
 Class LessonSlot
 
 Class "<<enum>>\nAttendanceStatus" as AttendanceStatus
-PaymentStatus -[hidden]right-> AttendanceStatus
+PaymentStatus -[hidden]right-> Remark
+Remark -[hidden]right-> AttendanceStatus
 @enduml

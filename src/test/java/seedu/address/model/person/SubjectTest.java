@@ -28,6 +28,10 @@ public class SubjectTest {
         assertFalse(Subject.isValidSubject("Math!"));
         assertFalse(Subject.isValidSubject("@Science"));
 
+        // special characters currently not accepted (planned enhancement)
+        assertFalse(Subject.isValidSubject("A-Math")); // hyphen
+        assertFalse(Subject.isValidSubject("Mother Tongue (Chinese)")); // parentheses
+
         assertTrue(Subject.isValidSubject("Mathematics"));
         assertTrue(Subject.isValidSubject("English Literature"));
         assertTrue(Subject.isValidSubject("H2 Physics"));

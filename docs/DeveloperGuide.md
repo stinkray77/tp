@@ -13,7 +13,8 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
+* This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+* Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -67,13 +68,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -84,7 +85,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -116,7 +117,7 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -144,7 +145,7 @@ Derived getters `getSubjects()`, `getDays()`, and `getTimes()` are provided for 
 
 <box type="info" seamless>
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model class to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**Note:** An alternative (arguably, a more OOP) model is given below. It provides a more focused view of the `AddressBook`'s internal structure, showing how `Person` objects are stored in a `UniquePersonList` and how each `Person` composes its value-object fields.<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
@@ -153,7 +154,7 @@ Derived getters `getSubjects()`, `getDays()`, and `getTimes()` are provided for 
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -257,6 +258,10 @@ remark, and tags. The updated student replaces the original student in the
 model, and the filtered list is refreshed.
 
 <puml src="diagrams/MarkSequenceDiagram.puml" alt="Sequence diagram for the mark payment status feature" />
+
+The following activity diagram summarises the flow when a `mark` command is executed:
+
+<puml src="diagrams/MarkActivityDiagram.puml" alt="Activity diagram for the mark payment status feature" />
 
 ### Mark attendance feature
 
@@ -467,7 +472,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | tutor                    | search students by subject, day, or payment status      | quickly find relevant students                                |
 | `* * *`  | tutor                    | view a student's full details                           | check information before a lesson                             |
 | `* * *`  | tutor                    | delete a student                                        | remove entries that I no longer need                          |
-| `* *`    | tutor                    | quickly mark a student's payment as paid                | track payments efficiently                                     |
 | `* *`    | tutor                    | update a student's details                              | correct outdated records when needed                          |
 | `* * *`  | tutor                    | mark a student's payment status                         | track who has paid without editing the full student record    |
 | `* * *`  | tutor                    | add a free-text remark to a student                     | record lesson notes, progress, or reminders quickly           |
@@ -511,23 +515,21 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to search for students.
-2.  Tutor Central prompts for the search criteria.
-3.  Tutor inputs the search criteria.
-4.  Tutor Central shows a list of students that match the criteria.
+1.  Tutor enters a search command with the desired criteria.
+2.  Tutor Central shows a list of students that match the criteria.
 
     Use case ends.
 
 **Extensions**
 
-* 3a. Tutor Central detects invalid search input.
-    * 3a1. Tutor Central shows an error message.
+* 1a. Tutor Central detects invalid search input.
+    * 1a1. Tutor Central shows an error message.
 
         Use case resumes from step 1.
 
 
-* 3b. No students match the criteria.
-    * 3b1. Tutor Central shows an empty list.
+* 2a. No students match the criteria.
+    * 2a1. Tutor Central shows an empty list.
 
         Use case ends.
 
@@ -609,8 +611,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 1a. The specified student index is invalid.
-    * 1a1. Tutor Central shows an error message.
+* 2a. The specified student index is invalid.
+    * 2a1. Tutor Central shows an error message.
 
         Use case ends.
 
@@ -660,14 +662,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 1a. The specified student index is invalid.
-    * 1a1. Tutor Central shows an error message.
+* 2a. The specified student index is invalid.
+    * 2a1. Tutor Central shows an error message.
 
         Use case ends.
 
 
-* 1b. Tutor provides multiple payment statuses.
-    * 1b1. Tutor Central shows an error message.
+* 2b. Tutor provides multiple payment statuses.
+    * 2b1. Tutor Central shows an error message.
 
         Use case ends.
 
@@ -704,8 +706,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.  Tutor lists students or performs <u>Search for students (UC02).</u>
-2.  Tutor requests to mark attendance for a student at a specific index, specifying the subject, lesson, and status.
-3.  Tutor Central validates the index, subject, lesson, and status.
+2.  Tutor requests to mark attendance for a student at a specific index, specifying the subject, day, time, and status.
+3.  Tutor Central validates the index, subject, day, time, and status.
 4.  Tutor Central records the attendance and shows a success message.
 
     Use case ends.
@@ -761,13 +763,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.  Changes made via commands must be auto-saved within 1 second of completion.
-5.  The student list must scroll smoothly and display at least 200 hundred student records without lag or stutter.
-6.  The default view must show essential fields like name and timeslot without horizontal scrolling
-7.  The System should warn users when adding a student with the same name or phone number as an existing entry, to prevent duplicate records.
+5.  The student list must scroll smoothly and display at least 200 student records without lag or stutter.
+6.  The default view must show essential fields like name and timeslot without horizontal scrolling.
+7.  The system must detect and reject duplicate student entries (same name, case-sensitive) within 1 second of the `add` command completing, displaying a clear error message.
 8.  Must consume less than 150MB of RAM, and minimal CPU when idle.
 9.  Attendance records must be persisted to the JSON data file within 1 second of the `markattendance` command completing.
 10. The `listattendance` command should return results within 1 second even for students with 100+ attendance records.
-11. All commands should provide clear, specific error messages that guide the user to correct their input.
+11. All error messages must include the invalid input value and the expected format, so the user can correct the command without consulting the User Guide.
 
 
 ### Glossary
@@ -777,8 +779,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Tutor**: The primary user of Tutor Central, an individual providing tutoring services
 * **Student**: A learner whose information is managed in Tutor Central
 * **Subject**: An academic subject a student is enrolled in (e.g., Mathematics, English)
-* **Lesson**: A specific class session within a subject (e.g., `Algebra Lesson 5`)
-* **Attendance**: The record of a student's presence at a lesson
+* **Lesson Slot**: A scheduled lesson defined by a Subject, Day, and Time triplet (e.g., Mathematics on Monday at 1400)
+* **Lesson**: A specific class session within a subject
+* **Attendance**: The record of a student's presence at a lesson slot
 * **Attendance Status**: The recorded status for attendance: `Present`, `Absent`, or `Excused`
 * **Payment Status**: The financial status of a student: `Paid`, `Due`, or `Overdue`
 * **Emergency Contact**: An 8-digit Singapore phone number for a student's parent/guardian
@@ -875,6 +878,42 @@ testers are expected to do more *exploratory* testing.
    1. Test case: Mismatched subjects/days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math s/English d/Monday ti/1400 d/Tuesday ec/91234567 ps/Paid`<br>
       Expected: No student added. Error message stating subjects, days, and times count must all match.
 
+### Editing a student
+
+1. Editing a student's details
+
+   1. Prerequisites: List all students using `list`. At least one student in the list.
+
+   2. Test case: `edit 1 n/Alice Tan`<br>
+      Expected: First student's name updated to "Alice Tan". Success message shows updated details.
+
+   3. Test case: `edit 1 s/English d/Wednesday ti/1000`<br>
+      Expected: First student's lesson slots replaced with English on Wednesday at 1000. Success message shown.
+
+   4. Test case: `edit 1 s/English d/Wednesday`<br>
+      Expected: No edit made. Error message stating subjects, days, and times count must all match.
+
+   5. Test case: `edit 0 n/Test`<br>
+      Expected: No edit made. Error message about invalid index.
+
+   6. Test case: `edit 1` (no fields specified)<br>
+      Expected: Command succeeds (no-op). The student remains unchanged.
+
+### Viewing a student
+
+1. Viewing a student's full details
+
+   1. Prerequisites: List all students using `list`. At least one student in the list.
+
+   2. Test case: `view 1`<br>
+      Expected: A popup dialog shows the first student's full details including name, email, address, lesson slots, emergency contact, payment status, remark, and tags.
+
+   3. Test case: `view 0`<br>
+      Expected: No dialog shown. Error message about invalid index.
+
+   4. Test case: `view x` (where x is larger than the list size)<br>
+      Expected: No dialog shown. Error message about invalid index.
+
 ### Marking payment status
 
 1. Marking payment status with valid input
@@ -958,6 +997,11 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `find ps/Paid ps/Overdue`<br>
       Expected: Students with either `Paid` or `Overdue` status are listed.
 
+### Exiting the application
+
+1. Test case: `exit`<br>
+   Expected: The application window closes. All data is saved.
+
 ### Deleting a person
 
 1. Deleting a student while all students are being shown
@@ -989,42 +1033,6 @@ testers are expected to do more *exploratory* testing.
    3. Test case: `delete 2`<br>
       Expected: Error message — index out of bounds for the filtered list, even if more students exist in the full list.
 
-### Marking attendance
-
-1. Marking attendance for a student
-
-   1. Prerequisites: List all students using the `list` command. Multiple students in the list. At least one student has a subject assigned.
-
-   1. Test case: `markattendance 1 s/Mathematics l/Algebra Lesson 1 st/Present` (assuming the first student has Mathematics as a subject)<br>
-      Expected: Attendance recorded successfully. Success message shown with student name, subject, lesson, and status.
-
-   1. Test case: `markattendance 1 s/NonexistentSubject l/Lesson 1 st/Present`<br>
-      Expected: Error message indicating the student is not enrolled in the specified subject.
-
-   1. Test case: `markattendance 1 s/Mathematics l/Algebra Lesson 1 st/InvalidStatus`<br>
-      Expected: Error message showing valid status options (Present, Absent, Excused).
-
-   1. Test case: `markattendance 0 s/Mathematics l/Algebra Lesson 1 st/Present`<br>
-      Expected: Error message about invalid index.
-
-### Viewing attendance
-
-1. Viewing a student's attendance records
-
-   1. Prerequisites: Mark attendance for at least one student using `markattendance` commands.
-
-   1. Test case: `listattendance 1`<br>
-      Expected: All attendance records for the 1st student are displayed, organized by subject.
-
-   1. Test case: `listattendance 1 s/Mathematics`<br>
-      Expected: Only Mathematics attendance records for the 1st student are displayed.
-
-   1. Test case: `listattendance 0`<br>
-      Expected: Error message about invalid index.
-
-   1. Other incorrect commands to try: `listattendance`, `listattendance x` (where x is larger than the list size)<br>
-      Expected: Appropriate error messages.
-
 ### Saving data
 
 1. Dealing with missing data file
@@ -1047,3 +1055,56 @@ testers are expected to do more *exploratory* testing.
 
    2. Re-launch the application.<br>
       Expected: The student added in the previous session is still present in the list.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Effort**
+
+### Difficulty Level
+
+Tutor Central required significantly more effort than AB3. AB3 manages a flat list of contacts with basic CRUD operations. Tutor Central extends this into a domain-specific tutor management system with:
+
+* **Composite data model** — `Person` was expanded from simple fields (Name, Phone, Email, Address, Tags) to a richer model including `LessonSlot` (a composite value object bundling Subject, Day, and Time), `EmergencyContact`, `PaymentStatus`, `Remark`, and a nested `attendanceRecords` map.
+* **Lesson slot refactor** — We initially modelled subjects, days, and times as three independent `Set` fields. This caused data integrity issues (mismatched counts) and made attendance tracking unreliable. We refactored into a unified `List<LessonSlot>` model, requiring changes across the entire stack: model, parser, storage (JSON serialisation), commands, and tests.
+* **Attendance tracking** — A two-level nested map (`Map<String, Map<String, AttendanceStatus>>`) keyed by subject and day-time slot was added to each student, with dedicated `markattendance` and `listattendance` commands for recording and viewing attendance history.
+* **Dedicated single-field commands** — `mark` (payment status) and `remark` were added as shortcuts to avoid the verbose `edit` syntax for the most common single-field updates.
+* **Extended find** — The `find` command was extended from name-only keyword search to support prefix-based multi-field filtering (`n/`, `s/`, `d/`, `ps/`, `t/`) with composable predicates.
+* **View dialog** — A `view` command was added to display a student's full details in a popup `PersonViewDialog`, requiring new JavaFX UI work.
+
+### Challenges
+
+* Ensuring the `edit` command preserved existing attendance records when non-slot fields were updated, and correctly pruned stale records when lesson slots were changed.
+* Maintaining backward compatibility during the LessonSlot refactor while keeping all existing tests passing.
+* JSON serialisation of the nested attendance map with proper validation on deserialisation (subject name validation, day-time key format validation, case-insensitive status parsing).
+
+### Achievements
+
+* 10 use cases fully implemented with comprehensive manual testing coverage.
+* All PlantUML diagrams verified against the current codebase.
+* Codecov patch coverage maintained above 85% throughout development.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Make `find` support OR logic across different fields.** Currently, `find s/Math d/Monday` uses AND logic (students must match both). We plan to add an `--or` flag (e.g., `find --or s/Math d/Monday`) so users can search for students matching any of the specified criteria.
+
+2. **Improve error message when `markattendance` targets a non-existent lesson slot.** Currently the error says the student does not have the specified lesson slot, but does not list the valid slots. We will include the student's actual lesson slots in the error message (e.g., "Valid slots: Mathematics Monday 1400, English Wednesday 1000").
+
+3. **Add validation for duplicate lesson slots within a single student.** Currently, `add` and `edit` allow the same subject-day-time triplet to be specified twice. We will reject commands that contain duplicate lesson slot triplets and display an error message.
+
+4. **Standardise `listattendance` output when no records exist.** Currently the message varies slightly depending on whether a subject filter was used. We will unify the output to always say "No attendance records found for [NAME]" optionally followed by "for subject [SUBJECT]".
+
+5. **Prune orphaned attendance records when lesson slots are edited.** Currently, if a student's lesson slots are changed via `edit`, attendance records for removed slots are preserved in storage but not displayed. We will automatically remove attendance records whose subject-day-time key no longer matches any of the student's lesson slots.
+
+6. **Make `view` dialog update when the underlying student data changes.** Currently, the `PersonViewDialog` shows a snapshot of the student at the time of the `view` command. If the user edits the student while the dialog is open, the dialog is not updated. We will bind the dialog to the model so it reflects live data.
+
+7. **Add case-insensitive name matching for duplicate detection.** Currently, "alice tan" and "Alice Tan" are treated as different students. We will make `isSamePerson` case-insensitive so that names differing only by case are detected as duplicates.
+
+8. **Improve `find` to support partial day matching.** Currently, `find d/Mon` does not match "Monday" — the day must be an exact match. We will support partial prefix matching for days (e.g., `d/Mon` matches "Monday").
+
+9. **Add confirmation prompt for `clear` command.** Currently, `clear` deletes all students immediately with no confirmation. We will add a confirmation step (e.g., requiring `clear --confirm`) to prevent accidental data loss.
+
+10. **Relax name and subject validation to accept common special characters.** Currently, names and subjects only allow alphanumeric characters and spaces. This rejects real-world names containing hyphens (e.g., `Mary-Jane`), apostrophes (e.g., `O'Brien`), periods (e.g., `Dr. Smith`), or slashes (e.g., `s/o Kumar`), and subjects like `A-Math` or `Mother Tongue (Chinese)`. We will update the validation regex for both `Name` and `Subject` to accept hyphens, apostrophes, periods, parentheses, and slashes, while ensuring the slash character does not conflict with command prefix parsing.

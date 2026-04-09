@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -24,9 +26,16 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import seedu.address.logic.Logic;
@@ -34,6 +43,9 @@ import seedu.address.logic.LogicManager;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.AttendanceStatus;
+import seedu.address.model.person.PaymentStatus;
+import seedu.address.model.person.Person;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
@@ -124,17 +136,35 @@ public class ScreenshotTest {
         runCommand(robot, "remark 1 r/Needs extra help with algebra.");
         takeScreenshot("remark-result");
 
+        // markattendance — Alice has Mathematics on Monday at 1400
         runCommand(robot, "list");
-        runCommand(robot, "view 1");
-        WaitForAsyncUtils.waitForFxEvents();
-        takeScreenshot("view-result");
+        runCommand(robot, "markattendance 1 s/Mathematics d/Monday ti/1400 st/Present");
+        takeScreenshot("markattendance-result");
 
+        // markattendance error — student does not have this lesson slot
+        runCommand(robot, "markattendance 3 s/Mathematics d/Tuesday ti/0900 st/Present");
+        takeScreenshot("markattendance-error");
+
+        // listattendance — show attendance records for Alice
+        runCommand(robot, "listattendance 1");
+        takeScreenshot("listattendance-result");
+
+        // view — execute via logic directly to avoid showAndWait() blocking,
+        // then manually open the dialog non-modally for the screenshot.
+        runCommand(robot, "list");
+        Person personToView = logic.getFilteredPersonList().get(0);
+        showViewDialogAndScreenshot(personToView, "view-result");
+
+        // delete — delete the added student (index 8)
+        runCommand(robot, "list");
         runCommand(robot, "delete 8");
         takeScreenshot("delete-result");
 
+        // help — main window shows "Opened help window." in the result display
         runCommand(robot, "help");
         WaitForAsyncUtils.waitForFxEvents();
         takeScreenshot("help-result");
+        closeNonModalWindows();
     }
 
     /**
@@ -249,10 +279,20 @@ public class ScreenshotTest {
     // -------------------------------------------------------------------------
 
     private void runCommand(FxRobot robot, String command) {
-        robot.clickOn(".text-field");
-        robot.write(command);
+        clearAndType(robot, command);
         robot.push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Clears the command text field and types a new command into it.
+     */
+    private void clearAndType(FxRobot robot, String command) {
+        robot.clickOn(".text-field");
+        // Select all existing text and delete it before typing new command
+        robot.push(KeyCode.SHORTCUT, KeyCode.A);
+        robot.push(KeyCode.BACK_SPACE);
+        robot.write(command);
     }
 
     private String getResultText(FxRobot robot) {
@@ -273,10 +313,35 @@ public class ScreenshotTest {
 
     private void takeScreenshot(String name) throws IOException, InterruptedException {
         WaitForAsyncUtils.waitForFxEvents();
+        takeScreenshotOfStage(primaryStage, name);
+    }
+
+    /**
+     * Takes a screenshot of a popup/dialog window (the topmost non-primary showing window).
+     * Falls back to the primary stage if no popup is found.
+     */
+    private void takeScreenshotOfPopup(String name) throws IOException, InterruptedException {
+        AtomicReference<Stage> popupRef = new AtomicReference<>();
+        CountDownLatch findLatch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            for (Window w : Window.getWindows()) {
+                if (w instanceof Stage && w != primaryStage && w.isShowing()) {
+                    popupRef.set((Stage) w);
+                }
+            }
+            findLatch.countDown();
+        });
+        findLatch.await();
+
+        Stage target = popupRef.get() != null ? popupRef.get() : primaryStage;
+        takeScreenshotOfStage(target, name);
+    }
+
+    private void takeScreenshotOfStage(Stage stage, String name) throws IOException, InterruptedException {
         AtomicReference<WritableImage> imageRef = new AtomicReference<>();
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
-            imageRef.set(primaryStage.getScene().snapshot(null));
+            imageRef.set(stage.getScene().snapshot(null));
             latch.countDown();
         });
         latch.await();
@@ -284,5 +349,116 @@ public class ScreenshotTest {
         Path outputPath = DOCS_IMAGES.resolve(name + ".png");
         ImageIO.write(bufferedImage, "PNG", outputPath.toFile());
         System.out.println("Saved: " + outputPath.toAbsolutePath());
+    }
+
+    /**
+     * Opens the PersonViewDialog non-modally (using show() instead of showAndWait()),
+     * takes a screenshot of the dialog, then closes it. This avoids the blocking
+     * behaviour of showAndWait() which hangs TestFX.
+     */
+    private void showViewDialogAndScreenshot(Person person, String name)
+            throws IOException, InterruptedException {
+        AtomicReference<Stage> dialogRef = new AtomicReference<>();
+        CountDownLatch openLatch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(PersonViewDialog.class.getResource("/view/PersonViewDialog.fxml"));
+                VBox page = loader.load();
+
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Student Details");
+                dialogStage.setResizable(true);
+                dialogStage.setScene(new Scene(page));
+
+                // Populate the dialog fields using the FXML controller's IDs
+                Label nameLabel = (Label) page.lookup("#nameLabel");
+                Label emergencyContactLabel = (Label) page.lookup("#emergencyContactLabel");
+                Label emailLabel = (Label) page.lookup("#emailLabel");
+                Label addressLabel = (Label) page.lookup("#addressLabel");
+                Label tagsLabel = (Label) page.lookup("#tagsLabel");
+                Label paymentLabel = (Label) page.lookup("#paymentLabel");
+                Label remarkLabel = (Label) page.lookup("#remarkLabel");
+                FlowPane lessonSlots = (FlowPane) page.lookup("#lessonSlots");
+                VBox attendanceRecordsBox = (VBox) page.lookup("#attendanceRecordsBox");
+
+                nameLabel.setText(person.getName().fullName);
+                emergencyContactLabel.setText(person.getEmergencyContact().value);
+                emailLabel.setText(person.getEmail().value);
+                addressLabel.setText(person.getAddress().value);
+                String remarkText = person.getRemark().value;
+                remarkLabel.setText(remarkText.isEmpty() ? "None" : remarkText);
+
+                String tags = person.getTags().stream()
+                        .map(tag -> tag.tagName)
+                        .reduce((a, b) -> a + ", " + b)
+                        .orElse("None");
+                tagsLabel.setText(tags);
+
+                PaymentStatus hasPaid = person.getPaymentStatus();
+                paymentLabel.setText(hasPaid.toString());
+
+                person.getLessonSlots().stream()
+                        .sorted(Comparator.comparing(ls -> ls.toString()))
+                        .forEach(ls -> lessonSlots.getChildren().add(new Label(ls.toString())));
+
+                Map<String, Map<String, AttendanceStatus>> records = person.getAttendanceRecords();
+                if (records.isEmpty()) {
+                    attendanceRecordsBox.getChildren().add(new Label("None"));
+                } else {
+                    records.entrySet().stream()
+                            .sorted(Map.Entry.comparingByKey())
+                            .forEach(subjectEntry -> {
+                                Label subjectLabel = new Label(subjectEntry.getKey());
+                                subjectLabel.setFont(Font.font("System Bold", 12));
+                                attendanceRecordsBox.getChildren().add(subjectLabel);
+                                subjectEntry.getValue().entrySet().stream()
+                                        .sorted(Map.Entry.comparingByKey())
+                                        .forEach(lessonEntry -> {
+                                            Label lessonLabel = new Label(
+                                                    "  " + lessonEntry.getKey() + ": "
+                                                            + lessonEntry.getValue().value);
+                                            attendanceRecordsBox.getChildren().add(lessonLabel);
+                                        });
+                            });
+                }
+
+                dialogStage.show(); // non-blocking show
+                dialogRef.set(dialogStage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            openLatch.countDown();
+        });
+        openLatch.await();
+
+        WaitForAsyncUtils.waitForFxEvents();
+        Thread.sleep(500); // allow layout to settle
+        takeScreenshotOfStage(dialogRef.get(), name);
+
+        // Close the dialog
+        CountDownLatch closeLatch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            dialogRef.get().close();
+            closeLatch.countDown();
+        });
+        closeLatch.await();
+    }
+
+    /**
+     * Closes all non-primary secondary windows (e.g. HelpWindow).
+     */
+    private void closeNonModalWindows() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            for (Window w : Window.getWindows()) {
+                if (w instanceof Stage && w != primaryStage && w.isShowing()) {
+                    ((Stage) w).close();
+                }
+            }
+            latch.countDown();
+        });
+        latch.await();
     }
 }

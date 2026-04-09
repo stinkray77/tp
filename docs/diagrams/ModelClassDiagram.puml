@@ -64,7 +64,8 @@ Name -[hidden]right-> Email
 Email -[hidden]right-> Address
 Address -[hidden]right-> EmergencyContact
 EmergencyContact -[hidden]right-> PaymentStatus
-PaymentStatus -[hidden]right-> AttendanceStatus
+PaymentStatus -[hidden]right-> Remark
+Remark -[hidden]right-> AttendanceStatus
 
 ModelManager --> "~* filtered" Person
 @enduml

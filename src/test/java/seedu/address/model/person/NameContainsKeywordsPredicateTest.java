@@ -68,6 +68,10 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Carol"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
+        // Partial keyword does not match — full word match required
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Ali"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
         // Keywords match emergency contact, email and address, but does not match name
         predicate = new NameContainsKeywordsPredicate(
                 Arrays.asList("91234567", "alice@email.com", "Main", "Street"));

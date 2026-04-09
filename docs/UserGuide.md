@@ -9,7 +9,7 @@ pageNav: 3
 
 TutorCentral is a **desktop app for freelance tutors in Singapore** to manage student information, optimised for use via a **Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). Whether you are tracking payments, recording attendance, or scheduling lessons, TutorCentral keeps everything organised in one place. If you can type fast, TutorCentral can get your student management tasks done faster than traditional GUI apps.
 
-### Key Features
+## Key Features
 
 - Manage student profiles (add, edit, delete, view)
 - Track payment status (mark as Paid, Due, or Overdue)
@@ -18,14 +18,14 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 - Add remarks and notes per student
 - Schedule lessons with day/time tracking
 
-### Using this guide
+## Using this guide
 
 - **New users:** Start with [Quick Start](#quick-start) for step-by-step setup instructions.
 - **Need help with a specific command:** Jump to [Command Summary](#command-summary) for a quick reference.
 - **Want deeper understanding:** Explore the [Features](#features) section for detailed explanations of each command.
 - **Developers:** Check the [Developer Guide](DeveloperGuide.md) for architecture and implementation details.
 
-### Useful Notations and Glossary
+## Useful Notations and Glossary
 
 | Term | Definition |
 |------|------------|
@@ -37,7 +37,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | **Mainstream OS** | Windows, macOS, and Linux operating systems |
 | **Tutor** | The user of TutorCentral — a freelance tutor managing their students |
 | **Student** | A person being tutored, whose information is stored in TutorCentral |
-| **Emergency Contact** | An 8-digit phone number of a person to contact in case of emergency for a student |
+| **Emergency Contact** | A valid 8-digit Singapore phone number (starting with 8 or 9) of a person to contact in case of emergency for a student |
 | **Attendance** | A record of whether a student was present, absent, or excused for a lesson |
 | **Attendance Status** | One of: `Present`, `Absent`, or `Excused` — indicates a student's attendance for a specific lesson |
 | **Payment Status** | One of: `Paid`, `Due`, or `Overdue` — indicates the current fee payment status of a student |
@@ -122,7 +122,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | `n/` | Name | Alphanumeric characters and spaces, cannot be blank |
 | `e/` | Email | Valid email format (e.g., `user@example.com`) |
 | `a/` | Address | Any text, cannot be blank |
-| `ec/` | Emergency Contact | Exactly 8 digits |
+| `ec/` | Emergency Contact | Exactly 8 digits, must start with 8 or 9 (valid Singapore mobile number) |
 | `s/` | Subject | Alphanumeric characters and spaces; must not be blank |
 | `d/` | Day | Monday-Sunday (or Mon-Sun), case-insensitive |
 | `ti/` | Time | 4-digit 24-hour format, 0000-2359 |
@@ -175,7 +175,7 @@ Example result:
 
 Edits an existing student in Tutor Central.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]… [ps/PAYMENT_STATUS] [r/REMARK] [t/TAG]…`
 
 <box type="warning" seamless>
 
@@ -189,6 +189,7 @@ Format: `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUB
 * When editing tags, the existing tags of the student will be removed i.e. adding of tags is not cumulative.
 * You can remove all the student’s tags by typing `t/` without
     specifying any tags after it.
+* You can remove all lesson slots by typing `s/ d/ ti/` without specifying any values after the prefixes.
 
 Examples:
 *  `edit 1 e/johndoe@example.com` Edits the email address of the 1st student to be `johndoe@example.com`.
@@ -396,7 +397,7 @@ _Details coming soon ..._
 **A**: By default, TutorCentral saves data in a `data` folder next to the JAR file, in a file called `tutorcentral.json`. Check the footer at the bottom of the app to see the exact path. Keep dated backups so you can revert if needed.
 
 **Q**: How do I back up my data?<br>
-**A**: Copy the data JSON file `[JAR file location]/data/tutorcentral.json` (or `addressbook.json` depending on your configuration) to a safe location such as your Downloads folder or an external drive. To restore from a backup, replace the data file with your backup copy.
+**A**: Copy the data JSON file `[JAR file location]/data/tutorcentral.json` to a safe location such as your Downloads folder or an external drive. To restore from a backup, replace the data file with your backup copy.
 
 **Q**: What if I accidentally corrupt the data file?<br>
 **A**: If the data file contains invalid JSON, TutorCentral will start with an empty data set. Keep dated backups so you can revert if needed.
@@ -429,7 +430,7 @@ _Details coming soon ..._
 | **Add**    | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due` |
 | **Clear**  | `clear` |
 | **Delete** | `delete INDEX` <br> e.g., `delete 3` |
-| **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com` |
+| **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [r/REMARK] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com` |
 | **Exit**   | `exit` |
 | **Find**   | `find [n/NAME] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG]` <br> e.g., `find s/Mathematics d/Monday` |
 | **Help**   | `help` |

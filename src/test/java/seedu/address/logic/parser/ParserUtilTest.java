@@ -57,6 +57,13 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseIndex_veryLargeNumber_throwsParseException() {
+        // Ensures extremely large numbers do not cause crashes
+        assertThrows(ParseException.class, ()
+                -> ParserUtil.parseIndex("99999999999999"));
+    }
+
+    @Test
     public void parseIndex_validInput_success() throws Exception {
         assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("1"));
         assertEquals(INDEX_FIRST_PERSON,
