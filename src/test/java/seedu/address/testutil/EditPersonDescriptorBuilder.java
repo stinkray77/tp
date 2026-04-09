@@ -6,16 +6,14 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
-import seedu.address.model.person.Subject;
-import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.util.SampleDataUtil;
 
 /**
  * A utility class to help with building EditPersonDescriptor objects.
@@ -40,9 +38,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setName(person.getName());
         descriptor.setEmail(person.getEmail());
         descriptor.setAddress(person.getAddress());
-        descriptor.setSubjects(person.getSubjects());
-        descriptor.setDays(person.getDays());
-        descriptor.setTimes(person.getTimes());
+        descriptor.setLessonSlots(person.getLessonSlots());
         descriptor.setEmergencyContact(person.getEmergencyContact());
         descriptor.setPaymentStatus(person.getPaymentStatus());
         descriptor.setTags(person.getTags());
@@ -73,17 +69,6 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Parses the {@code subjects} into a {@code Set<Subject>} and set it to the
-     * {@code EditPersonDescriptor} that we are building.
-     */
-    public EditPersonDescriptorBuilder withSubjects(String... subjects) {
-        Set<Subject> subjectSet = Stream.of(subjects)
-                .map(Subject::new).collect(Collectors.toSet());
-        descriptor.setSubjects(subjectSet);
-        return this;
-    }
-
-    /**
      * Sets the {@code EmergencyContact} of the {@code EditPersonDescriptor}.
      */
     public EditPersonDescriptorBuilder withEmergencyContact(String contact) {
@@ -108,24 +93,10 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Parses the {@code days} into a {@code Set<Day>} and set it to the
-     * {@code EditPersonDescriptor} that we are building.
+     * Sets lesson slots from groups of 3 strings: subject, day, time.
      */
-    public EditPersonDescriptorBuilder withDays(String... days) {
-        Set<Day> daySet = Stream.of(days)
-                .map(Day::new).collect(Collectors.toSet());
-        descriptor.setDays(daySet);
-        return this;
-    }
-
-    /**
-     * Parses the {@code times} into a {@code Set<Time>} and set it to the
-     * {@code EditPersonDescriptor} that we are building.
-     */
-    public EditPersonDescriptorBuilder withTimes(String... times) {
-        Set<Time> timeSet = Stream.of(times)
-                .map(Time::new).collect(Collectors.toSet());
-        descriptor.setTimes(timeSet);
+    public EditPersonDescriptorBuilder withLessonSlots(String... triplets) {
+        descriptor.setLessonSlots(SampleDataUtil.getLessonSlotList(triplets));
         return this;
     }
 

@@ -177,7 +177,7 @@ public class EditCommandTest {
                 .withTags(VALID_TAG_HUSBAND).build();
         editedPerson = new Person(
                 editedPerson.getName(), editedPerson.getEmail(), editedPerson.getAddress(),
-                editedPerson.getSubjects(), editedPerson.getDays(), editedPerson.getTimes(),
+                editedPerson.getLessonSlots(),
                 editedPerson.getEmergencyContact(), editedPerson.getPaymentStatus(),
                 editedPerson.getRemark(), editedPerson.getTags(), lastPerson.getAttendanceRecords());
 

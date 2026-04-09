@@ -17,12 +17,15 @@ Person -up-> "*" Tag
 Person *--> Name
 Person *--> Email
 Person *--> Address
-Person *--> "*" Subject
-Person *--> "*" Day
-Person *--> "*" Time
+Person *--> "*" LessonSlot
+LessonSlot *--> Subject
+LessonSlot *--> Day
+LessonSlot *--> Time
 Person *--> EmergencyContact
 Person *--> PaymentStatus
 Person --> "attendanceRecords" AttendanceStatus
+
+Class LessonSlot
 
 Class "<<enum>>\nAttendanceStatus" as AttendanceStatus
 PaymentStatus -[hidden]right-> AttendanceStatus

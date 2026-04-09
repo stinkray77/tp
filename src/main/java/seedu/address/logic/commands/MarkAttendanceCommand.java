@@ -2,8 +2,9 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ATTENDANCE_STATUS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Person;
 
 /**
- * Marks the attendance of a student for a specific subject and lesson.
+ * Marks the attendance of a student for a specific subject, day, and time.
  */
 public class MarkAttendanceCommand extends Command {
 
@@ -27,38 +28,45 @@ public class MarkAttendanceCommand extends Command {
             + "by the index number used in the displayed student list.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_SUBJECT + "SUBJECT "
-            + PREFIX_LESSON + "LESSON "
+            + PREFIX_DAY + "DAY "
+            + PREFIX_TIME + "TIME "
             + PREFIX_ATTENDANCE_STATUS + "STATUS\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_SUBJECT + "Mathematics "
-            + PREFIX_LESSON + "Lesson 1 "
+            + PREFIX_DAY + "Monday "
+            + PREFIX_TIME + "1400 "
             + PREFIX_ATTENDANCE_STATUS + "Present";
 
     public static final String MESSAGE_MARK_ATTENDANCE_SUCCESS =
-            "Marked attendance for %1$s: %2$s - %3$s as %4$s";
+            "Marked attendance for %1$s: %2$s - %3$s %4$s as %5$s";
 
     public static final String MESSAGE_SUBJECT_NOT_FOUND =
             "The student does not take the subject: %1$s";
 
     private final Index targetIndex;
     private final String subject;
-    private final String lesson;
+    private final String day;
+    private final String time;
     private final AttendanceStatus status;
 
     /**
      * @param targetIndex of the person in the filtered person list
      * @param subject     the subject name to mark attendance for
-     * @param lesson      the lesson name to mark attendance for
+     * @param day         the day of the lesson
+     * @param time        the time of the lesson
      * @param status      the attendance status to record
      */
-    public MarkAttendanceCommand(Index targetIndex, String subject, String lesson, AttendanceStatus status) {
+    public MarkAttendanceCommand(Index targetIndex, String subject,
+            String day, String time, AttendanceStatus status) {
         requireNonNull(targetIndex);
         requireNonNull(subject);
-        requireNonNull(lesson);
+        requireNonNull(day);
+        requireNonNull(time);
         requireNonNull(status);
         this.targetIndex = targetIndex;
         this.subject = subject;
-        this.lesson = lesson;
+        this.day = day;
+        this.time = time;
         this.status = status;
     }
 
@@ -80,12 +88,20 @@ public class MarkAttendanceCommand extends Command {
                 .orElseThrow(() -> new CommandException(
                         String.format(MESSAGE_SUBJECT_NOT_FOUND, subject)));
 
-        Person markedPerson = personToMark.markAttendance(matchedSubject, lesson, status);
+        String dayTime = day + " " + time;
+
+        if (!personToMark.hasLessonSlot(matchedSubject, dayTime)) {
+            throw new CommandException(
+                    String.format(Messages.MESSAGE_LESSON_SLOT_NOT_FOUND,
+                            matchedSubject, day, time));
+        }
+
+        Person markedPerson = personToMark.markAttendance(matchedSubject, dayTime, status);
         model.setPerson(personToMark, markedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(String.format(MESSAGE_MARK_ATTENDANCE_SUCCESS,
-                personToMark.getName(), matchedSubject, lesson, status.value));
+                personToMark.getName(), matchedSubject, day, time, status.value));
     }
 
     @Override
@@ -98,7 +114,8 @@ public class MarkAttendanceCommand extends Command {
         }
         return targetIndex.equals(otherCmd.targetIndex)
                 && subject.equals(otherCmd.subject)
-                && lesson.equals(otherCmd.lesson)
+                && day.equals(otherCmd.day)
+                && time.equals(otherCmd.time)
                 && status == otherCmd.status;
     }
 }

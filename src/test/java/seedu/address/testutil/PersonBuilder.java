@@ -1,18 +1,18 @@
 package seedu.address.testutil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
+import seedu.address.model.person.LessonSlot;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
-import seedu.address.model.person.Subject;
-import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -30,9 +30,7 @@ public class PersonBuilder {
     private Name name;
     private Email email;
     private Address address;
-    private Set<Subject> subjects;
-    private Set<Day> days;
-    private Set<Time> times;
+    private List<LessonSlot> lessonSlots;
     private EmergencyContact emergencyContact;
     private PaymentStatus paymentStatus;
     private Remark remark;
@@ -45,9 +43,7 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
-        subjects = new HashSet<>();
-        days = new HashSet<>();
-        times = new HashSet<>();
+        lessonSlots = new ArrayList<>();
         emergencyContact = new EmergencyContact(DEFAULT_EMERGENCY_CONTACT);
         paymentStatus = new PaymentStatus(DEFAULT_PAYMENT_STATUS);
         remark = new Remark("");
@@ -61,9 +57,7 @@ public class PersonBuilder {
         name = personToCopy.getName();
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
-        subjects = new HashSet<>(personToCopy.getSubjects());
-        days = new HashSet<>(personToCopy.getDays());
-        times = new HashSet<>(personToCopy.getTimes());
+        lessonSlots = new ArrayList<>(personToCopy.getLessonSlots());
         emergencyContact = personToCopy.getEmergencyContact();
         paymentStatus = personToCopy.getPaymentStatus();
         remark = personToCopy.getRemark();
@@ -87,26 +81,11 @@ public class PersonBuilder {
     }
 
     /**
-     * Parses the {@code subjects} into a {@code Set<Subject>} and set it to the {@code Person}.
+     * Sets lesson slots from groups of 3 strings: subject, day, time.
+     * Example: withLessonSlots("Mathematics", "Monday", "1400", "English", "Tuesday", "0900")
      */
-    public PersonBuilder withSubjects(String ... subjects) {
-        this.subjects = SampleDataUtil.getSubjectSet(subjects);
-        return this;
-    }
-
-    /**
-     * Parses the {@code days} into a {@code Set<Day>} and set it to the {@code Person}.
-     */
-    public PersonBuilder withDays(String ... days) {
-        this.days = SampleDataUtil.getDaySet(days);
-        return this;
-    }
-
-    /**
-     * Parses the {@code times} into a {@code Set<Time>} and set it to the {@code Person}.
-     */
-    public PersonBuilder withTimes(String ... times) {
-        this.times = SampleDataUtil.getTimeSet(times);
+    public PersonBuilder withLessonSlots(String ... triplets) {
+        this.lessonSlots = SampleDataUtil.getLessonSlotList(triplets);
         return this;
     }
 
@@ -154,8 +133,7 @@ public class PersonBuilder {
      * Builds and returns the {@code Person}.
      */
     public Person build() {
-        return new Person(name, email, address, subjects,
-                days, times,
+        return new Person(name, email, address, lessonSlots,
                 emergencyContact, paymentStatus, remark, tags);
     }
 

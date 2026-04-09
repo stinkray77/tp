@@ -1,9 +1,9 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.Messages.MESSAGE_DAY_TIME_INCOMPLETE;
-import static seedu.address.logic.Messages.MESSAGE_DAY_TIME_MISMATCH;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_LESSON_SLOT_INCOMPLETE;
+import static seedu.address.logic.Messages.MESSAGE_SUBJECT_DAY_TIME_MISMATCH;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -17,6 +17,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,10 +25,8 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Day;
+import seedu.address.model.person.LessonSlot;
 import seedu.address.model.person.Remark;
-import seedu.address.model.person.Subject;
-import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -77,30 +76,43 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setAddress(ParserUtil.parseAddress(
                     argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
-        parseSubjectsForEdit(argMultimap.getAllValues(PREFIX_SUBJECT))
-                .ifPresent(editPersonDescriptor::setSubjects);
-        java.util.List<String> rawDays = argMultimap.getAllValues(PREFIX_DAY);
-        java.util.List<String> rawTimes = argMultimap.getAllValues(PREFIX_TIME);
 
-        boolean hasRawDays = !rawDays.isEmpty()
-                && !(rawDays.size() == 1 && rawDays.get(0).isEmpty());
-        boolean hasRawTimes = !rawTimes.isEmpty()
-                && !(rawTimes.size() == 1 && rawTimes.get(0).isEmpty());
+        // Handle lesson slots (s/, d/, ti/ must all be present together)
+        List<String> rawSubjects = argMultimap.getAllValues(PREFIX_SUBJECT);
+        List<String> rawDays = argMultimap.getAllValues(PREFIX_DAY);
+        List<String> rawTimes = argMultimap.getAllValues(PREFIX_TIME);
 
-        if (hasRawDays != hasRawTimes) {
-            throw new ParseException(MESSAGE_DAY_TIME_INCOMPLETE);
+        boolean hasSubjects = !rawSubjects.isEmpty();
+        boolean hasDays = !rawDays.isEmpty();
+        boolean hasTimes = !rawTimes.isEmpty();
+
+        if (hasSubjects || hasDays || hasTimes) {
+            // Check if clearing all three (all empty values)
+            boolean clearingSubjects = hasSubjects && rawSubjects.size() == 1
+                    && rawSubjects.get(0).isEmpty();
+            boolean clearingDays = hasDays && rawDays.size() == 1
+                    && rawDays.get(0).isEmpty();
+            boolean clearingTimes = hasTimes && rawTimes.size() == 1
+                    && rawTimes.get(0).isEmpty();
+
+            if (clearingSubjects && clearingDays && clearingTimes) {
+                // Clear all lesson slots
+                editPersonDescriptor.setLessonSlots(List.of());
+            } else if (hasSubjects != hasDays || hasDays != hasTimes) {
+                throw new ParseException(MESSAGE_LESSON_SLOT_INCOMPLETE);
+            } else {
+                if (rawSubjects.size() != rawDays.size()
+                        || rawDays.size() != rawTimes.size()) {
+                    throw new ParseException(String.format(
+                            MESSAGE_SUBJECT_DAY_TIME_MISMATCH,
+                            rawSubjects.size(), rawDays.size(), rawTimes.size()));
+                }
+                List<LessonSlot> lessonSlots = ParserUtil.parseLessonSlots(
+                        rawSubjects, rawDays, rawTimes);
+                editPersonDescriptor.setLessonSlots(lessonSlots);
+            }
         }
-        if (hasRawDays && rawDays.size() != rawTimes.size()) {
-            throw new ParseException(String.format(
-                    MESSAGE_DAY_TIME_MISMATCH,
-                    rawDays.size(), rawTimes.size()));
-        }
 
-        Optional<Set<Day>> parsedDays = parseDaysForEdit(rawDays);
-        Optional<Set<Time>> parsedTimes = parseTimesForEdit(rawTimes);
-
-        parsedDays.ifPresent(editPersonDescriptor::setDays);
-        parsedTimes.ifPresent(editPersonDescriptor::setTimes);
         if (argMultimap.getValue(PREFIX_EMERGENCY_CONTACT).isPresent()) {
             editPersonDescriptor.setEmergencyContact(
                     ParserUtil.parseEmergencyContact(
@@ -125,57 +137,6 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         return new EditCommand(index, editPersonDescriptor);
-    }
-
-    /**
-     * Parses {@code Collection<String> subjects} into a {@code Set<Subject>}
-     * if {@code subjects} is non-empty.
-     */
-    private Optional<Set<Subject>> parseSubjectsForEdit(
-            Collection<String> subjects) throws ParseException {
-        assert subjects != null;
-
-        if (subjects.isEmpty()) {
-            return Optional.empty();
-        }
-        Collection<String> subjectSet = subjects.size() == 1
-                && subjects.contains("")
-                ? Collections.emptySet() : subjects;
-        return Optional.of(ParserUtil.parseSubjects(subjectSet));
-    }
-
-    /**
-     * Parses {@code Collection<String> days} into a {@code Set<Day>}
-     * if {@code days} is non-empty.
-     */
-    private Optional<Set<Day>> parseDaysForEdit(
-            Collection<String> days) throws ParseException {
-        assert days != null;
-
-        if (days.isEmpty()) {
-            return Optional.empty();
-        }
-        Collection<String> daySet = days.size() == 1
-                && days.contains("")
-                ? Collections.emptySet() : days;
-        return Optional.of(ParserUtil.parseDays(daySet));
-    }
-
-    /**
-     * Parses {@code Collection<String> times} into a {@code Set<Time>}
-     * if {@code times} is non-empty.
-     */
-    private Optional<Set<Time>> parseTimesForEdit(
-            Collection<String> times) throws ParseException {
-        assert times != null;
-
-        if (times.isEmpty()) {
-            return Optional.empty();
-        }
-        Collection<String> timeSet = times.size() == 1
-                && times.contains("")
-                ? Collections.emptySet() : times;
-        return Optional.of(ParserUtil.parseTimes(timeSet));
     }
 
     /**

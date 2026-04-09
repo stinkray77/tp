@@ -60,7 +60,7 @@ deactivate Model
 ListAttendanceCommand -> ListAttendanceCommand : validate index is in range
 ListAttendanceCommand -> ListAttendanceCommand : retrieve attendanceRecords from target student
 ListAttendanceCommand -> ListAttendanceCommand : filter by subject if s/ provided
-ListAttendanceCommand -> ListAttendanceCommand : format results as "Attendance for [NAME]: [SUBJECT]: [LESSON]: [STATUS]"
+ListAttendanceCommand -> ListAttendanceCommand : format results as "Attendance for [NAME]: [SUBJECT]: [DAY TIME]: [STATUS]"
 
 create CommandResult
 ListAttendanceCommand -> CommandResult

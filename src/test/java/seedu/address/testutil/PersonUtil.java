@@ -10,14 +10,13 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
-import seedu.address.model.person.Day;
+import seedu.address.model.person.LessonSlot;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Subject;
-import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -40,15 +39,11 @@ public class PersonUtil {
         sb.append(PREFIX_NAME + person.getName().fullName + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
         sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
-        person.getSubjects().stream().forEach(
-            s -> sb.append(PREFIX_SUBJECT + s.subjectName + " ")
-        );
-        person.getDays().stream().forEach(
-            d -> sb.append(PREFIX_DAY + d.dayName + " ")
-        );
-        person.getTimes().stream().forEach(
-            t -> sb.append(PREFIX_TIME + t.timeValue + " ")
-        );
+        person.getLessonSlots().forEach(ls -> {
+            sb.append(PREFIX_SUBJECT + ls.getSubject().subjectName + " ");
+            sb.append(PREFIX_DAY + ls.getDay().dayName + " ");
+            sb.append(PREFIX_TIME + ls.getTime().timeValue + " ");
+        });
         sb.append(PREFIX_EMERGENCY_CONTACT
                 + person.getEmergencyContact().value + " ");
         sb.append(PREFIX_PAYMENT_STATUS
@@ -72,31 +67,18 @@ public class PersonUtil {
         descriptor.getAddress().ifPresent(address
                 -> sb.append(PREFIX_ADDRESS)
                 .append(address.value).append(" "));
-        if (descriptor.getSubjects().isPresent()) {
-            Set<Subject> subjects = descriptor.getSubjects().get();
-            if (subjects.isEmpty()) {
+        if (descriptor.getLessonSlots().isPresent()) {
+            List<LessonSlot> lessonSlots = descriptor.getLessonSlots().get();
+            if (lessonSlots.isEmpty()) {
                 sb.append(PREFIX_SUBJECT).append(" ");
-            } else {
-                subjects.forEach(s -> sb.append(PREFIX_SUBJECT)
-                        .append(s.subjectName).append(" "));
-            }
-        }
-        if (descriptor.getDays().isPresent()) {
-            Set<Day> days = descriptor.getDays().get();
-            if (days.isEmpty()) {
                 sb.append(PREFIX_DAY).append(" ");
-            } else {
-                days.forEach(d -> sb.append(PREFIX_DAY)
-                        .append(d.dayName).append(" "));
-            }
-        }
-        if (descriptor.getTimes().isPresent()) {
-            Set<Time> times = descriptor.getTimes().get();
-            if (times.isEmpty()) {
                 sb.append(PREFIX_TIME).append(" ");
             } else {
-                times.forEach(t -> sb.append(PREFIX_TIME)
-                        .append(t.timeValue).append(" "));
+                lessonSlots.forEach(ls -> {
+                    sb.append(PREFIX_SUBJECT).append(ls.getSubject().subjectName).append(" ");
+                    sb.append(PREFIX_DAY).append(ls.getDay().dayName).append(" ");
+                    sb.append(PREFIX_TIME).append(ls.getTime().timeValue).append(" ");
+                });
             }
         }
         descriptor.getEmergencyContact().ifPresent(ec

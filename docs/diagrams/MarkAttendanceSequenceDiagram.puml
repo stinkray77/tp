@@ -14,10 +14,10 @@ box Model MODEL_COLOR_T1
 participant "model:Model" as Model MODEL_COLOR
 end box
 
-[-> LogicManager : execute("markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present")
+[-> LogicManager : execute("markattendance 1 s/Mathematics d/Monday ti/1400 st/Present")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present")
+LogicManager -> AddressBookParser : parseCommand("markattendance 1 s/Mathematics d/Monday ti/1400 st/Present")
 activate AddressBookParser
 
 create MarkAttendanceCommandParser
@@ -27,13 +27,14 @@ activate MarkAttendanceCommandParser
 MarkAttendanceCommandParser --> AddressBookParser
 deactivate MarkAttendanceCommandParser
 
-AddressBookParser -> MarkAttendanceCommandParser : parse(" 1 s/Mathematics l/Algebra Lesson 5 st/Present")
+AddressBookParser -> MarkAttendanceCommandParser : parse(" 1 s/Mathematics d/Monday ti/1400 st/Present")
 activate MarkAttendanceCommandParser
 
-MarkAttendanceCommandParser -> MarkAttendanceCommandParser : tokenize args with PREFIX_SUBJECT, PREFIX_LESSON, PREFIX_ATTENDANCE_STATUS
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : tokenize args with PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_ATTENDANCE_STATUS
 MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse index from preamble
 MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse subject from s/
-MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse lesson from l/
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse day from d/
+MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse time from ti/
 MarkAttendanceCommandParser -> MarkAttendanceCommandParser : parse attendance status from st/
 
 create MarkAttendanceCommand
@@ -59,7 +60,7 @@ activate Model
 Model --> MarkAttendanceCommand : lastShownList
 deactivate Model
 
-MarkAttendanceCommand -> MarkAttendanceCommand : validate subject exists in student (case-insensitive)
+MarkAttendanceCommand -> MarkAttendanceCommand : validate lesson slot exists (subject + day + time)
 MarkAttendanceCommand -> MarkAttendanceCommand : create updated Person via person.markAttendance()
 MarkAttendanceCommand -> Model : setPerson(target, updatedPerson)
 activate Model

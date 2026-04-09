@@ -1,8 +1,8 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_DAY_TIME_INCOMPLETE;
-import static seedu.address.logic.Messages.MESSAGE_DAY_TIME_MISMATCH;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_LESSON_SLOT_INCOMPLETE;
+import static seedu.address.logic.Messages.MESSAGE_SUBJECT_DAY_TIME_MISMATCH;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.DAY_DESC_MONDAY;
@@ -24,6 +24,7 @@ import static seedu.address.logic.commands.CommandTestUtil.PAYMENT_STATUS_DESC_A
 import static seedu.address.logic.commands.CommandTestUtil.PAYMENT_STATUS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPTY;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
+import static seedu.address.logic.commands.CommandTestUtil.SUBJECT_DESC_ENGLISH;
 import static seedu.address.logic.commands.CommandTestUtil.SUBJECT_DESC_MATH;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
@@ -176,7 +177,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_optionalFieldsMissing_success() {
         Person expectedPerson = new PersonBuilder(AMY).withTags()
-                .withSubjects().build();
+                .withLessonSlots().build();
         assertParseSuccess(parser,
                 NAME_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
                         + EMERGENCY_CONTACT_DESC_AMY
@@ -281,60 +282,71 @@ public class AddCommandParserTest {
     }
 
     @Test
-    public void parse_dayWithoutTime_failure() {
+    public void parse_subjectWithoutDayOrTime_failure() {
         assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                        + EMERGENCY_CONTACT_DESC_BOB + DAY_DESC_MONDAY + SUBJECT_DESC_MATH,
-                MESSAGE_DAY_TIME_INCOMPLETE);
+                        + EMERGENCY_CONTACT_DESC_BOB + SUBJECT_DESC_MATH,
+                MESSAGE_LESSON_SLOT_INCOMPLETE);
     }
 
     @Test
-    public void parse_timeWithoutDays_failure() {
-        assertParseFailure(parser, NAME_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + EMERGENCY_CONTACT_DESC_BOB + TIME_DESC_1400 + SUBJECT_DESC_MATH,
-                MESSAGE_DAY_TIME_INCOMPLETE);
+    public void parse_dayWithoutSubjectOrTime_failure() {
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + EMERGENCY_CONTACT_DESC_BOB + DAY_DESC_MONDAY,
+                MESSAGE_LESSON_SLOT_INCOMPLETE);
     }
 
     @Test
-    public void parse_dayTimeMismatch_failure() {
-        // 2 days but only 1 time
+    public void parse_timeWithoutSubjectOrDay_failure() {
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + EMERGENCY_CONTACT_DESC_BOB + TIME_DESC_1400,
+                MESSAGE_LESSON_SLOT_INCOMPLETE);
+    }
+
+    @Test
+    public void parse_subjectDayTimeMismatch_failure() {
+        // 2 subjects, 2 days, but only 1 time
         String input = NAME_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + EMERGENCY_CONTACT_DESC_BOB
-                + DAY_DESC_MONDAY + DAY_DESC_WEDNESDAY + TIME_DESC_1400
-                + SUBJECT_DESC_MATH;
-        String expectedMessage = String.format(MESSAGE_DAY_TIME_MISMATCH, 2, 1);
+                + SUBJECT_DESC_MATH + SUBJECT_DESC_ENGLISH
+                + DAY_DESC_MONDAY + DAY_DESC_WEDNESDAY + TIME_DESC_1400;
+        String expectedMessage = String.format(MESSAGE_SUBJECT_DAY_TIME_MISMATCH, 2, 2, 1);
         assertParseFailure(parser, input, expectedMessage);
     }
 
     @Test
-    public void parse_dayTimeMismatchReverse_failure() {
-        // 1 day but 2 times
+    public void parse_subjectDayTimeMismatchReverse_failure() {
+        // 1 subject, 1 day, but 2 times
         String input = NAME_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + EMERGENCY_CONTACT_DESC_BOB
-                + DAY_DESC_MONDAY + TIME_DESC_1400 + TIME_DESC_0900
-                + SUBJECT_DESC_MATH;
-        String expectedMessage = String.format(MESSAGE_DAY_TIME_MISMATCH, 1, 2);
+                + SUBJECT_DESC_MATH + DAY_DESC_MONDAY
+                + TIME_DESC_1400 + TIME_DESC_0900;
+        String expectedMessage = String.format(MESSAGE_SUBJECT_DAY_TIME_MISMATCH, 1, 1, 2);
         assertParseFailure(parser, input, expectedMessage);
     }
 
     @Test
-    public void parse_matchingDaysAndTimes_success() {
-        // 2 days and 2 matching times
+    public void parse_matchingLessonSlots_success() {
+        // 2 lesson slots with matching subjects, days, and times
         Person expectedPerson = new PersonBuilder(BOB)
-                .withDays("Monday", "Wednesday")
-                .withTimes("1400", "0900")
+                .withLessonSlots("Mathematics", "Monday", "1400",
+                        "English", "Wednesday", "0900")
                 .build();
 
         assertParseSuccess(parser, NAME_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + EMERGENCY_CONTACT_DESC_BOB
-                + DAY_DESC_MONDAY + DAY_DESC_WEDNESDAY + TIME_DESC_1400
-                + TIME_DESC_0900 + TAG_DESC_FRIEND + TAG_DESC_HUSBAND,
+                + SUBJECT_DESC_MATH + SUBJECT_DESC_ENGLISH
+                + DAY_DESC_MONDAY + DAY_DESC_WEDNESDAY
+                + TIME_DESC_1400 + TIME_DESC_0900
+                + TAG_DESC_FRIEND + TAG_DESC_HUSBAND,
                 new AddCommand(expectedPerson));
     }
 
     @Test
-    public void parse_noDaysNoTimes_success() {
-        // No days and no times - should be valid
+    public void parse_noLessonSlots_success() {
+        // No subjects, days, or times - should be valid
         Person expectedPerson = new PersonBuilder(BOB).build();
 
         assertParseSuccess(parser, NAME_DESC_BOB + EMAIL_DESC_BOB
@@ -345,19 +357,17 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_invalidDay_failure() {
-        // Invalid day format but valid time
         assertParseFailure(parser, NAME_DESC_BOB + EMAIL_DESC_BOB
                         + ADDRESS_DESC_BOB + EMERGENCY_CONTACT_DESC_BOB
-                        + INVALID_DAY_DESC + TIME_DESC_1400 + SUBJECT_DESC_MATH,
+                        + SUBJECT_DESC_MATH + INVALID_DAY_DESC + TIME_DESC_1400,
                 Day.MESSAGE_CONSTRAINTS);
     }
 
     @Test
     public void parse_invalidTime_failure() {
-        // Valid day but invalid time format
         assertParseFailure(parser, NAME_DESC_BOB + EMAIL_DESC_BOB
                         + ADDRESS_DESC_BOB + EMERGENCY_CONTACT_DESC_BOB
-                        + DAY_DESC_MONDAY + INVALID_TIME_DESC + SUBJECT_DESC_MATH,
+                        + SUBJECT_DESC_MATH + DAY_DESC_MONDAY + INVALID_TIME_DESC,
                 Time.MESSAGE_CONSTRAINTS);
     }
 }

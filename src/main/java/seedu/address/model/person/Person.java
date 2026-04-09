@@ -2,12 +2,15 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
@@ -24,9 +27,7 @@ public class Person {
 
     // Data fields
     private final Address address;
-    private final Set<Subject> subjects = new HashSet<>();
-    private final Set<Day> days = new HashSet<>();
-    private final Set<Time> times = new HashSet<>();
+    private final List<LessonSlot> lessonSlots;
     private final EmergencyContact emergencyContact;
     private final PaymentStatus paymentStatus;
     private final Remark remark;
@@ -38,10 +39,10 @@ public class Person {
      * Attendance records default to an empty map.
      */
     public Person(Name name, Email email, Address address,
-                  Set<Subject> subjects, Set<Day> days, Set<Time> times,
+                  List<LessonSlot> lessonSlots,
                   EmergencyContact emergencyContact,
                   PaymentStatus paymentStatus, Remark remark, Set<Tag> tags) {
-        this(name, email, address, subjects, days, times,
+        this(name, email, address, lessonSlots,
                 emergencyContact, paymentStatus, remark, tags, new LinkedHashMap<>());
     }
 
@@ -49,18 +50,16 @@ public class Person {
      * Every field must be present and not null, including attendance records.
      */
     public Person(Name name, Email email, Address address,
-                  Set<Subject> subjects, Set<Day> days, Set<Time> times,
+                  List<LessonSlot> lessonSlots,
                   EmergencyContact emergencyContact,
                   PaymentStatus paymentStatus, Remark remark, Set<Tag> tags,
                   Map<String, Map<String, AttendanceStatus>> attendanceRecords) {
-        requireAllNonNull(name, email, address, subjects, days, times,
+        requireAllNonNull(name, email, address, lessonSlots,
                 emergencyContact, paymentStatus, remark, tags, attendanceRecords);
         this.name = name;
         this.email = email;
         this.address = address;
-        this.subjects.addAll(subjects);
-        this.days.addAll(days);
-        this.times.addAll(times);
+        this.lessonSlots = new ArrayList<>(lessonSlots);
         this.emergencyContact = emergencyContact;
         this.paymentStatus = paymentStatus;
         this.remark = remark;
@@ -85,11 +84,37 @@ public class Person {
     }
 
     /**
-     * Returns an immutable subject set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
+     * Returns an unmodifiable view of the lesson slots.
+     */
+    public List<LessonSlot> getLessonSlots() {
+        return Collections.unmodifiableList(lessonSlots);
+    }
+
+    /**
+     * Returns an immutable subject set derived from lesson slots.
      */
     public Set<Subject> getSubjects() {
-        return Collections.unmodifiableSet(subjects);
+        return lessonSlots.stream()
+                .map(LessonSlot::getSubject)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    /**
+     * Returns an immutable day set derived from lesson slots.
+     */
+    public Set<Day> getDays() {
+        return lessonSlots.stream()
+                .map(LessonSlot::getDay)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    /**
+     * Returns an immutable time set derived from lesson slots.
+     */
+    public Set<Time> getTimes() {
+        return lessonSlots.stream()
+                .map(LessonSlot::getTime)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     public EmergencyContact getEmergencyContact() {
@@ -114,7 +139,7 @@ public class Person {
 
     /**
      * Returns an unmodifiable view of the attendance records.
-     * The outer key is the subject name, the inner key is the lesson name,
+     * The outer key is the subject name, the inner key is the day-time string,
      * and the value is the {@code AttendanceStatus}.
      */
     public Map<String, Map<String, AttendanceStatus>> getAttendanceRecords() {
@@ -122,39 +147,33 @@ public class Person {
     }
 
     /**
-     * Returns a new {@code Person} with the attendance record for the given subject and lesson updated.
-     * All other fields remain unchanged.
+     * Returns true if this person has a lesson slot matching the given subject (case-insensitive)
+     * and attendance key (day + time).
+     */
+    public boolean hasLessonSlot(String subject, String dayTime) {
+        return lessonSlots.stream().anyMatch(slot ->
+                slot.getSubject().subjectName.equalsIgnoreCase(subject)
+                && slot.getAttendanceKey().equals(dayTime));
+    }
+
+    /**
+     * Returns a new {@code Person} with the attendance record for the given subject and
+     * day-time updated. All other fields remain unchanged.
      *
      * @param subject The subject name.
-     * @param lesson  The lesson name.
+     * @param dayTime The day-time key (e.g., "Monday 1400").
      * @param status  The new attendance status.
      * @return A new {@code Person} with the updated attendance record.
      */
-    public Person markAttendance(String subject, String lesson, AttendanceStatus status) {
-        requireAllNonNull(subject, lesson, status);
+    public Person markAttendance(String subject, String dayTime, AttendanceStatus status) {
+        requireAllNonNull(subject, dayTime, status);
         Map<String, Map<String, AttendanceStatus>> updated = new LinkedHashMap<>();
         for (Map.Entry<String, Map<String, AttendanceStatus>> entry : attendanceRecords.entrySet()) {
             updated.put(entry.getKey(), new LinkedHashMap<>(entry.getValue()));
         }
-        updated.computeIfAbsent(subject, k -> new LinkedHashMap<>()).put(lesson, status);
-        return new Person(name, email, address, subjects, days, times,
+        updated.computeIfAbsent(subject, k -> new LinkedHashMap<>()).put(dayTime, status);
+        return new Person(name, email, address, lessonSlots,
                 emergencyContact, paymentStatus, remark, tags, updated);
-    }
-
-    /**
-     * Returns an immutable day set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
-     */
-    public Set<Day> getDays() {
-        return Collections.unmodifiableSet(days);
-    }
-
-    /**
-     * Returns an immutable time set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
-     */
-    public Set<Time> getTimes() {
-        return Collections.unmodifiableSet(times);
     }
 
     /**
@@ -189,9 +208,7 @@ public class Person {
         return name.equals(otherPerson.name)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && subjects.equals(otherPerson.subjects)
-                && days.equals(otherPerson.days)
-                && times.equals(otherPerson.times)
+                && lessonSlots.equals(otherPerson.lessonSlots)
                 && emergencyContact.equals(otherPerson.emergencyContact)
                 && paymentStatus.equals(otherPerson.paymentStatus)
                 && remark.equals(otherPerson.remark)
@@ -201,8 +218,8 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, email, address, subjects,
-                days, times, emergencyContact, paymentStatus, remark, tags, attendanceRecords);
+        return Objects.hash(name, email, address, lessonSlots,
+                emergencyContact, paymentStatus, remark, tags, attendanceRecords);
     }
 
     @Override
@@ -211,9 +228,7 @@ public class Person {
                 .add("name", name)
                 .add("email", email)
                 .add("address", address)
-                .add("subjects", subjects)
-                .add("days", days)
-                .add("times", times)
+                .add("lessonSlots", lessonSlots)
                 .add("emergencyContact", emergencyContact)
                 .add("paymentStatus", paymentStatus)
                 .add("remark", remark)

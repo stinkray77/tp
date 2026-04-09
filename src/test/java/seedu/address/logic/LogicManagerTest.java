@@ -192,7 +192,7 @@ public class LogicManagerTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
                 + EMERGENCY_CONTACT_DESC_AMY + PAYMENT_STATUS_DESC_AMY;
         Person expectedPerson = new PersonBuilder(AMY).withTags()
-                .withSubjects().build();
+                .withLessonSlots().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class,

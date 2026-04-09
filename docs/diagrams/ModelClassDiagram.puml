@@ -17,6 +17,7 @@ Class Person
 Class Address
 Class Email
 Class Name
+Class LessonSlot
 Class Subject
 Class Day
 Class Time
@@ -46,9 +47,10 @@ UniquePersonList --> "~* all" Person
 Person *--> Name
 Person *--> Email
 Person *--> Address
-Person *--> "*" Subject
-Person *--> "*" Day
-Person *--> "*" Time
+Person *--> "*" LessonSlot
+LessonSlot *--> Subject
+LessonSlot *--> Day
+LessonSlot *--> Time
 Person *--> EmergencyContact
 Person *--> PaymentStatus
 Person *--> Remark
