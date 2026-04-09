@@ -1,15 +1,21 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.DayMatchesPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.PaymentStatusMatchesPredicate;
@@ -121,6 +127,17 @@ public class FindCommandParserTest {
         FindCommand expectedFindCommand =
                 new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("priority", "urgent", "vip")));
         assertParseSuccess(parser, " t/priority urgent t/vip", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_combinedPredicate_filtersCorrectly() throws Exception {
+        // Exercises the combined predicate path (predicateCount > 1) by actually invoking .test()
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        FindCommand command = parser.parse(" n/Alice ps/Paid");
+        command.execute(model);
+        // ALICE: name "Alice Pauline", paymentStatus "Paid" — matches both predicates
+        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals(ALICE, model.getFilteredPersonList().get(0));
     }
 
 }
