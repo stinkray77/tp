@@ -92,6 +92,33 @@ public class PersonTest {
     }
 
     @Test
+    public void getSubjects_derivedFromLessonSlots() {
+        Person person = new PersonBuilder()
+                .withLessonSlots("Mathematics", "Monday", "1400").build();
+        assertEquals(1, person.getSubjects().size());
+        assertTrue(person.getSubjects().stream()
+                .anyMatch(s -> s.subjectName.equals("Mathematics")));
+    }
+
+    @Test
+    public void getDays_derivedFromLessonSlots() {
+        Person person = new PersonBuilder()
+                .withLessonSlots("Mathematics", "Monday", "1400").build();
+        assertEquals(1, person.getDays().size());
+        assertTrue(person.getDays().stream()
+                .anyMatch(d -> d.dayName.equals("Monday")));
+    }
+
+    @Test
+    public void getTimes_derivedFromLessonSlots() {
+        Person person = new PersonBuilder()
+                .withLessonSlots("Mathematics", "Monday", "1400").build();
+        assertEquals(1, person.getTimes().size());
+        assertTrue(person.getTimes().stream()
+                .anyMatch(t -> t.timeValue.equals("1400")));
+    }
+
+    @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName()
                 + "{name=" + ALICE.getName()
