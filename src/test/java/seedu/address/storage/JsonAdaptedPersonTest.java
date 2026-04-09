@@ -318,6 +318,22 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_attendanceKeyWithExtraSpaces_throwsIllegalValueException() {
+        Map<String, Map<String, String>> invalidRecords = new LinkedHashMap<>();
+        Map<String, String> lessons = new LinkedHashMap<>();
+        lessons.put("Monday 1400 extra", "Present");
+        invalidRecords.put("Mathematics", lessons);
+
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_EMAIL, VALID_ADDRESS,
+                VALID_LESSON_SLOTS, VALID_EMERGENCY_CONTACT,
+                VALID_PAYMENT_STATUS,
+                VALID_REMARK, VALID_TAGS, invalidRecords);
+        assertThrows(IllegalValueException.class,
+                JsonAdaptedPerson.INVALID_ATTENDANCE_KEY_FORMAT, person::toModelType);
+    }
+
+    @Test
     public void constructor_personWithLessonSlots_serialisesCorrectly() throws Exception {
         Person personWithSlots = new seedu.address.testutil.PersonBuilder()
                 .withName("Test Person").withEmail("test@example.com")

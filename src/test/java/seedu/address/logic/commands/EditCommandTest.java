@@ -260,6 +260,24 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_editNameOnly_preservesAttendanceRecords() throws Exception {
+        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person personWithAttendance = firstPerson.markAttendance(
+                "Mathematics", "Monday 1400",
+                seedu.address.model.person.AttendanceStatus.PRESENT);
+        model.setPerson(firstPerson, personWithAttendance);
+
+        EditPersonDescriptor descriptor =
+                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+        editCommand.execute(model);
+
+        Person edited = model.getFilteredPersonList().get(0);
+        assertEquals(personWithAttendance.getAttendanceRecords(),
+                edited.getAttendanceRecords());
+    }
+
+    @Test
     public void equals() {
         // Utility behavior: equality partitions for command identity
         final EditCommand standardCommand =
