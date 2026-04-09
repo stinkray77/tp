@@ -75,7 +75,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 predicateCount++;
             }
 
-            List<String> dayKeywords = getAllKeywords(argMultimap, PREFIX_DAY);
+            List<String> dayKeywords = getAllValidatedDays(argMultimap);
             if (!dayKeywords.isEmpty()) {
                 combinedPredicate = combinedPredicate.and(new DayMatchesPredicate(dayKeywords));
                 predicateCount++;
@@ -126,6 +126,14 @@ public class FindCommandParser implements Parser<FindCommand> {
                     .forEach(keywords::add);
         }
         return keywords;
+    }
+
+    private static List<String> getAllValidatedDays(ArgumentMultimap argMultimap) throws ParseException {
+        List<String> days = new ArrayList<>();
+        for (String value : getAllKeywords(argMultimap, PREFIX_DAY)) {
+            days.add(ParserUtil.parseDay(value).dayName);
+        }
+        return days;
     }
 
     private static List<String> getAllValidatedPaymentStatuses(ArgumentMultimap argMultimap) throws ParseException {
