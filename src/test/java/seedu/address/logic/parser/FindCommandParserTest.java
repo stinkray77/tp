@@ -136,6 +136,13 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_preambleWithPrefix_throwsParseException() {
+        // Bare keywords mixed with prefixes should be rejected; the bare part would be silently ignored
+        assertParseFailure(parser, " Alice n/Bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_emptyPrefixValue_throwsParseException() {
         // Providing a prefix with no value should fail, not silently match all students
         assertParseFailure(parser, " n/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));

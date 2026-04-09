@@ -55,6 +55,10 @@ public class FindCommandParser implements Parser<FindCommand> {
             String[] nameKeywords = argMultimap.getPreamble().split("\\s+");
             return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
         } else {
+            if (!argMultimap.getPreamble().isEmpty()) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            }
             // Prefix-based search: combine predicates with AND logic
             Predicate<Person> combinedPredicate = person -> true;
             int predicateCount = 0;
