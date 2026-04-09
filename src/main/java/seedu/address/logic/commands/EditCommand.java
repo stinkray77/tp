@@ -16,7 +16,10 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -137,12 +140,45 @@ public class EditCommand extends Command {
                 .orElse(personToEdit.getRemark());
         Set<Tag> updatedTags = editPersonDescriptor.getTags()
                 .orElse(personToEdit.getTags());
+        Map<String, Map<String, seedu.address.model.person.AttendanceStatus>> prunedAttendanceRecords =
+                pruneAttendanceRecords(personToEdit, updatedLessonSlots);
 
         return new Person(updatedName, updatedEmail, updatedAddress,
                 updatedLessonSlots,
                 updatedEmergencyContact, updatedPaymentStatus,
                 updatedRemark, updatedTags,
-                personToEdit.getAttendanceRecords());
+                prunedAttendanceRecords);
+    }
+
+    /**
+     * Returns attendance records filtered to the edited lesson slots.
+     * Records for removed lesson slots are dropped. Surviving records are re-keyed to match the
+     * current lesson slot subject casing so attendance stays aligned after subject renames/case changes.
+     */
+    private static Map<String, Map<String, seedu.address.model.person.AttendanceStatus>> pruneAttendanceRecords(
+            Person personToEdit, List<LessonSlot> updatedLessonSlots) {
+        Map<String, Map<String, String>> allowedSlots = new LinkedHashMap<>();
+        for (LessonSlot lessonSlot : updatedLessonSlots) {
+            String normalizedSubject = lessonSlot.getSubject().subjectName.toLowerCase(Locale.ROOT);
+            allowedSlots.computeIfAbsent(normalizedSubject, key -> new LinkedHashMap<>())
+                    .put(lessonSlot.getAttendanceKey(), lessonSlot.getSubject().subjectName);
+        }
+
+        Map<String, Map<String, seedu.address.model.person.AttendanceStatus>> prunedRecords = new LinkedHashMap<>();
+        personToEdit.getAttendanceRecords().forEach((subject, attendanceBySlot) -> {
+            Map<String, String> allowedAttendanceKeys = allowedSlots.get(subject.toLowerCase(Locale.ROOT));
+            if (allowedAttendanceKeys == null) {
+                return;
+            }
+
+            attendanceBySlot.forEach((attendanceKey, status) -> {
+                String canonicalSubject = allowedAttendanceKeys.get(attendanceKey);
+                prunedRecords.computeIfAbsent(canonicalSubject, key -> new LinkedHashMap<>())
+                        .put(attendanceKey, status);
+            });
+        });
+
+        return prunedRecords;
     }
 
     @Override

@@ -163,6 +163,17 @@ public class LessonSlotIntegrationTest {
     }
 
     @Test
+    public void execute_editLessonSlots_removesStaleAttendanceRecords() throws Exception {
+        logic.execute(
+                "markattendance 1 s/Mathematics d/Monday "
+                + "ti/1400 st/Present");
+        logic.execute("edit 1 s/English d/Friday ti/1000");
+
+        Person edited = logic.getFilteredPersonList().get(0);
+        assertTrue(edited.getAttendanceRecords().isEmpty());
+    }
+
+    @Test
     public void execute_editPartialSlotPrefixes_fails() {
         // Only subject without day/time — should fail
         assertThrowsParseOrCommand(() -> logic.execute(
@@ -452,6 +463,7 @@ public class LessonSlotIntegrationTest {
         student = logic.getFilteredPersonList().get(idx);
         assertEquals("Chemistry", student.getLessonSlots().get(0)
                 .getSubject().subjectName);
+        assertTrue(student.getAttendanceRecords().isEmpty());
 
         // Remark — slots preserved
         logic.execute("remark " + displayIdx + " r/Great progress");
