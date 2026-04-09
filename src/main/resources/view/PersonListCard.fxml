@@ -29,7 +29,7 @@
         </Label>
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
-      <FlowPane fx:id="lessonSlots" hgap="5" vgap="3" />
+      <FlowPane fx:id="lessonSlots" />
       <FlowPane fx:id="tags" />
     </VBox>
 
