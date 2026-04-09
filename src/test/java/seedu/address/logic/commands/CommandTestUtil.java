@@ -39,8 +39,8 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_SUBJECT_MATH = "Mathematics";
     public static final String VALID_SUBJECT_ENGLISH = "English";
-    public static final String VALID_EMERGENCY_CONTACT_AMY = "11111111";
-    public static final String VALID_EMERGENCY_CONTACT_BOB = "22222222";
+    public static final String VALID_EMERGENCY_CONTACT_AMY = "81111111";
+    public static final String VALID_EMERGENCY_CONTACT_BOB = "92222222";
     public static final String VALID_PAYMENT_STATUS_AMY = "Paid";
     public static final String VALID_PAYMENT_STATUS_BOB = "Due";
     public static final String VALID_DAY_MONDAY = "Monday";

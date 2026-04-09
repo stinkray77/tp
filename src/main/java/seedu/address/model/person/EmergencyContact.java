@@ -10,9 +10,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class EmergencyContact {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Emergency contact should be exactly 8 digits";
+            "Emergency contact should be a valid Singapore number: 8 digits starting with 8 or 9";
 
-    public static final String VALIDATION_REGEX = "\\d{8}";
+    public static final String VALIDATION_REGEX = "[89]\\d{7}";
 
     public final String value;
 

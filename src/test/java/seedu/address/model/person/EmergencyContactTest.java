@@ -25,14 +25,26 @@ public class EmergencyContactTest {
 
     @Test
     public void isValidEmergencyContact() {
+        // invalid: wrong length
         assertFalse(EmergencyContact.isValidEmergencyContact(""));
-        assertFalse(EmergencyContact.isValidEmergencyContact("1234567"));
-        assertFalse(EmergencyContact.isValidEmergencyContact("123456789"));
-        assertFalse(EmergencyContact.isValidEmergencyContact("abcdefgh"));
-        assertFalse(EmergencyContact.isValidEmergencyContact("1234 5678"));
+        assertFalse(EmergencyContact.isValidEmergencyContact("9123456"));
+        assertFalse(EmergencyContact.isValidEmergencyContact("912345678"));
 
+        // invalid: non-digit characters
+        assertFalse(EmergencyContact.isValidEmergencyContact("abcdefgh"));
+        assertFalse(EmergencyContact.isValidEmergencyContact("9234 567"));
+
+        // invalid: does not start with 8 or 9
+        assertFalse(EmergencyContact.isValidEmergencyContact("00000000"));
+        assertFalse(EmergencyContact.isValidEmergencyContact("11111111"));
+        assertFalse(EmergencyContact.isValidEmergencyContact("71234567"));
+
+        // valid: starts with 8
+        assertTrue(EmergencyContact.isValidEmergencyContact("81234567"));
+        assertTrue(EmergencyContact.isValidEmergencyContact("88888888"));
+
+        // valid: starts with 9
         assertTrue(EmergencyContact.isValidEmergencyContact("91234567"));
-        assertTrue(EmergencyContact.isValidEmergencyContact("00000000"));
         assertTrue(EmergencyContact.isValidEmergencyContact("99999999"));
     }
 
