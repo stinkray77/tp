@@ -88,4 +88,39 @@ public class FindCommandParserTest {
         assertNotNull(parser.parse(" n/Alice s/Math d/Monday"));
     }
 
+    @Test
+    public void parse_repeatedNamePrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob", "Carol")));
+        assertParseSuccess(parser, " n/Alice Bob n/Carol", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_repeatedSubjectPrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new SubjectContainsKeywordsPredicate(Arrays.asList("Math", "English", "Science")));
+        assertParseSuccess(parser, " s/Math English s/Science", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_repeatedDayPrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new DayMatchesPredicate(Arrays.asList("Monday", "Tuesday", "Friday")));
+        assertParseSuccess(parser, " d/Monday Tuesday d/Friday", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_repeatedPaymentStatusPrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new PaymentStatusMatchesPredicate(Arrays.asList("Paid", "Due")));
+        assertParseSuccess(parser, " ps/Paid ps/Due", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_repeatedTagPrefix_returnsFindCommand() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new TagContainsKeywordsPredicate(Arrays.asList("priority", "urgent", "vip")));
+        assertParseSuccess(parser, " t/priority urgent t/vip", expectedFindCommand);
+    }
+
 }

@@ -1,22 +1,28 @@
 package seedu.address.model.person;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code PaymentStatus} matches the given status.
+ * Tests that a {@code Person}'s {@code PaymentStatus} matches any of the given statuses.
  */
 public class PaymentStatusMatchesPredicate implements Predicate<Person> {
-    private final String status;
+    private final List<String> statuses;
 
     public PaymentStatusMatchesPredicate(String status) {
-        this.status = status;
+        this(List.of(status));
+    }
+
+    public PaymentStatusMatchesPredicate(List<String> statuses) {
+        this.statuses = List.copyOf(statuses);
     }
 
     @Override
     public boolean test(Person person) {
-        return person.getPaymentStatus().value.equalsIgnoreCase(status);
+        return statuses.stream()
+                .anyMatch(status -> person.getPaymentStatus().value.equalsIgnoreCase(status));
     }
 
     @Override
@@ -31,11 +37,11 @@ public class PaymentStatusMatchesPredicate implements Predicate<Person> {
         }
 
         PaymentStatusMatchesPredicate otherPaymentStatusMatchesPredicate = (PaymentStatusMatchesPredicate) other;
-        return status.equals(otherPaymentStatusMatchesPredicate.status);
+        return statuses.equals(otherPaymentStatusMatchesPredicate.statuses);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("status", status).toString();
+        return new ToStringBuilder(this).add("statuses", statuses).toString();
     }
 }
