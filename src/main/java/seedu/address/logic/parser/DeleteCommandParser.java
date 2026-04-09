@@ -10,7 +10,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
     public static final String MESSAGE_INVALID_FORMAT = "Invalid command format. Usage: delete INDEX";
-    public static final String MESSAGE_NOT_A_NUMBER = "Not a number: Invalid index. Use an integer (e.g. delete 3)";
+    public static final String MESSAGE_NOT_A_NUMBER = "Not a number. Use an integer (e.g. delete 3)";
+    public static final String MESSAGE_INVALID_INDEX = "Invalid index. Use a plain positive integer "
+            + "(e.g. delete 3). Inputs such as 0, -1, +2, and 1.0 are not supported.";
 
     /**
      * Parses the given {@code String} of arguments in the context of the DeleteCommand
@@ -30,10 +32,13 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         }
 
         try {
-            Index index = ParserUtil.parseIndex(trimmedArgs); // Use trimmedArgs here
+            Index index = ParserUtil.parseIndex(trimmedArgs);
             return new DeleteCommand(index);
         } catch (ParseException pe) {
-            // Throw your specific custom error message
+            // Numeric-looking inputs that are not plain positive integers should be treated as invalid indices.
+            if (trimmedArgs.matches("[+-]?\\d+(\\.\\d+)?")) {
+                throw new ParseException(MESSAGE_INVALID_INDEX);
+            }
             throw new ParseException(MESSAGE_NOT_A_NUMBER);
         }
     }

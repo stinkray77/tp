@@ -123,7 +123,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | `e/` | Email | Valid email format (e.g., `user@example.com`) |
 | `a/` | Address | Any text, cannot be blank |
 | `ec/` | Emergency Contact | Exactly 8 digits |
-| `s/` | Subject | Alphanumeric characters, no spaces |
+| `s/` | Subject | Alphanumeric characters and spaces; must not be blank |
 | `d/` | Day | Monday-Sunday (or Mon-Sun), case-insensitive |
 | `ti/` | Time | 4-digit 24-hour format, 0000-2359 |
 | `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` |
@@ -253,7 +253,6 @@ Format: `remark INDEX r/REMARK`
 * The index **must be a positive integer** 1, 2, 3, ...
 * The remark replaces any existing remark for that student.
 * To remove a remark, use `remark INDEX r/` with nothing after `r/`.
-* `remark INDEX` without `r/` is also treated as removing the student's remark.
 
 Examples:
 * `remark 1 r/Needs extra help with algebra` adds a remark to the 1st student.
@@ -344,7 +343,10 @@ Format: `delete INDEX`
 
 * Deletes the student at the specified `INDEX`.
 * The index refers to the index number shown in the displayed student list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* The index **must be a plain positive integer** 1, 2, 3, …​
+* Inputs such as `+2` and `1.0` are not supported.
+* The command only accepts one index input at a time.
+* After a successful deletion, Tutor Central shows the full student list again.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd student in Tutor Central.
@@ -392,7 +394,7 @@ _Details coming soon ..._
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TutorCentral home folder.
 
 **Q**: Where is the data file stored?<br>
-**A**: By default, TutorCentral saves data in a `data` folder next to the JAR file, in a file called `tutorcentral.json` (or `addressbook.json` depending on your configuration). Check the status bar at the bottom of the app to see the exact path. Keep dated backups so you can revert if needed.
+**A**: By default, TutorCentral saves data in a `data` folder next to the JAR file, in a file called `tutorcentral.json`. Check the footer at the bottom of the app to see the exact path. Keep dated backups so you can revert if needed.
 
 **Q**: How do I back up my data?<br>
 **A**: Copy the data JSON file `[JAR file location]/data/tutorcentral.json` (or `addressbook.json` depending on your configuration) to a safe location such as your Downloads folder or an external drive. To restore from a backup, replace the data file with your backup copy.

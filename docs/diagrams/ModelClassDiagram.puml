@@ -22,6 +22,7 @@ Class Day
 Class Time
 Class EmergencyContact
 Class PaymentStatus
+Class Remark
 Class "<<enum>>\nAttendanceStatus" as AttendanceStatus
 Class Tag
 

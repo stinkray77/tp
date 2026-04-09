@@ -22,7 +22,7 @@ public class FindCommandManualTest {
 
     @Test
     public void testManual() {
-        // Test basic name search (backward compatibility)
+        // Test basic name-only search without prefixes
         NameContainsKeywordsPredicate namePredicate = new NameContainsKeywordsPredicate(Arrays.asList("Alex"));
         Person namePerson = new PersonBuilder().withName("Alex Tan").build();
         assertTrue(namePredicate.test(namePerson));

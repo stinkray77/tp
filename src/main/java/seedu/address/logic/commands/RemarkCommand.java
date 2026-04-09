@@ -14,7 +14,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
 
 /**
- * Changes the remark of an existing person in the address book.
+ * Changes the remark of an existing student in Tutor Central.
  */
 public class RemarkCommand extends Command {
 
@@ -29,8 +29,8 @@ public class RemarkCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + "r/ Likes to swim.";
 
-    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added remark to Person: %1$s";
-    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed remark from Person: %1$s";
+    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added remark to student: %1$s";
+    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed remark from student: %1$s";
 
     private final Index index;
     private final Remark remark;
