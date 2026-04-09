@@ -42,7 +42,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | **Attendance Status** | One of: `Present`, `Absent`, or `Excused` — indicates a student's attendance for a specific lesson |
 | **Payment Status** | One of: `Paid`, `Due`, or `Overdue` — indicates the current fee payment status of a student |
 | **Subject** | An academic subject a student is enrolled in (e.g., `Mathematics`, `English`) |
-| **Lesson** | A scheduled tutoring session associated with a subject |
+| **Lesson Slot** | A scheduled tutoring session defined by a subject, day, and time (e.g., Mathematics on Monday at 1400) |
 | **Tag** | A short alphanumeric label attached to a student for categorisation (e.g., `priority`, `trial`) |
 | **Remark** | A free-text note attached to a student for any additional information |
 
@@ -129,10 +129,9 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` |
 | `t/` | Tag | Alphanumeric characters, no spaces |
 | `r/` | Remark | Any text (free-form) |
-| `l/` | Lesson | Alphanumeric characters and spaces, cannot be blank |
 | `st/` | Attendance Status | One of: `Present`, `Absent`, `Excused` |
 
-**Important:** Days and times must be specified in matching pairs. If you provide 2 days, you must provide exactly 2 times.
+**Important:** Subjects, days, and times must be specified in matching triplets. Each subject requires a corresponding day and time. If you provide 2 subjects, you must provide exactly 2 days and 2 times.
 
 ### Viewing help : `help`
 
@@ -147,7 +146,7 @@ Example result: A pop-up window will show you a link to this user guide with mor
 
 Adds a student to Tutor Central.
 
-Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]… [d/DAY]… [ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
+Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
 
 <box type="tip" seamless>
 
@@ -155,7 +154,7 @@ Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]… [d/DAY
 </box>
 
 Examples:
-* `add n/John Doe e/johnd@example.com a/311, Clementi Ave 2, #02-25 ec/98765432 s/Mathematics s/English d/Monday d/Wednesday ti/1400 ti/1600 ps/Due`
+* `add n/John Doe e/johnd@example.com a/311, Clementi Ave 2, #02-25 ec/98765432 s/Mathematics d/Monday ti/1400 s/English d/Wednesday ti/1600 ps/Due`
 
 If `ps/PAYMENT_STATUS` is omitted, the student's payment status defaults to `Due`.
 
@@ -176,11 +175,11 @@ Example result:
 
 Edits an existing student in Tutor Central.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT]… [d/DAY]… [ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
 
 <box type="warning" seamless>
 
-**Caution:** If you edit days (`d/`), you must also edit times (`ti/`), and vice versa.
+**Caution:** If you edit lesson slots, you must provide all three of subject (`s/`), day (`d/`), and time (`ti/`) together. Editing lesson slots replaces all existing lesson slots.
 
 </box>
 
@@ -283,29 +282,29 @@ Example result:
 
 Records a student's attendance for a specific lesson within a subject.
 
-Format: `markattendance INDEX s/SUBJECT l/LESSON st/STATUS`
+Format: `markattendance INDEX s/SUBJECT d/DAY ti/TIME st/STATUS`
 
 * The index refers to the index number shown in the displayed student list.
 * The index **must be a positive integer** 1, 2, 3, ...
-* The subject must match one of the student's existing enrolled subjects (case-insensitive).
-* If an attendance record already exists for that subject and lesson combination, it is updated.
+* The student must have a lesson slot matching the specified subject, day, and time combination. Subject matching is case-insensitive.
+* If an attendance record already exists for that subject and time slot, it is updated.
 * If no record exists, a new one is created.
 
 <box type="warning" seamless>
 
 **Caution:**
-* The student must be enrolled in the specified subject before attendance can be marked. Else, the command is blocked.
+* The student must have a matching lesson slot (subject + day + time) before attendance can be marked. Else, the command is blocked.
 * The `INDEX` refers to the position in the **currently displayed list** — use `list` or `find` first if needed.
 * Attendance status (`st/`) is case-insensitive (e.g., `present`, `Present`, and `PRESENT` are all accepted).
 </box>
 
 Examples:
-* `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Absent` marks the 1st student as Absent for Algebra Lesson 5 in Mathematics.
+* `markattendance 1 s/Mathematics d/Monday ti/1400 st/Absent` marks the 1st student as Absent for their Mathematics lesson on Monday at 1400.
 
 Example result:
 ![view result](images/markattendance-result.png)
-* `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Excused` can update the same record to Excused (e.g., after receiving an MC).
-* `markattendance 3 s/Science l/Chemistry Lab 2 st/Absent`  is blocked, since the third student is not enrolled in the Science subject.
+* `markattendance 1 s/Mathematics d/Monday ti/1400 st/Excused` can update the same record to Excused (e.g., after receiving an MC).
+* `markattendance 3 s/Mathematics d/Tuesday ti/0900 st/Present` is blocked, since the third student does not have a lesson slot for Mathematics on Tuesday at 0900.
 
 Example result:
 ![view result](images/markattendance-error.png)
@@ -418,7 +417,7 @@ _Details coming soon ..._
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 3. **When using the `find` command with multiple prefixes** (e.g., `find s/Math d/Monday`), the results use AND logic. There is currently no way to perform OR searches across different fields.
-4. **The `markattendance` command creates attendance records even if the lesson name doesn't match a previously used lesson name.** This means typos in lesson names (e.g., "Algbera" vs "Algebra") will create separate attendance records. Attendance records are currently not displayed in the student list cards in the GUI. Use the `listattendance` command to view them in the result display area.
+4. **Attendance records are stored per lesson slot (subject + day + time).** If a student's lesson slots are edited, existing attendance records for removed slots are preserved in storage but no longer displayed. Use `listattendance` to verify records after editing lesson slots.
 5. **On macOS fullscreen mode, secondary dialogs may behave unexpectedly.** Commands that open separate windows, such as `help` and `view`, may not display as expected while the app is in fullscreen. Use windowed mode if this happens.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -427,16 +426,16 @@ _Details coming soon ..._
 
 | Action     | Format, Examples |
 |------------|------------------|
-| **Add**    | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT]... [d/DAY]... [ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due` |
+| **Add**    | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due` |
 | **Clear**  | `clear` |
 | **Delete** | `delete INDEX` <br> e.g., `delete 3` |
-| **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT]... [d/DAY]... [ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com` |
+| **Edit**   | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com` |
 | **Exit**   | `exit` |
 | **Find**   | `find [n/NAME] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG]` <br> e.g., `find s/Mathematics d/Monday` |
 | **Help**   | `help` |
 | **List**   | `list` |
 | **ListAttendance** | `listattendance INDEX [s/SUBJECT]` <br> e.g., `listattendance 1 s/Mathematics` |
 | **Mark**   | `mark INDEX ps/PAYMENT_STATUS` <br> e.g., `mark 1 ps/Paid` |
-| **MarkAttendance** | `markattendance INDEX s/SUBJECT l/LESSON st/STATUS` <br> e.g., `markattendance 1 s/Mathematics l/Algebra Lesson 5 st/Present` |
+| **MarkAttendance** | `markattendance INDEX s/SUBJECT d/DAY ti/TIME st/STATUS` <br> e.g., `markattendance 1 s/Mathematics d/Monday ti/1400 st/Present` |
 | **Remark** | `remark INDEX r/REMARK` <br> e.g., `remark 1 r/Needs help with algebra` |
 | **View**   | `view INDEX` <br> e.g., `view 1` |

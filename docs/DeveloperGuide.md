@@ -133,14 +133,14 @@ Each `Person` in Tutor Central currently contains:
 * `Name`
 * `Email`
 * `Address`
-* `Set<Subject>`
-* `Set<Day>`
-* `Set<Time>`
+* `List<LessonSlot>` — each `LessonSlot` bundles a `Subject`, `Day`, and `Time` into a single immutable value object
 * `EmergencyContact`
 * `PaymentStatus`
 * `Remark`
 * `Set<Tag>`
-* `attendanceRecords` — a `Map` mapping each `Subject` to a map of lesson names to `AttendanceStatus`, tracking attendance per subject per lesson
+* `attendanceRecords` — a `Map<String, Map<String, AttendanceStatus>>` mapping subject name to time-slot key (e.g., `"Monday 1400"`) to `AttendanceStatus`, tracking attendance per subject per lesson slot
+
+Derived getters `getSubjects()`, `getDays()`, and `getTimes()` are provided for backward compatibility with predicates used in the `find` command.
 
 <box type="info" seamless>
 
@@ -231,7 +231,7 @@ During execution, `ViewCommand`:
 The `MainWindow` checks `CommandResult#isShowView()` and, if true, calls `PersonViewDialog.show(person)`.
 
 The `PersonViewDialog` is a JavaFX dialog that displays all student fields in a structured `GridPane`
-layout: name, emergency contact, email, address, tags, payment status, subjects, days, times, and remark.
+layout: name, emergency contact, email, address, tags, payment status, lesson slots (each showing subject, day, and time), and remark.
 
 <puml src="diagrams/ViewSequenceDiagram.puml" alt="Sequence diagram for the view student feature" />
 
@@ -252,7 +252,7 @@ index and the new `PaymentStatus`.
 During execution, `MarkCommand` retrieves the target student from the filtered
 list and validates that the provided index is in range. It then creates a new
 `Person` object with the updated `PaymentStatus` while preserving the student's
-name, email, address, subjects, lesson days, lesson times, emergency contact,
+name, email, address, lesson slots, emergency contact,
 remark, and tags. The updated student replaces the original student in the
 model, and the filtered list is refreshed.
 
@@ -262,21 +262,22 @@ model, and the filtered list is refreshed.
 
 The `markattendance` command records a student's attendance for a specific lesson within a subject.
 
-`MarkAttendanceCommandParser` tokenizes the user input with the `s/`, `l/`, and `st/` prefixes and checks
+`MarkAttendanceCommandParser` tokenizes the user input with the `s/`, `d/`, `ti/`, and `st/` prefixes and checks
 that the command contains:
 
 * a non-empty preamble that can be parsed into an index
 * exactly one `s/` value (subject)
-* exactly one `l/` value (lesson)
+* exactly one `d/` value (day)
+* exactly one `ti/` value (time)
 * exactly one `st/` value (attendance status)
 
 If the input is valid, the parser creates a `MarkAttendanceCommand` with the target index, subject name,
-lesson name, and `AttendanceStatus`.
+day, time, and `AttendanceStatus`.
 
 During execution, `MarkAttendanceCommand`:
 1. Retrieves the target student from the filtered list.
-2. Validates that the provided subject is in the student's subject list (case-insensitive match).
-3. Creates a new `Person` with the updated attendance record using `Person#markAttendance()`.
+2. Validates that the student has a matching lesson slot for the specified subject, day, and time combination (subject match is case-insensitive).
+3. Creates a new `Person` with the updated attendance record using `Person#markAttendance(subject, "Day Time", status)`.
 4. Replaces the original student in the model.
 5. Refreshes the filtered list.
 
@@ -299,7 +300,7 @@ During execution, `ListAttendanceCommand`:
 5. Formats the results into a human-readable string.
 6. Returns a `CommandResult` with the formatted string.
 
-The output format is: `Attendance for [NAME]: [SUBJECT]: [LESSON]: [STATUS]`
+The output format is: `Attendance for [NAME]: [SUBJECT]: [DAY TIME]: [STATUS]`
 
 <puml src="diagrams/ListAttendanceSequenceDiagram.puml" alt="Sequence diagram for the list attendance feature" />
 
@@ -406,6 +407,23 @@ The following activity diagram summarizes what happens when a user executes a ne
 ### \[Proposed\] Data archiving
 
 Archiving would allow tutors to hide inactive students from the main list without permanently deleting them. This feature is not yet implemented.
+
+### \[Proposed\] Monthly payment tracking
+
+The current payment status field (`Paid`, `Due`, `Overdue`) is a single static value per student. In practice, tutors need to track payments on a monthly basis — a student may be `Paid` for March but `Due` for April. A future enhancement would replace the single `PaymentStatus` with a monthly payment record (e.g., `Map<YearMonth, PaymentStatus>`), allowing tutors to:
+
+* Mark payment status per month (e.g., `mark 1 ps/Paid m/2026-04`)
+* View payment history over time
+* Identify students with overdue payments for specific months
+* Generate payment summaries for a given period
+
+### \[Proposed\] Lesson duration
+
+Each `LessonSlot` currently stores only a start time. Adding a `Duration` field (e.g., 60 or 90 minutes) would enable:
+
+* Display of lesson end times in the UI (e.g., "Monday 1400–1530")
+* Detection of scheduling conflicts between overlapping lesson slots
+* Calculation of total teaching hours per week or month for workload planning
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -520,7 +538,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.  Tutor requests to add a student.
 2.  Tutor Central shows the required details to be input.
-3.  Tutor provides the student's details: name, email, address, emergency contact, subjects, days, times, payment status, and tags.
+3.  Tutor provides the student's details: name, email, address, emergency contact, lesson slots (subject/day/time triplets), payment status, and tags.
 4.  Tutor Central validates the input.
 5.  Tutor Central records the new student and shows a success message with the added student's details.
 
@@ -534,7 +552,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
         Use case resumes from step 2.
 
 
-* 4b. The number of days does not match the number of times.
+* 4b. The number of subjects, days, and times do not match (must be equal triplets).
     * 4b1. Tutor Central shows an error message.
 
         Use case resumes from step 2.
@@ -573,7 +591,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
         Use case resumes from step 3.
 
 
-* 5b. Tutor updates `days` without `times`, or `times` without `days`.
+* 5b. Tutor updates lesson slots without providing all three of subject, day, and time together.
     * 5b1. Tutor Central shows an error message.
 
         Use case resumes from step 3.
@@ -854,8 +872,8 @@ testers are expected to do more *exploratory* testing.
    4. Test case: Missing compulsory field, e.g. `add n/John Doe e/johnd@example.com`<br>
       Expected: No student added. Error message showing correct usage format.
 
-   5. Test case: Mismatched days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math d/Monday d/Tuesday ti/1400 ec/91234567 ps/Paid`<br>
-      Expected: No student added. Error message stating days and times count must match.
+   1. Test case: Mismatched subjects/days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math s/English d/Monday ti/1400 d/Tuesday ec/91234567 ps/Paid`<br>
+      Expected: No student added. Error message stating subjects, days, and times count must all match.
 
 ### Marking payment status
 
@@ -889,6 +907,36 @@ testers are expected to do more *exploratory* testing.
 
    3. Test case: `remark 1 r/` (empty remark)<br>
       Expected: Existing remark removed from first student. Success message shown.
+
+### Marking attendance
+
+1. Marking attendance with valid input
+
+   1. Prerequisites: List all students using `list`. First student has a lesson slot for Mathematics on Monday at 1400.
+
+   1. Test case: `markattendance 1 s/Mathematics d/Monday ti/1400 st/Present`<br>
+      Expected: Attendance marked. Success message shown.
+
+   1. Test case: `markattendance 1 s/mathematics d/Monday ti/1400 st/Absent` (lowercase subject)<br>
+      Expected: Attendance updated (case-insensitive). Success message shown.
+
+   1. Test case: `markattendance 1 s/Mathematics d/Tuesday ti/0900 st/Present` (non-existent slot)<br>
+      Expected: Error message — student does not have this lesson slot.
+
+   1. Test case: `markattendance 0 s/Mathematics d/Monday ti/1400 st/Present`<br>
+      Expected: Error — invalid index.
+
+### Viewing attendance
+
+1. Viewing attendance records
+
+   1. Prerequisites: Student 1 has attendance records from the marking attendance tests above.
+
+   1. Test case: `listattendance 1`<br>
+      Expected: Shows all attendance records grouped by subject, with time-slot keys (e.g., "Monday 1400: Absent").
+
+   1. Test case: `listattendance 1 s/Mathematics`<br>
+      Expected: Shows only Mathematics attendance records.
 
 ### Finding students
 
