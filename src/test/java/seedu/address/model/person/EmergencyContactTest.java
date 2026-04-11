@@ -17,35 +17,37 @@ public class EmergencyContactTest {
     @Test
     public void constructor_invalidContact_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> new EmergencyContact(""));
-        assertThrows(IllegalArgumentException.class, () -> new EmergencyContact("1234567"));
-        assertThrows(IllegalArgumentException.class, () -> new EmergencyContact("123456789"));
+        assertThrows(IllegalArgumentException.class, () -> new EmergencyContact("12"));
+        assertThrows(IllegalArgumentException.class, () -> new EmergencyContact("1234567890123456"));
         assertThrows(IllegalArgumentException.class, () -> new EmergencyContact("abcdefgh"));
         assertThrows(IllegalArgumentException.class, () -> new EmergencyContact("1234 567"));
     }
 
     @Test
     public void isValidEmergencyContact() {
-        // invalid: wrong length
+        // invalid: too short (fewer than 3 digits)
         assertFalse(EmergencyContact.isValidEmergencyContact(""));
-        assertFalse(EmergencyContact.isValidEmergencyContact("9123456"));
-        assertFalse(EmergencyContact.isValidEmergencyContact("912345678"));
+        assertFalse(EmergencyContact.isValidEmergencyContact("12"));
+
+        // invalid: too long (more than 15 digits)
+        assertFalse(EmergencyContact.isValidEmergencyContact("1234567890123456"));
 
         // invalid: non-digit characters
         assertFalse(EmergencyContact.isValidEmergencyContact("abcdefgh"));
         assertFalse(EmergencyContact.isValidEmergencyContact("9234 567"));
 
-        // invalid: does not start with 8 or 9
-        assertFalse(EmergencyContact.isValidEmergencyContact("00000000"));
-        assertFalse(EmergencyContact.isValidEmergencyContact("11111111"));
-        assertFalse(EmergencyContact.isValidEmergencyContact("71234567"));
+        // valid: short code (3 digits)
+        assertTrue(EmergencyContact.isValidEmergencyContact("999"));
 
-        // valid: starts with 8
+        // valid: landline (does not start with 8 or 9)
+        assertTrue(EmergencyContact.isValidEmergencyContact("61234567"));
+
+        // valid: standard Singapore mobile
         assertTrue(EmergencyContact.isValidEmergencyContact("81234567"));
-        assertTrue(EmergencyContact.isValidEmergencyContact("88888888"));
-
-        // valid: starts with 9
         assertTrue(EmergencyContact.isValidEmergencyContact("91234567"));
-        assertTrue(EmergencyContact.isValidEmergencyContact("99999999"));
+
+        // valid: maximum length (15 digits)
+        assertTrue(EmergencyContact.isValidEmergencyContact("123456789012345"));
     }
 
     @Test

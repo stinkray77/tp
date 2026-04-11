@@ -96,7 +96,7 @@ public class CommandTestUtil {
             + "bob!yahoo";
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS;
     public static final String INVALID_EMERGENCY_CONTACT_DESC = " "
-            + PREFIX_EMERGENCY_CONTACT + "911";
+            + PREFIX_EMERGENCY_CONTACT + "12";
     public static final String INVALID_PAYMENT_STATUS_DESC = " "
             + PREFIX_PAYMENT_STATUS + "Unknown";
     public static final String INVALID_DAY_DESC = " " + PREFIX_DAY
