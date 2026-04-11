@@ -143,6 +143,15 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_malformedPrefix_throwsParseException() {
+        // Space before slash causes the token to land in the preamble instead of being parsed as a prefix
+        assertParseFailure(parser, " ps /Due",
+                "Malformed prefix detected. Did you add a space before '/'? " + FindCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, " n /Alice",
+                "Malformed prefix detected. Did you add a space before '/'? " + FindCommand.MESSAGE_USAGE);
+    }
+
+    @Test
     public void parse_emptyPrefixValue_throwsParseException() {
         // Providing a prefix with no value should fail, not silently match all students
         assertParseFailure(parser, " n/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
