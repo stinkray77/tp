@@ -120,13 +120,13 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | Prefix | Field | Rules |
 |--------|-------|-------|
 | `n/` | Name | Alphanumeric characters and spaces, cannot be blank |
-| `e/` | Email | Valid email format (e.g., `user@example.com`) |
+| `e/` | Email | Valid email format (e.g., `user@example.com`); must not be blank |
 | `a/` | Address | Any text, cannot be blank |
 | `ec/` | Emergency Contact | Exactly 8 digits, must start with 8 or 9 (valid Singapore mobile number) |
 | `s/` | Subject | Alphanumeric characters and spaces; must not be blank |
 | `d/` | Day | Monday-Sunday (or Mon-Sun), case-insensitive |
 | `ti/` | Time | 4-digit 24-hour format, 0000-2359 |
-| `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` |
+| `ps/` | Payment Status | One of: `Paid`, `Due`, `Overdue` (case-insensitive) |
 | `t/` | Tag | Alphanumeric characters, no spaces |
 | `r/` | Remark | Any text (free-form) |
 | `st/` | Attendance Status | One of: `Present`, `Absent`, `Excused` |
