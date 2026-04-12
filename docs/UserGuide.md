@@ -53,7 +53,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 ## Notes for Users
 
-* **Launching the app:** Use `java -jar TutorCentral.jar` in a terminal rather than double-clicking the file, as double-clicking may not work on some systems.
+* **Launching the app:** Use `java -jar tutorcentral.jar` in a terminal rather than double-clicking the file, as double-clicking may not work on some systems.
 * **Folder permissions:** The app needs to create and update files such as `preferences.json` and the `data/` folder. Place the JAR in a normal user-writable folder such as `Documents`, `Desktop`, or a personal project folder. Avoid protected system folders or read-only shared folders.
 * **macOS fullscreen:** macOS users running the app in fullscreen mode may experience unexpected behaviour when opening secondary dialogs such as the Help window or the student view dialog. Use windowed mode instead.
 
@@ -156,7 +156,7 @@ Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/T
 * You can clear all lesson slots only by providing `s/ d/ ti/` with no values after each prefix, for example `edit 1 s/ d/ ti/`.
 
 Examples:
-* `add n/John Doe e/johnd@example.com a/311, Clementi Ave 2, #02-25 ec/98765432 s/Mathematics d/Monday ti/1400 s/English d/Wednesday ti/1600 ps/Due`
+* `add n/John Tan e/johnt@example.com a/311, Clementi Ave 2, #02-25 ec/98765432 s/Mathematics d/Monday ti/1400 s/English d/Wednesday ti/1600 ps/Due`
 
 If `ps/PAYMENT_STATUS` is omitted, the student's payment status defaults to `Due`.
 
