@@ -323,4 +323,26 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, "1 s/ d/ ti/",
                 new EditCommand(INDEX_FIRST_PERSON, descriptor));
     }
+
+    // --- Regression: blank subject/day/time in a partial edit is rejected (#242) ---
+
+    @Test
+    public void parse_blankSubjectWithDayAndTime_failure() {
+        // Tester B reproduction: `edit 1 s/ d/Monday ti/1400`
+        assertParseFailure(parser, "1 s/ d/Monday ti/1400",
+                seedu.address.model.person.Subject.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_whitespaceOnlySubjectWithDayAndTime_failure() {
+        assertParseFailure(parser, "1 s/    d/Monday ti/1400",
+                seedu.address.model.person.Subject.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_blankSubjectInSecondLessonSlot_failure() {
+        assertParseFailure(parser,
+                "1 s/Math d/Monday ti/1400 s/ d/Tuesday ti/1500",
+                seedu.address.model.person.Subject.MESSAGE_CONSTRAINTS);
+    }
 }
