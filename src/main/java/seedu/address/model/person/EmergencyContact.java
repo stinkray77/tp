@@ -10,16 +10,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class EmergencyContact {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Emergency contact should be a valid Singapore number: 8 digits starting with 8 or 9";
+            "Emergency contact must be a 3 to 15 digit number (may be a landline or short code).";
 
-    public static final String VALIDATION_REGEX = "[89]\\d{7}";
+    public static final String VALIDATION_REGEX = "\\d{3,15}";
 
     public final String value;
 
     /**
      * Constructs an {@code EmergencyContact}.
      *
-     * @param contact A valid 8-digit emergency contact number.
+     * @param contact A valid emergency contact number (3 to 15 digits).
      */
     public EmergencyContact(String contact) {
         requireNonNull(contact);

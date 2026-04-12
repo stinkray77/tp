@@ -122,7 +122,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | `n/` | Name | Alphanumeric characters and spaces, cannot be blank |
 | `e/` | Email | Valid email format (e.g., `user@example.com`); must not be blank |
 | `a/` | Address | Any text, cannot be blank |
-| `ec/` | Emergency Contact | Exactly 8 digits, must start with 8 or 9 (valid Singapore mobile number) |
+| `ec/` | Emergency Contact | A 3 to 15 digit number (e.g., mobile, landline, or short code such as 999) |
 | `s/` | Subject | Alphanumeric characters and spaces; must not be blank |
 | `d/` | Day | Monday-Sunday (or Mon-Sun), case-insensitive |
 | `ti/` | Time | 4-digit 24-hour format, 0000-2359 |
