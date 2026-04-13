@@ -30,6 +30,12 @@ public class MarkCommandParser implements Parser<MarkCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
         }
 
+        String preamble = argMultimap.getPreamble().trim();
+        if (preamble.split("\\s+").length > 1) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+        }
+
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_PAYMENT_STATUS);
 
         Index index;
