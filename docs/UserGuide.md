@@ -299,6 +299,7 @@ Format: `markattendance INDEX s/SUBJECT d/DAY ti/TIME st/STATUS`
 - The index refers to the index number shown in the displayed student list.
 - The index **must be a positive integer** 1, 2, 3, ...
 - The student must have a lesson slot matching the specified subject, day, and time combination. Subject matching is case-insensitive.
+- Valid attendance statuses are `Present`, `Absent`, and `Excused`.
 - If an attendance record already exists for that subject and time slot, it is updated.
 - If no record exists, a new one is created.
 
