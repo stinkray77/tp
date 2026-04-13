@@ -782,7 +782,6 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **Student**: A learner whose information is managed in Tutor Central
 * **Subject**: An academic subject a student is enrolled in (e.g., Mathematics, English)
 * **Lesson Slot**: A scheduled lesson defined by a Subject, Day, and Time triplet (e.g., Mathematics on Monday at 1400)
-* **Lesson**: A specific class session within a subject
 * **Attendance**: The record of a student's presence at a lesson slot
 * **Attendance Status**: The recorded status for attendance: `Present`, `Absent`, or `Excused`
 * **Payment Status**: The financial status of a student: `Paid`, `Due`, or `Overdue`
@@ -790,10 +789,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **Remark**: A free-text note attached to a student record
 * **Tag**: A label for categorizing students (e.g., `primary`, `priority`)
 * **Field**: A piece of data within a student record (e.g., Name, Emergency Contact)
-* **Timeslot**: The scheduled day and time of the tuition for a student
-* **Rate**: Tuition fee that is agreed upon
-* **Private student detail**: A student detail that is not meant to be shared with others
-* **Duplicate Record**: A new student entry that is identical or near identical to an existing entry
+* **Time-slot key**: The combined day and time string used to identify an attendance record (e.g., `Monday 1400`)
 
 #### Application Logic & Architecture
 
@@ -802,6 +798,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **Storage**: The component that reads and writes data to JSON files
 * **Command**: A parsed user instruction ready for execution
 * **Predicate**: A filter condition applied to the student list
+* **Filtered list**: The currently displayed subset of students, usually produced by commands such as `find`; index-based commands operate on this list
 * **JSON**: The file format used for persistent data storage
 * **Auto-save**: Automatic saving of changes without needing any extra user action
 
@@ -811,7 +808,6 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **Index**: The 1-based position number of a student in the displayed list
 * **Preamble**: Text before the first prefix in a command string
 * **Parameter**: A value provided to a command via a prefix
-* **Line-break**: In multi-line commands, it is the point where the command visually wraps to the next line in the display
 
 #### Interface & Environment
 
@@ -819,10 +815,10 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **GUI**: Graphical User Interface, the visual display
 * **JavaFX**: The UI framework used by Tutor Central
 * **MarkBind**: The documentation framework used for the project website
-* **List View**: The graphical display showing all student records in a scrollable table or grid format
+* **List View**: The graphical display showing student records as a scrollable list
 * **Command Box**: The text box where users type commands
 * **Command Output Area**: The display area showing the results of commands entered (successes or failures)
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Mainstream OS**: Windows, Linux, and macOS
 
 --------------------------------------------------------------------------------------------------------------------
 
