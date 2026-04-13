@@ -1,5 +1,19 @@
 package seedu.address.logic;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ATTENDANCE_STATUS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
+
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,16 +41,30 @@ public class Messages {
     public static final String MESSAGE_LESSON_SLOT_NOT_FOUND =
                 "Student does not have a lesson for %1$s on %2$s at %3$s";
 
+    private static final Map<Prefix, String> PREFIX_LABELS = Map.ofEntries(
+            Map.entry(PREFIX_NAME, "Name"),
+            Map.entry(PREFIX_EMAIL, "Email"),
+            Map.entry(PREFIX_ADDRESS, "Address"),
+            Map.entry(PREFIX_EMERGENCY_CONTACT, "Emergency Contact"),
+            Map.entry(PREFIX_SUBJECT, "Subject"),
+            Map.entry(PREFIX_DAY, "Day"),
+            Map.entry(PREFIX_TIME, "Time"),
+            Map.entry(PREFIX_PAYMENT_STATUS, "Payment Status"),
+            Map.entry(PREFIX_TAG, "Tag"),
+            Map.entry(PREFIX_REMARK, "Remark"),
+            Map.entry(PREFIX_ATTENDANCE_STATUS, "Attendance Status"));
+
     /**
      * Returns an error message indicating the duplicate prefixes.
      */
     public static String getErrorMessageForDuplicatePrefixes(Prefix... duplicatePrefixes) {
         assert duplicatePrefixes.length > 0;
 
-        Set<String> duplicateFields =
-                Stream.of(duplicatePrefixes).map(Prefix::toString).collect(Collectors.toSet());
+        Set<String> duplicateFields = Stream.of(duplicatePrefixes)
+                .map(p -> PREFIX_LABELS.getOrDefault(p, p.toString()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
-        return MESSAGE_DUPLICATE_FIELDS + String.join(" ", duplicateFields);
+        return MESSAGE_DUPLICATE_FIELDS + String.join(", ", duplicateFields);
     }
 
     /**

@@ -65,10 +65,13 @@ public class PersonCard extends UiPart<Region> {
         remark.setText(remarkText.isEmpty() ? "" : "Remark: " + remarkText);
         remark.setVisible(!remarkText.isEmpty());
         remark.setManaged(!remarkText.isEmpty());
-        person.getLessonSlots().stream()
+        String lessonText = person.getLessonSlots().stream()
                 .sorted(Comparator.comparing(ls -> ls.toString()))
-                .forEach(ls -> lessonSlots.getChildren()
-                        .add(new Label(ls.toString())));
+                .map(ls -> ls.toString())
+                .collect(java.util.stream.Collectors.joining(", "));
+        if (!lessonText.isEmpty()) {
+            lessonSlots.getChildren().add(new Label(lessonText));
+        }
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren()

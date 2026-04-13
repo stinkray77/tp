@@ -119,7 +119,7 @@ public class AddCommandParserTest {
                         + EMERGENCY_CONTACT_DESC_AMY
                         + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(
-                        PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL,
+                        PREFIX_NAME, PREFIX_EMAIL, PREFIX_ADDRESS,
                         PREFIX_EMERGENCY_CONTACT,
                         PREFIX_PAYMENT_STATUS));
 

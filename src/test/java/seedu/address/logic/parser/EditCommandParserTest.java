@@ -241,8 +241,8 @@ public class EditCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(
-                        PREFIX_EMERGENCY_CONTACT, PREFIX_EMAIL,
-                        PREFIX_ADDRESS));
+                        PREFIX_EMAIL, PREFIX_ADDRESS,
+                        PREFIX_EMERGENCY_CONTACT));
 
         userInput = targetIndex.getOneBased()
                 + INVALID_EMERGENCY_CONTACT_DESC
@@ -252,8 +252,8 @@ public class EditCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(
-                        PREFIX_EMERGENCY_CONTACT, PREFIX_EMAIL,
-                        PREFIX_ADDRESS));
+                        PREFIX_EMAIL, PREFIX_ADDRESS,
+                        PREFIX_EMERGENCY_CONTACT));
 
         // duplicate remark
         userInput = targetIndex.getOneBased()
