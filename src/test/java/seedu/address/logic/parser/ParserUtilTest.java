@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.EmergencyContact;
+import seedu.address.model.person.LessonSlot;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Subject;
@@ -320,5 +322,45 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(
                 new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    // --- parseLessonSlots dedup & overlap detection ---
+
+    @Test
+    public void parseLessonSlots_exactDuplicate_throwsParseException() {
+        assertThrows(ParseException.class, () ->
+                ParserUtil.parseLessonSlots(
+                        Arrays.asList("Math", "Math"),
+                        Arrays.asList("Monday", "Monday"),
+                        Arrays.asList("1400", "1400")));
+    }
+
+    @Test
+    public void parseLessonSlots_overlappingDifferentSubject_throwsParseException() {
+        assertThrows(ParseException.class, () ->
+                ParserUtil.parseLessonSlots(
+                        Arrays.asList("Math", "English"),
+                        Arrays.asList("Friday", "Friday"),
+                        Arrays.asList("1400", "1400")));
+    }
+
+    @Test
+    public void parseLessonSlots_sameSubjectDifferentDays_success()
+            throws ParseException {
+        List<LessonSlot> slots = ParserUtil.parseLessonSlots(
+                Arrays.asList("Math", "Math"),
+                Arrays.asList("Monday", "Wednesday"),
+                Arrays.asList("1400", "1600"));
+        assertEquals(2, slots.size());
+    }
+
+    @Test
+    public void parseLessonSlots_sameDayDifferentTimes_success()
+            throws ParseException {
+        List<LessonSlot> slots = ParserUtil.parseLessonSlots(
+                Arrays.asList("Math", "English"),
+                Arrays.asList("Friday", "Friday"),
+                Arrays.asList("1400", "1600"));
+        assertEquals(2, slots.size());
     }
 }

@@ -4,8 +4,10 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -238,14 +240,29 @@ public class ParserUtil {
         requireNonNull(subjects);
         requireNonNull(days);
         requireNonNull(times);
-        List<LessonSlot> result = new ArrayList<>();
+        List<LessonSlot> lessonSlots = new ArrayList<>();
         for (int i = 0; i < subjects.size(); i++) {
             Subject subject = parseSubject(subjects.get(i));
             Day day = parseDay(days.get(i));
             Time time = parseTime(times.get(i));
-            result.add(new LessonSlot(subject, day, time));
+            lessonSlots.add(new LessonSlot(subject, day, time));
         }
-        return result;
+        Set<LessonSlot> seenLessonSlots = new HashSet<>();
+        Map<String, LessonSlot> slotsByDayTime = new HashMap<>();
+        for (LessonSlot slot : lessonSlots) {
+            if (!seenLessonSlots.add(slot)) {
+                throw new ParseException("Duplicate lesson slot: " + slot);
+            }
+            String key = slot.getDay() + "|" + slot.getTime();
+            LessonSlot conflictingSlot = slotsByDayTime.putIfAbsent(key, slot);
+            if (conflictingSlot != null) {
+                throw new ParseException("Overlapping lesson slots at "
+                        + conflictingSlot.getDay() + " " + conflictingSlot.getTime()
+                        + ": " + conflictingSlot.getSubject()
+                        + " and " + slot.getSubject());
+            }
+        }
+        return lessonSlots;
     }
 
     /**
