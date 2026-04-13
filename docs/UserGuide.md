@@ -210,6 +210,8 @@ Format: `find [n/NAME_KEYWORDS] [s/SUBJECT] [d/DAY] [ps/PAYMENT_STATUS] [t/TAG]`
 * You can still search by name without prefixes using `find KEYWORD [MORE_KEYWORDS]`.
 * When using prefixes, multiple criteria use AND logic.
 * Repeating the same prefix combines all supplied values for that field.
+* Within the same prefix (e.g.`ps/Due ps/Overdue`), values are **OR**-ed.
+* For different prefixes (e.g.`ps/Due s/Science`), values are **AND**-ed.
 * You can provide multiple keywords after a single prefix, or repeat the same prefix multiple times.
 * Name search is case-insensitive and matches full words only.
 * Subject and tag searches are case-insensitive and match partial words.
