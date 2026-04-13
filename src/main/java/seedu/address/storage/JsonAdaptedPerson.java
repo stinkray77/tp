@@ -95,8 +95,15 @@ class JsonAdaptedPerson {
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
         source.getAttendanceRecords().forEach((subject, lessons) -> {
+            if (subject == null) {
+                return;
+            }
             Map<String, String> lessonMap = new LinkedHashMap<>();
-            lessons.forEach((lesson, status) -> lessonMap.put(lesson, status.value));
+            lessons.forEach((lesson, status) -> {
+                if (lesson != null && status != null) {
+                    lessonMap.put(lesson, status.value);
+                }
+            });
             attendanceRecords.put(subject, lessonMap);
         });
     }

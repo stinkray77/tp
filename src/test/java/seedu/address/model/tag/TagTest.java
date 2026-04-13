@@ -53,6 +53,10 @@ public class TagTest {
         // same tag name -> returns true
         assertTrue(tag.equals(new Tag("friend")));
 
+        // different case -> returns true (case-insensitive)
+        assertTrue(tag.equals(new Tag("Friend")));
+        assertTrue(tag.equals(new Tag("FRIEND")));
+
         // different tag name -> returns false
         assertFalse(tag.equals(new Tag("enemy")));
     }
@@ -61,7 +65,17 @@ public class TagTest {
     public void hashcode() {
         Tag tag = new Tag("friend");
         assertEquals(tag.hashCode(), new Tag("friend").hashCode());
+        assertEquals(tag.hashCode(), new Tag("Friend").hashCode());
+        assertEquals(tag.hashCode(), new Tag("FRIEND").hashCode());
         assertNotEquals(tag.hashCode(), new Tag("enemy").hashCode());
+    }
+
+    @Test
+    public void equals_caseInsensitive_setDedup() {
+        java.util.Set<Tag> tags = new java.util.HashSet<>();
+        tags.add(new Tag("Friend"));
+        tags.add(new Tag("friend"));
+        assertEquals(1, tags.size());
     }
 
     @Test

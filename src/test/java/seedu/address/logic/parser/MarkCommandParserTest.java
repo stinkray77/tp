@@ -69,4 +69,11 @@ public class MarkCommandParserTest {
         assertParseFailure(parser, "1 ps/Paid ps/Due",
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PAYMENT_STATUS));
     }
+
+    @Test
+    public void parse_multiTokenPreamble_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "1 2 ps/Due", expectedMessage);
+        assertParseFailure(parser, "1 2 3 ps/Paid", expectedMessage);
+    }
 }

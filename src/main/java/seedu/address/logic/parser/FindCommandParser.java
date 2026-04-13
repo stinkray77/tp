@@ -43,6 +43,12 @@ public class FindCommandParser implements Parser<FindCommand> {
                 PREFIX_NAME, PREFIX_SUBJECT, PREFIX_DAY,
                 PREFIX_PAYMENT_STATUS, PREFIX_TAG);
 
+        if (argMultimap.getPreamble().contains("/")) {
+            throw new ParseException(
+                    "Malformed prefix detected. Did you add a space before '/'? "
+                    + FindCommand.MESSAGE_USAGE);
+        }
+
         // Check if any prefixes are present
         boolean hasPrefixes = argMultimap.getValue(PREFIX_NAME).isPresent()
                 || argMultimap.getValue(PREFIX_SUBJECT).isPresent()
@@ -51,9 +57,8 @@ public class FindCommandParser implements Parser<FindCommand> {
                 || argMultimap.getValue(PREFIX_TAG).isPresent();
 
         if (!hasPrefixes) {
-            // If no supported prefixes are provided, interpret the input as a name search.
-            String[] nameKeywords = argMultimap.getPreamble().split("\\s+");
-            return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         } else {
             if (!argMultimap.getPreamble().isEmpty()) {
                 throw new ParseException(

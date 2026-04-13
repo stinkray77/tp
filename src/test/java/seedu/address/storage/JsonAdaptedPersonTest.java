@@ -345,4 +345,87 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson adapted = new JsonAdaptedPerson(personWithSlots);
         assertEquals(personWithSlots, adapted.toModelType());
     }
+
+    @Test
+    public void constructor_attendanceWithNullSubjectKey_skipsSilently() throws Exception {
+        Map<String, Map<String, AttendanceStatus>> records = new LinkedHashMap<>();
+        records.put(null, Map.of("Monday 1400", AttendanceStatus.PRESENT));
+        records.put("Math", Map.of("Monday 1400", AttendanceStatus.PRESENT));
+
+        Person person = new seedu.address.testutil.PersonBuilder()
+                .withName("Test")
+                .withEmail("test@example.com")
+                .withAddress("1 Street")
+                .withEmergencyContact("91234567")
+                .withPaymentStatus("Paid")
+                .build();
+        Person personWithRecords = new Person(
+                person.getName(), person.getEmail(), person.getAddress(),
+                person.getLessonSlots(), person.getEmergencyContact(),
+                person.getPaymentStatus(), person.getRemark(),
+                person.getTags(), records);
+
+        JsonAdaptedPerson adapted = new JsonAdaptedPerson(personWithRecords);
+        Person restored = adapted.toModelType();
+        assertTrue(restored.getAttendanceRecords().containsKey("Math"));
+        assertEquals(1, restored.getAttendanceRecords().size());
+    }
+
+    @Test
+    public void constructor_attendanceWithNullLessonKey_skipsSilently() throws Exception {
+        Map<String, Map<String, AttendanceStatus>> records = new LinkedHashMap<>();
+        Map<String, AttendanceStatus> innerMap = new LinkedHashMap<>();
+        innerMap.put(null, AttendanceStatus.PRESENT);
+        innerMap.put("Monday 1400", AttendanceStatus.ABSENT);
+        records.put("Math", innerMap);
+
+        Person person = new seedu.address.testutil.PersonBuilder()
+                .withName("Test")
+                .withEmail("test@example.com")
+                .withAddress("1 Street")
+                .withEmergencyContact("91234567")
+                .withPaymentStatus("Paid")
+                .build();
+        Person personWithRecords = new Person(
+                person.getName(), person.getEmail(), person.getAddress(),
+                person.getLessonSlots(), person.getEmergencyContact(),
+                person.getPaymentStatus(), person.getRemark(),
+                person.getTags(), records);
+
+        JsonAdaptedPerson adapted = new JsonAdaptedPerson(personWithRecords);
+        Person restored = adapted.toModelType();
+        Map<String, Map<String, AttendanceStatus>> restoredRecords =
+                restored.getAttendanceRecords();
+        assertEquals(1, restoredRecords.get("Math").size());
+        assertTrue(restoredRecords.get("Math").containsKey("Monday 1400"));
+    }
+
+    @Test
+    public void constructor_attendanceWithNullStatus_skipsSilently() throws Exception {
+        Map<String, Map<String, AttendanceStatus>> records = new LinkedHashMap<>();
+        Map<String, AttendanceStatus> innerMap = new LinkedHashMap<>();
+        innerMap.put("Monday 1400", null);
+        innerMap.put("Tuesday 1600", AttendanceStatus.PRESENT);
+        records.put("Math", innerMap);
+
+        Person person = new seedu.address.testutil.PersonBuilder()
+                .withName("Test")
+                .withEmail("test@example.com")
+                .withAddress("1 Street")
+                .withEmergencyContact("91234567")
+                .withPaymentStatus("Paid")
+                .build();
+        Person personWithRecords = new Person(
+                person.getName(), person.getEmail(), person.getAddress(),
+                person.getLessonSlots(), person.getEmergencyContact(),
+                person.getPaymentStatus(), person.getRemark(),
+                person.getTags(), records);
+
+        JsonAdaptedPerson adapted = new JsonAdaptedPerson(personWithRecords);
+        Person restored = adapted.toModelType();
+        Map<String, Map<String, AttendanceStatus>> restoredRecords =
+                restored.getAttendanceRecords();
+        assertEquals(1, restoredRecords.get("Math").size());
+        assertTrue(restoredRecords.get("Math").containsKey("Tuesday 1600"));
+    }
 }

@@ -119,7 +119,7 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<puml src="diagrams/ModelClassDiagram.puml" width="450" />
+<puml src="diagrams/ModelClassDiagram.puml" width="700" />
 
 
 The `Model` component,
@@ -897,7 +897,7 @@ testers are expected to do more *exploratory* testing.
       Expected: No edit made. Error message about invalid index.
 
    6. Test case: `edit 1` (no fields specified)<br>
-      Expected: Command succeeds (no-op). The student remains unchanged.
+      Expected: No edit made. Error message stating that at least one field must be provided.
 
 ### Viewing a student
 
@@ -1095,16 +1095,19 @@ Team size: 5
 
 3. **Add validation for duplicate lesson slots within a single student.** Currently, `add` and `edit` allow the same subject-day-time triplet to be specified twice. We will reject commands that contain duplicate lesson slot triplets and display an error message.
 
-4. **Standardise `listattendance` output when no records exist.** Currently the message varies slightly depending on whether a subject filter was used. We will unify the output to always say "No attendance records found for [NAME]" optionally followed by "for subject [SUBJECT]".
+4. **Standardise `listattendance` output when no records exist.** Currently, the message varies slightly depending on whether a subject filter was used. We will unify the output to always say "No attendance records found for [NAME]" optionally followed by "for subject [SUBJECT]".
 
-5. **Prune orphaned attendance records when lesson slots are edited.** Currently, if a student's lesson slots are changed via `edit`, attendance records for removed slots are preserved in storage but not displayed. We will automatically remove attendance records whose subject-day-time key no longer matches any of the student's lesson slots.
+5. **Make attendance pruning after `edit` more visible to users.** Currently, when a student's lesson slots are changed via `edit`, attendance records for removed slots are automatically pruned so stored attendance stays aligned with the current lesson schedule.
 
 6. **Make `view` dialog update when the underlying student data changes.** Currently, the `PersonViewDialog` shows a snapshot of the student at the time of the `view` command. If the user edits the student while the dialog is open, the dialog is not updated. We will bind the dialog to the model so it reflects live data.
 
 7. **Add case-insensitive name matching for duplicate detection.** Currently, "alice tan" and "Alice Tan" are treated as different students. We will make `isSamePerson` case-insensitive so that names differing only by case are detected as duplicates.
 
-8. **Improve `find` to support partial day matching.** Currently, `find d/Mon` does not match "Monday" — the day must be an exact match. We will support partial prefix matching for days (e.g., `d/Mon` matches "Monday").
+8. **Clarify abbreviated day matching in `find`.** Currently, abbreviated day inputs such as `find d/Mon` are already accepted and normalized to `Monday`. We plan to improve the documentation and examples so this behavior is clearer to users.
 
 9. **Add confirmation prompt for `clear` command.** Currently, `clear` deletes all students immediately with no confirmation. We will add a confirmation step (e.g., requiring `clear --confirm`) to prevent accidental data loss.
 
-10. **Relax name and subject validation to accept common special characters.** Currently, names and subjects only allow alphanumeric characters and spaces. This rejects real-world names containing hyphens (e.g., `Mary-Jane`), apostrophes (e.g., `O'Brien`), periods (e.g., `Dr. Smith`), or slashes (e.g., `s/o Kumar`), and subjects like `A-Math` or `Mother Tongue (Chinese)`. We will update the validation regex for both `Name` and `Subject` to accept hyphens, apostrophes, periods, parentheses, and slashes, while ensuring the slash character does not conflict with command prefix parsing.
+10. **Allow `edit` with no changed values to succeed as a no-op.** Currently, running `edit 1` with no fields is rejected with an error ("At least one field to edit must be provided"). A future enhancement could detect when all supplied values are identical to the existing record and treat the command as a silent no-op success, which may feel more natural to users.
+
+11. **Relax name and subject validation to accept common special characters.** Currently, names and subjects only allow alphanumeric characters and spaces. This rejects real-world names containing hyphens (e.g., `Mary-Jane`), apostrophes (e.g., `O'Brien`), periods (e.g., `Dr. Smith`), or slashes (e.g., `s/o Kumar`), and subjects like `A-Math` or `Mother Tongue (Chinese)`. We will update the validation regex for both `Name` and `Subject` to accept hyphens, apostrophes, periods, parentheses, and slashes, while ensuring the slash character does not conflict with command prefix parsing.
+
