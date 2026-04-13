@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.PaymentStatus;
 import seedu.address.model.person.Person;
@@ -62,7 +63,8 @@ public class PersonViewDialog {
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Student Details");
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initStyle(StageStyle.DECORATED);
+            dialogStage.initModality(Modality.NONE);
             dialogStage.setResizable(true);
 
             Scene scene = new Scene(page);
