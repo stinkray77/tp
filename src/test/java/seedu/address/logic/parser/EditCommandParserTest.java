@@ -324,11 +324,11 @@ public class EditCommandParserTest {
                 new EditCommand(INDEX_FIRST_PERSON, descriptor));
     }
 
-    // --- Regression: blank subject/day/time in a partial edit is rejected (#242) ---
+    // --- Regression: blank subject/day/time in a partial edit is rejected ---
 
     @Test
     public void parse_blankSubjectWithDayAndTime_failure() {
-        // Tester B reproduction: `edit 1 s/ d/Monday ti/1400`
+        // Empty subject with valid day and time
         assertParseFailure(parser, "1 s/ d/Monday ti/1400",
                 seedu.address.model.person.Subject.MESSAGE_CONSTRAINTS);
     }
