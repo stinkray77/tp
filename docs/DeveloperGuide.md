@@ -787,7 +787,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **Payment Status**: The financial status of a student: `Paid`, `Due`, or `Overdue`
 * **Emergency Contact**: An 8-digit Singapore phone number for a student's parent/guardian
 * **Remark**: A free-text note attached to a student record
-* **Tag**: A label for categorizing students (e.g., `primary`, `priority`)
+* **Tag**: A single-token label for categorizing students (e.g., `primary`, `exam-prep`, `lower_sec`)
 * **Field**: A piece of data within a student record (e.g., Name, Emergency Contact)
 * **Time-slot key**: The combined day and time string used to identify an attendance record (e.g., `Monday 1400`)
 
