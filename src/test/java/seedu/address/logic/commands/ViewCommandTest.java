@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -65,6 +66,19 @@ public class ViewCommandTest {
     }
 
     @Test
+    public void execute_afterLessonSlotEdits_returnsPersonToView() throws Exception {
+        executeCommand("edit 2 s/chemistry d/tue ti/0900 s/chemistry d/fri ti/1400");
+        executeCommand("edit 3 s/chemistry d/fri ti/0900 s/Chemistry d/fri ti/1400");
+        executeCommand("edit 2 s/chemistry d/fri ti/0900 s/Chemistry d/fri ti/1400");
+
+        CommandResult result = executeCommand("view 2");
+        Person expectedPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        assertTrue(result.isShowView());
+        assertEquals(expectedPerson, result.getPersonToView());
+    }
+
+    @Test
     public void execute_invalidIndexFilteredList_throwsCommandException() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -99,5 +113,9 @@ public class ViewCommandTest {
         ViewCommand viewCommand = new ViewCommand(targetIndex);
         String expected = ViewCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
         assertEquals(expected, viewCommand.toString());
+    }
+
+    private CommandResult executeCommand(String commandText) throws Exception {
+        return new AddressBookParser().parseCommand(commandText).execute(model);
     }
 }
