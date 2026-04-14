@@ -17,10 +17,26 @@ mark {
   font-size: 1.15rem;
 }
 
+.dg-table-of-contents {
+  font-size: 1.15rem;
+}
+
 #content-wrapper img[src^="images/"],
 #content-wrapper img[src^="/images/"] {
   display: block;
   margin: 1rem auto;
+  max-width: 100%;
+}
+
+#content-wrapper .image-wrapper {
+  display: block;
+  margin: 1rem auto;
+  text-align: center;
+}
+
+#content-wrapper .image-wrapper img {
+  display: inline-block;
+  margin: 0 auto;
   max-width: 100%;
 }
 
@@ -168,6 +184,9 @@ mark {
       font-size: 0.65rem !important;
   }
   .ug-table-of-contents {
+      font-size: 0.85rem !important;
+  }
+  .dg-table-of-contents {
       font-size: 0.85rem !important;
   }
   img {
