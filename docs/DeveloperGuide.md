@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# Tutor Central Developer Guide
+# TutorCentral Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -131,7 +131,7 @@ The `Model` component,
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-Each `Person` in Tutor Central currently contains:
+Each `Person` in TutorCentral currently contains:
 
 * `Name`
 * `Email`
@@ -324,40 +324,40 @@ The output format is: `Attendance for [NAME]: [SUBJECT]: [DAY TIME - LESSON]: [S
 
 The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
-* `VersionedAddressBook#commit()` — Saves the current Tutor Central data state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous Tutor Central data state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone Tutor Central data state from its history.
+* `VersionedAddressBook#commit()` — Saves the current TutorCentral data state in its history.
+* `VersionedAddressBook#undo()` — Restores the previous TutorCentral data state from its history.
+* `VersionedAddressBook#redo()` — Restores a previously undone TutorCentral data state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial Tutor Central data state, and the `currentStatePointer` pointing to that single saved state.
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial TutorCentral data state, and the `currentStatePointer` pointing to that single saved state.
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the student list. The `delete` command calls `Model#commitAddressBook()`, causing the modified Tutor Central data state after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted saved state.
+Step 2. The user executes `delete 5` command to delete the 5th person in the student list. The `delete` command calls `Model#commitAddressBook()`, causing the modified TutorCentral data state after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted saved state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified Tutor Central data state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified TutorCentral data state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the updated Tutor Central data state will not be saved into the `addressBookStateList`.
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the updated TutorCentral data state will not be saved into the `addressBookStateList`.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous saved state, and restores Tutor Central data to that state.
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous saved state, and restores TutorCentral data to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial Tutor Central state, then there are no previous Tutor Central states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial TutorCentral state, then there are no previous TutorCentral states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
 than attempting to perform the undo.
 
 </box>
@@ -376,11 +376,11 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 <puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores Tutor Central data to that state.
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores TutorCentral data to that state.
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest Tutor Central state, then there are no undone Tutor Central states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest TutorCentral state, then there are no undone TutorCentral states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </box>
 
@@ -478,14 +478,14 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 | Priority | As a …​                  | I want to …​                                           | So that I can…​                                              |
 |----------|--------------------------|---------------------------------------------------------|--------------------------------------------------------------|
-| `* * *`  | new user                 | see usage instructions                                  | refer to instructions when I forget how to use Tutor Central |
+| `* * *`  | new user                 | see usage instructions                                  | refer to instructions when I forget how to use TutorCentral |
 | `* * *`  | tutor                    | add a student with schedule and payment details         | maintain complete student records                             |
 | `* * *`  | tutor                    | list all students                                       | return to the full student list after searching or filtering |
 | `* * *`  | tutor                    | search for students by name                             | find a target student quickly                                 |
 | `* * *`  | tutor                    | search students by subject, day, payment status, or tag | quickly find relevant students                                |
 | `* * *`  | tutor                    | view a student's full details                           | check information before a lesson                             |
 | `* * *`  | tutor                    | delete a student                                        | remove entries that I no longer need                          |
-| `*`      | tutor                    | clear all student records                               | reset Tutor Central when starting over or switching datasets  |
+| `*`      | tutor                    | clear all student records                               | reset TutorCentral when starting over or switching datasets  |
 | `* *`    | tutor                    | update a student's details                              | correct outdated records when needed                          |
 | `* * *`  | tutor                    | mark a student's payment status                         | track who has paid without editing the full student record    |
 | `* * *`  | tutor                    | add a free-text remark to a student                     | record lesson notes, progress, or reminders quickly           |
@@ -500,7 +500,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 ### Use cases
 
-(For all use cases below, the **System** is `Tutor Central` and the **Actor** is the `tutor`, unless specified otherwise)
+(For all use cases below, the **System** is `TutorCentral` and the **Actor** is the `tutor`, unless specified otherwise)
 
 **Use Case 01: Delete a student**
 
@@ -508,15 +508,15 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1.  Tutor list students or performs <u>Search for students (UC02).</u>
 2.  Tutor requests to delete the target student from the shown results.
-3.  Tutor Central deletes the target student.
-4.  Tutor Central shows a success message with the deleted student's details.
+3.  TutorCentral deletes the target student.
+4.  TutorCentral shows a success message with the deleted student's details.
 
     Use case ends.
 
 **Extensions**
 
 * 2a. The specified student to delete is invalid.
-    * 2a1. Tutor Central shows an error message.
+    * 2a1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
@@ -527,20 +527,20 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 **MSS**
 
 1.  Tutor enters a search command with the desired criteria.
-2.  Tutor Central shows a list of students that match the criteria.
+2.  TutorCentral shows a list of students that match the criteria.
 
     Use case ends.
 
 **Extensions**
 
-* 1a. Tutor Central detects invalid search input.
-    * 1a1. Tutor Central shows an error message.
+* 1a. TutorCentral detects invalid search input.
+    * 1a1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
 
 * 2a. No students match the criteria.
-    * 2a1. Tutor Central shows an empty list.
+    * 2a1. TutorCentral shows an empty list.
 
         Use case ends.
 
@@ -550,27 +550,27 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 **MSS**
 
 1.  Tutor requests to add a student by providing the student's details: name, email, address, emergency contact, lesson slots (subject/day/time triplets), payment status, and tags.
-2.  Tutor Central validates the input.
-3.  Tutor Central records the new student and shows a success message with the added student's details.
+2.  TutorCentral validates the input.
+3.  TutorCentral records the new student and shows a success message with the added student's details.
 
     Use case ends.
 
 **Extensions**
 
 * 2a. The provided details are invalid.
-    * 2a1. Tutor Central shows an error message.
+    * 2a1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
 
 * 2b. The number of subjects, days, and times do not match (must be equal triplets).
-    * 2b1. Tutor Central shows an error message.
+    * 2b1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
 
 * 2c. A matching student already exists.
-    * 2c1. Tutor Central shows an error message.
+    * 2c1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
@@ -581,27 +581,27 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1.  Tutor lists students or performs <u>Search for students (UC02).</u>
 2.  Tutor requests to update the target student from the search results by providing updated values for one or more fields.
-3.  Tutor Central validates the updated values.
-4.  Tutor Central updates the student and shows a success message with the updated details.
+3.  TutorCentral validates the updated values.
+4.  TutorCentral updates the student and shows a success message with the updated details.
 
     Use case ends.
 
 **Extensions**
 
 * 2a. The specified student is invalid.
-    * 2a1. Tutor Central shows an error message.
+    * 2a1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
 
 * 3a. The provided update details are invalid.
-    * 3a1. Tutor Central shows an error message.
+    * 3a1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
 
 * 3b. Tutor updates lesson slots without providing all three of subject, day, and time together.
-    * 3b1. Tutor Central shows an error message.
+    * 3b1. TutorCentral shows an error message.
 
         Use case resumes from step 1.
 
@@ -612,14 +612,14 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1. Tutor lists students or performs <u>Search for students (UC02).</u> 
 2. Tutor locates target student and requests to view the student in the currently shown list.
-3. Tutor Central shows the full student details in a popup dialog.
+3. TutorCentral shows the full student details in a popup dialog.
 
     Use case ends.
 
 **Extensions**
 
 * 2a. The specified student index is invalid.
-    * 2a1. Tutor Central shows an error message.
+    * 2a1. TutorCentral shows an error message.
 
         Use case ends.
 
@@ -629,28 +629,28 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 **MSS**
 
 1.  Tutor lists students or performs <u>Search for students (UC02).</u>
-2.  Tutor Central parses the search criteria.
-3.  Tutor Central filters the student list using the specified field predicates.
-4.  Tutor Central displays the matching students.
+2.  TutorCentral parses the search criteria.
+3.  TutorCentral filters the student list using the specified field predicates.
+4.  TutorCentral displays the matching students.
 
     Use case ends.
 
 **Extensions**
 
 * 1a. Tutor provides no criteria to search by.
-    * 1a1. Tutor Central shows an error message.
+    * 1a1. TutorCentral shows an error message.
 
         Use case ends.
 
 
 * 1b. Tutor provides invalid search input.
-    * 1b1. Tutor Central shows an error message.
+    * 1b1. TutorCentral shows an error message.
 
         Use case ends.
 
 
 * 3a. No students match the criteria.
-    * 3a1. Tutor Central shows `0 persons listed!`.
+    * 3a1. TutorCentral shows `0 persons listed!`.
 
         Use case ends.
 
@@ -661,22 +661,22 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1. Tutor lists students or performs <u>Search for students (UC02).</u> 
 2. Tutor requests to update a student's payment status.
-3. Tutor Central locates the target student in the currently shown list.
-4. Tutor Central updates the student's payment status.
-5. Tutor Central shows a success message confirming the new payment status.
+3. TutorCentral locates the target student in the currently shown list.
+4. TutorCentral updates the student's payment status.
+5. TutorCentral shows a success message confirming the new payment status.
 
     Use case ends.
 
 **Extensions**
 
 * 2a. The specified student index is invalid.
-    * 2a1. Tutor Central shows an error message.
+    * 2a1. TutorCentral shows an error message.
 
         Use case ends.
 
 
 * 2b. Tutor provides multiple payment statuses.
-    * 2b1. Tutor Central shows an error message.
+    * 2b1. TutorCentral shows an error message.
 
         Use case ends.
 
@@ -687,23 +687,23 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1. Tutor lists students or performs <u>Search for students (UC02).</u>
 2. Tutor requests to update a student's remark.
-3. Tutor Central locates the target student in the currently shown list.
-4. Tutor Central updates the student's remark.
-5. Tutor Central shows a success message with the updated student details.
+3. TutorCentral locates the target student in the currently shown list.
+4. TutorCentral updates the student's remark.
+5. TutorCentral shows a success message with the updated student details.
 
     Use case ends.
 
 **Extensions**
 
 * 1a. The specified student is invalid.
-    * 1a1. Tutor Central shows an error message.
+    * 1a1. TutorCentral shows an error message.
 
         Use case ends.
 
 
 * 3a. Tutor provides an empty remark.
-    * 3a1. Tutor Central removes the student's existing remark.
-    * 3a2. Tutor Central shows a success message with the updated student details.
+    * 3a1. TutorCentral removes the student's existing remark.
+    * 3a2. TutorCentral shows a success message with the updated student details.
 
         Use case ends.
 
@@ -714,36 +714,36 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1.  Tutor lists students or performs <u>Search for students (UC02).</u>
 2.  Tutor requests to mark attendance for student(s) at specific index/indices, specifying the subject, day, time, lesson, and status.
-3.  Tutor Central validates the index/indices, subject, day, time, lesson, and status.
-4.  Tutor Central records the attendance and shows a success message.
+3.  TutorCentral validates the index/indices, subject, day, time, lesson, and status.
+4.  TutorCentral records the attendance and shows a success message.
 
     Use case ends.
 
 **Extensions**
 
 * 2a. Tutor requests to mark attendance for multiple students using comma-separated indices (e.g., "1,2,3").
-    * 2a1. Tutor Central validates each student has the required lesson slot.
-    * 2a2. Tutor Central marks attendance for all valid students and shows a summary message.
+    * 2a1. TutorCentral validates each student has the required lesson slot.
+    * 2a2. TutorCentral marks attendance for all valid students and shows a summary message.
 
         Use case ends.
 
 * 3a. The specified index is invalid.
-    * 3a1. Tutor Central shows an error message.
+    * 3a1. TutorCentral shows an error message.
 
         Use case resumes from step 2.
 
 * 3b. The specified subject does not match any of the student's subjects.
-    * 3b1. Tutor Central shows an error message indicating the subject mismatch.
+    * 3b1. TutorCentral shows an error message indicating the subject mismatch.
 
         Use case resumes from step 2.
 
 * 3c. The attendance status is not one of Present, Absent, or Excused.
-    * 3c1. Tutor Central shows an error message with valid status options.
+    * 3c1. TutorCentral shows an error message with valid status options.
 
         Use case resumes from step 2.
 
 * 3d. For multiple students, some students do not have the required lesson slot.
-    * 3d1. Tutor Central shows an error message indicating which students lack the required lesson slot.
+    * 3d1. TutorCentral shows an error message indicating which students lack the required lesson slot.
 
         Use case resumes from step 2.
 
@@ -754,21 +754,21 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 1. Tutor lists students or performs <u>Search for students (UC02).</u>
 2. Tutor requests to list the attendance for a student at a specific index, optionally specifying a subject filter.
-3. Tutor Central validates the index, and optionally subject.
-4. Tutor Central retrieves and displays the attendance records.
+3. TutorCentral validates the index, and optionally subject.
+4. TutorCentral retrieves and displays the attendance records.
 
     Use case ends.
 
 **Extensions**
 
 * 3a. The specified index is invalid.
-    * 3a1. Tutor Central shows an error message.
+    * 3a1. TutorCentral shows an error message.
 
         Use case resumes from step 2.
 
 
 * 4a. No attendance records exist for the student (or for the filtered subject).
-    * 4a1. Tutor Central shows a message indicating no records found.
+    * 4a1. TutorCentral shows a message indicating no records found.
 
         Use case ends.
 
@@ -781,7 +781,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 4.  Changes made via commands must be auto-saved within 1 second of completion.
 5.  The student list must scroll smoothly and display at least 200 student records without lag or stutter.
 6.  The default view must show essential fields like name and timeslot without horizontal scrolling. Long single-line details may be shortened with ellipses in the student list, but must remain available in full through the `view` command.
-7.  The system must detect and reject duplicate student entries (same name, case-sensitive) within 1 second of the `add` command completing, displaying a clear error message.
+7.  The system must detect and reject duplicate student entries (same email, case-insensitive) within 1 second of the `add` command completing, displaying a clear error message.
 8.  Must consume less than 150MB of RAM, and minimal CPU when idle.
 9.  Attendance records must be persisted to the JSON data file within 1 second of the `markattendance` command completing.
 10. The `listattendance` command should return results within 1 second even for students with 100+ attendance records.
@@ -792,8 +792,8 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 #### User & Data Entities
 
-* **Tutor**: The primary user of Tutor Central, an individual providing tutoring services
-* **Student**: A learner whose information is managed in Tutor Central
+* **Tutor**: The primary user of TutorCentral, an individual providing tutoring services
+* **Student**: A learner whose information is managed in TutorCentral
 * **Subject**: An academic subject a student is enrolled in (e.g., Mathematics, English)
 * **Lesson Slot**: A scheduled lesson defined by a Subject, Day, and Time triplet (e.g., Mathematics on Monday at 1400)
 * **Attendance**: The record of a student's presence at a lesson slot
@@ -827,7 +827,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 * **CLI**: Command Line Interface, the text-based input method
 * **GUI**: Graphical User Interface, the visual display
-* **JavaFX**: The UI framework used by Tutor Central
+* **JavaFX**: The UI framework used by TutorCentral
 * **MarkBind**: The documentation framework used for the project website
 * **List View**: The graphical display showing student records as a scrollable list
 * **Command Box**: The text box where users type commands
@@ -1077,7 +1077,7 @@ testers are expected to do more *exploratory* testing.
 
 ### Difficulty Level
 
-Tutor Central required significantly more effort than AB3. AB3 manages a flat list of contacts with basic CRUD operations. Tutor Central extends this into a domain-specific tutor management system with:
+TutorCentral required significantly more effort than AB3. AB3 manages a flat list of contacts with basic CRUD operations. TutorCentral extends this into a domain-specific tutor management system with:
 
 * **Composite data model** — `Person` was expanded from simple fields (Name, Phone, Email, Address, Tags) to a richer model including `LessonSlot` (a composite value object bundling Subject, Day, and Time), `EmergencyContact`, `PaymentStatus`, `Remark`, and a nested `attendanceRecords` map.
 * **Lesson slot refactor** — We initially modelled subjects, days, and times as three independent `Set` fields. This caused data integrity issues (mismatched counts) and made attendance tracking unreliable. We refactored into a unified `List<LessonSlot>` model, requiring changes across the entire stack: model, parser, storage (JSON serialisation), commands, and tests.
@@ -1122,10 +1122,9 @@ Team size: 5
 
 9. **Relax name and subject validation to accept common special characters.** Currently, names and subjects only allow alphanumeric characters and spaces. This rejects real-world names containing hyphens (e.g., `Mary-Jane`), apostrophes (e.g., `O'Brien`), periods (e.g., `Dr. Smith`), or slashes (e.g., `s/o Kumar`), and subjects like `A-Math` or `Mother Tongue (Chinese)`. We will update the validation regex for both `Name` and `Subject` to accept hyphens, apostrophes, periods, parentheses, and slashes, while ensuring the slash character does not conflict with command prefix parsing.
 
-10. **Identify students who are frequently absent.** Currently, tutors can view attendance history manually, but Tutor Central does not automatically flag students with repeated absences. We will add a way to identify students who are frequently absent so tutors can follow up with at-risk students and notify their parents.
+10. **Identify students who are frequently absent.** Currently, tutors can view attendance history manually, but TutorCentral does not automatically flag students with repeated absences. We will add a way to identify students who are frequently absent so tutors can follow up with at-risk students and notify their parents.
 
-12. **Export student data.** Currently, student records can only be viewed inside Tutor Central or through the local JSON data file. We will add an export feature so tutors can share selected records with centre managers or parents in a more readable format.
+11. **Export student data.** Currently, student records can only be viewed inside TutorCentral or through the local JSON data file. We will add an export feature so tutors can share selected records with centre managers or parents in a more readable format.
 
-13. **Allow remarks to be added during student creation.** Currently, remarks can only be added after a student has been created using the separate `remark` command. We will support an optional `r/REMARK` field in the `add` command so tutors can record initial notes while creating a student, while keeping the existing `remark` command for later updates.
 
-14. **Add lesson end times to lesson slots.** Currently each lesson slot only records a start time (e.g., `ti/1400`). We plan to add an optional end time parameter (e.g., `te/1530`) to `LessonSlot` so tutors can see the full duration of each lesson.
+12. **Add lesson end times to lesson slots.** Currently each lesson slot only records a start time (e.g., `ti/1400`). We plan to add an optional end time parameter (e.g., `te/1530`) to `LessonSlot` so tutors can see the full duration of each lesson.
