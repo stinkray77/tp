@@ -45,6 +45,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | **Tag**               | A short single-token label attached to a student for categorisation (e.g., `priority`, `exam-prep`, `lower_sec`)         |
 | **Remark**            | A free-text note attached to a student for any additional information                                                   |
 
+<div style="page-break-after: always;"></div>
+
 <!-- * Table of Contents -->
 <page-nav-print />
 
@@ -57,6 +59,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 - **macOS fullscreen:** macOS users running the app in fullscreen mode may experience unexpected behaviour when opening secondary dialogs such as the Help window or the student view dialog. Use windowed mode instead.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Quick start
 
