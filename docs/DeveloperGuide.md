@@ -1114,5 +1114,3 @@ Team size: 5
 13. **Allow remarks to be added during student creation.** Currently, remarks can only be added after a student has been created using the separate `remark` command. We will support an optional `r/REMARK` field in the `add` command so tutors can record initial notes while creating a student, while keeping the existing `remark` command for later updates.
 
 14. **Add lesson end times to lesson slots.** Currently each lesson slot only records a start time (e.g., `ti/1400`). We plan to add an optional end time parameter (e.g., `te/1530`) to `LessonSlot` so tutors can see the full duration of each lesson.
-
-15. **Validate `l/LESSON` as a structured date.** Currently `markattendance` uses a free-text `l/LESSON` session label. Tutors can include dates manually (e.g., `l/2026-04-13 Algebra Lesson 2`), but TutorCentral does not validate, sort, or filter attendance records by date. We plan to add a dedicated `date/DATE` parameter so attendance records can be stored and queried using actual lesson dates, enabling chronological sorting and date-range filtering.
