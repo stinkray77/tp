@@ -175,9 +175,9 @@ public class AddressBookParserTest {
     public void parseCommand_markAttendance() throws Exception {
         MarkAttendanceCommand command = (MarkAttendanceCommand) parser.parseCommand(
                         MarkAttendanceCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased()
-                                        + " s/Mathematics d/Monday ti/1400 st/Present");
+                                        + " s/Mathematics d/Monday ti/1400 l/Week 1 st/Present");
         assertEquals(new MarkAttendanceCommand(
-                        INDEX_FIRST_PERSON, "Mathematics", "Monday", "1400",
+                        INDEX_FIRST_PERSON, "Mathematics", "Monday", "1400", "Week 1",
                         AttendanceStatus.PRESENT), command);
     }
 

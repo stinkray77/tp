@@ -166,7 +166,7 @@ public class LessonSlotIntegrationTest {
     public void execute_editLessonSlots_removesStaleAttendanceRecords() throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Present");
+                + "ti/1400 l/Week 1 st/Present");
         logic.execute("edit 1 s/English d/Friday ti/1000");
 
         Person edited = logic.getFilteredPersonList().get(0);
@@ -188,33 +188,33 @@ public class LessonSlotIntegrationTest {
     public void execute_markAttendancePresent_success() throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Present");
+                + "ti/1400 l/Week 1 st/Present");
         Person alice = logic.getFilteredPersonList().get(0);
         assertEquals(AttendanceStatus.PRESENT,
                 alice.getAttendanceRecords()
-                        .get("Mathematics").get("Monday 1400"));
+                        .get("Mathematics").get("Monday 1400 - Week 1"));
     }
 
     @Test
     public void execute_markAttendanceAbsent_success() throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Absent");
+                + "ti/1400 l/Week 1 st/Absent");
         Person alice = logic.getFilteredPersonList().get(0);
         assertEquals(AttendanceStatus.ABSENT,
                 alice.getAttendanceRecords()
-                        .get("Mathematics").get("Monday 1400"));
+                        .get("Mathematics").get("Monday 1400 - Week 1"));
     }
 
     @Test
     public void execute_markAttendanceExcused_success() throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Excused");
+                + "ti/1400 l/Week 1 st/Excused");
         Person alice = logic.getFilteredPersonList().get(0);
         assertEquals(AttendanceStatus.EXCUSED,
                 alice.getAttendanceRecords()
-                        .get("Mathematics").get("Monday 1400"));
+                        .get("Mathematics").get("Monday 1400 - Week 1"));
     }
 
     @Test
@@ -222,11 +222,11 @@ public class LessonSlotIntegrationTest {
             throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/present");
+                + "ti/1400 l/Week 1 st/present");
         Person alice = logic.getFilteredPersonList().get(0);
         assertEquals(AttendanceStatus.PRESENT,
                 alice.getAttendanceRecords()
-                        .get("Mathematics").get("Monday 1400"));
+                        .get("Mathematics").get("Monday 1400 - Week 1"));
     }
 
     @Test
@@ -234,21 +234,21 @@ public class LessonSlotIntegrationTest {
             throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Present");
+                + "ti/1400 l/Week 1 st/Present");
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Absent");
+                + "ti/1400 l/Week 1 st/Absent");
         Person alice = logic.getFilteredPersonList().get(0);
         assertEquals(AttendanceStatus.ABSENT,
                 alice.getAttendanceRecords()
-                        .get("Mathematics").get("Monday 1400"));
+                        .get("Mathematics").get("Monday 1400 - Week 1"));
     }
 
     @Test
     public void execute_markAttendanceInvalidStatus_fails() {
         assertThrowsParseOrCommand(() -> logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Maybe"));
+                + "ti/1400 l/Week 1 st/Maybe"));
         Person alice = logic.getFilteredPersonList().get(0);
         assertTrue(alice.getAttendanceRecords().isEmpty());
     }
@@ -257,7 +257,7 @@ public class LessonSlotIntegrationTest {
     public void execute_markAttendanceInvalidDay_fails() {
         assertThrowsParseOrCommand(() -> logic.execute(
                 "markattendance 1 s/Mathematics d/Funday "
-                + "ti/1400 st/Present"));
+                + "ti/1400 l/Week 1 st/Present"));
         Person alice = logic.getFilteredPersonList().get(0);
         assertTrue(alice.getAttendanceRecords().isEmpty());
     }
@@ -266,7 +266,7 @@ public class LessonSlotIntegrationTest {
     public void execute_markAttendanceInvalidTime_fails() {
         assertThrowsParseOrCommand(() -> logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/9999 st/Present"));
+                + "ti/9999 l/Week 1 st/Present"));
         Person alice = logic.getFilteredPersonList().get(0);
         assertTrue(alice.getAttendanceRecords().isEmpty());
     }
@@ -295,7 +295,7 @@ public class LessonSlotIntegrationTest {
             throws Exception {
         logic.execute(
                 "markattendance 1 s/Mathematics d/Monday "
-                + "ti/1400 st/Present");
+                + "ti/1400 l/Week 1 st/Present");
         CommandResult result = logic.execute("listattendance 1");
         String feedback = result.getFeedbackToUser();
         assertTrue(feedback.contains("Mathematics")
@@ -445,11 +445,11 @@ public class LessonSlotIntegrationTest {
 
         // Mark attendance
         logic.execute("markattendance " + displayIdx
-                + " s/Physics d/Thursday ti/1600 st/Present");
+                + " s/Physics d/Thursday ti/1600 l/Week 1 st/Present");
         student = logic.getFilteredPersonList().get(idx);
         assertEquals(AttendanceStatus.PRESENT,
                 student.getAttendanceRecords()
-                        .get("Physics").get("Thursday 1600"));
+                        .get("Physics").get("Thursday 1600 - Week 1"));
 
         // List attendance
         CommandResult listResult = logic.execute(

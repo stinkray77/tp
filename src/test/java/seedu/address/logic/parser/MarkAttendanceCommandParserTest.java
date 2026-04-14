@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ATTENDANCE_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -25,6 +26,7 @@ public class MarkAttendanceCommandParserTest {
     private static final String VALID_SUBJECT = "Mathematics";
     private static final String VALID_DAY = "Monday";
     private static final String VALID_TIME = "1400";
+    private static final String VALID_LESSON = "Week 1";
     private static final String VALID_STATUS = "Present";
 
     private MarkAttendanceCommandParser parser = new MarkAttendanceCommandParser();
@@ -32,12 +34,13 @@ public class MarkAttendanceCommandParserTest {
     @Test
     public void parse_allFieldsPresent_success() {
         MarkAttendanceCommand expected = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+                INDEX_FIRST_PERSON, VALID_SUBJECT, VALID_DAY, VALID_TIME, VALID_LESSON, AttendanceStatus.PRESENT);
 
         assertParseSuccess(parser,
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expected);
     }
@@ -45,12 +48,13 @@ public class MarkAttendanceCommandParserTest {
     @Test
     public void parse_caseInsensitiveStatus_success() {
         MarkAttendanceCommand expected = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+                INDEX_FIRST_PERSON, VALID_SUBJECT, VALID_DAY, VALID_TIME, VALID_LESSON, AttendanceStatus.PRESENT);
 
         assertParseSuccess(parser,
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + "present",
                 expected);
 
@@ -58,6 +62,7 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + "PRESENT",
                 expected);
     }
@@ -124,6 +129,7 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + "Invalid",
                 AttendanceStatus.MESSAGE_CONSTRAINTS);
     }
@@ -134,6 +140,7 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + "!!invalid "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 Subject.MESSAGE_CONSTRAINTS);
     }
@@ -144,6 +151,7 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + "Mon@day "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 Day.MESSAGE_CONSTRAINTS);
     }
@@ -154,6 +162,7 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + "14pm "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 Time.MESSAGE_CONSTRAINTS);
     }
@@ -166,12 +175,14 @@ public class MarkAttendanceCommandParserTest {
                 "0 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expectedMessage);
         assertParseFailure(parser,
                 "-1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expectedMessage);
     }
@@ -189,6 +200,7 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " " + PREFIX_SUBJECT + "English "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_SUBJECT));
 
@@ -196,13 +208,31 @@ public class MarkAttendanceCommandParserTest {
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " " + PREFIX_DAY + "Tuesday "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_DAY));
 
         assertParseFailure(parser,
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " " + PREFIX_TIME + "1500 "
+                        + PREFIX_LESSON + VALID_LESSON + " "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TIME));
+
+        assertParseFailure(parser,
+                "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " " + PREFIX_LESSON + "Week 2 "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_LESSON));
+
+        assertParseFailure(parser,
+                "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS + " "
                         + PREFIX_ATTENDANCE_STATUS + "Absent",
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ATTENDANCE_STATUS));
@@ -212,12 +242,13 @@ public class MarkAttendanceCommandParserTest {
     public void parse_multipleIndices_success() {
         Index[] expectedIndices = new Index[]{INDEX_FIRST_PERSON, INDEX_SECOND_PERSON};
         MarkAttendanceCommand expected = new MarkAttendanceCommand(
-                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, VALID_LESSON, AttendanceStatus.PRESENT);
 
         assertParseSuccess(parser,
                 "1,2 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expected);
     }
@@ -226,12 +257,13 @@ public class MarkAttendanceCommandParserTest {
     public void parse_multipleIndicesWithSpaces_success() {
         Index[] expectedIndices = new Index[]{INDEX_FIRST_PERSON, INDEX_SECOND_PERSON};
         MarkAttendanceCommand expected = new MarkAttendanceCommand(
-                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, VALID_LESSON, AttendanceStatus.PRESENT);
 
         assertParseSuccess(parser,
                 "1, 2 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expected);
     }
@@ -241,12 +273,13 @@ public class MarkAttendanceCommandParserTest {
         Index[] expectedIndices = new Index[]{
             INDEX_FIRST_PERSON, INDEX_SECOND_PERSON, Index.fromOneBased(3)};
         MarkAttendanceCommand expected = new MarkAttendanceCommand(
-                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, VALID_LESSON, AttendanceStatus.PRESENT);
 
         assertParseSuccess(parser,
                 "1,2,3 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expected);
     }
@@ -259,6 +292,7 @@ public class MarkAttendanceCommandParserTest {
                 "1,0 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
                         + PREFIX_DAY + VALID_DAY + " "
                         + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
                 expectedMessage);
     }
