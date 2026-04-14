@@ -1110,3 +1110,5 @@ Team size: 5
 11. **Identify students who are frequently absent.** Currently, tutors can view attendance history manually, but Tutor Central does not automatically flag students with repeated absences. We will add a way to identify students who are frequently absent so tutors can follow up with at-risk students and notify their parents.
 
 12. **Export student data.** Currently, student records can only be viewed inside Tutor Central or through the local JSON data file. We will add an export feature so tutors can share selected records with centre managers or parents in a more readable format.
+
+13. **Allow remarks to be added during student creation.** Currently, remarks can only be added after a student has been created using the separate `remark` command. We will support an optional `r/REMARK` field in the `add` command so tutors can record initial notes while creating a student, while keeping the existing `remark` command for later updates.
