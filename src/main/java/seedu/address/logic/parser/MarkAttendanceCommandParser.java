@@ -38,9 +38,20 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_ATTENDANCE_STATUS);
 
-        Index index;
+        Index[] indices;
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            String preamble = argMultimap.getPreamble();
+            if (preamble.contains(",")) {
+                // Multiple indices separated by commas
+                String[] indexStrings = preamble.split(",");
+                indices = new Index[indexStrings.length];
+                for (int i = 0; i < indexStrings.length; i++) {
+                    indices[i] = ParserUtil.parseIndex(indexStrings[i].trim());
+                }
+            } else {
+                // Single index
+                indices = new Index[]{ParserUtil.parseIndex(preamble)};
+            }
         } catch (ParseException pe) {
             throw new ParseException(
                     "Invalid index: " + pe.getMessage() + "\n" + MarkAttendanceCommand.MESSAGE_USAGE, pe);
@@ -52,7 +63,7 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         AttendanceStatus status = ParserUtil.parseAttendanceStatus(
                 argMultimap.getValue(PREFIX_ATTENDANCE_STATUS).get());
 
-        return new MarkAttendanceCommand(index, subject, day, time, status);
+        return new MarkAttendanceCommand(indices, subject, day, time, status);
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {

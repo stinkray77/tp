@@ -29,12 +29,16 @@ public class TagTest {
         // invalid tag names
         assertFalse(Tag.isValidTagName(""));
         assertFalse(Tag.isValidTagName("hello world")); // spaces not allowed
-        assertFalse(Tag.isValidTagName("tag-name")); // hyphens not allowed
+        assertFalse(Tag.isValidTagName("-tag")); // leading hyphen not allowed
+        assertFalse(Tag.isValidTagName("_tag")); // leading underscore not allowed
 
         // valid tag names
         assertTrue(Tag.isValidTagName("friend"));
         assertTrue(Tag.isValidTagName("123"));
         assertTrue(Tag.isValidTagName("friend123"));
+        assertTrue(Tag.isValidTagName("exam-prep"));
+        assertTrue(Tag.isValidTagName("lower_sec"));
+        assertTrue(Tag.isValidTagName("p1-math_2026"));
     }
 
     @Test

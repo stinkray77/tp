@@ -8,9 +8,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.MarkAttendanceCommand;
 import seedu.address.model.person.AttendanceStatus;
@@ -204,5 +206,60 @@ public class MarkAttendanceCommandParserTest {
                         + PREFIX_ATTENDANCE_STATUS + VALID_STATUS + " "
                         + PREFIX_ATTENDANCE_STATUS + "Absent",
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ATTENDANCE_STATUS));
+    }
+
+    @Test
+    public void parse_multipleIndices_success() {
+        Index[] expectedIndices = new Index[]{INDEX_FIRST_PERSON, INDEX_SECOND_PERSON};
+        MarkAttendanceCommand expected = new MarkAttendanceCommand(
+                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+
+        assertParseSuccess(parser,
+                "1,2 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                expected);
+    }
+
+    @Test
+    public void parse_multipleIndicesWithSpaces_success() {
+        Index[] expectedIndices = new Index[]{INDEX_FIRST_PERSON, INDEX_SECOND_PERSON};
+        MarkAttendanceCommand expected = new MarkAttendanceCommand(
+                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+
+        assertParseSuccess(parser,
+                "1, 2 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                expected);
+    }
+
+    @Test
+    public void parse_threeIndices_success() {
+        Index[] expectedIndices = new Index[]{
+            INDEX_FIRST_PERSON, INDEX_SECOND_PERSON, Index.fromOneBased(3)};
+        MarkAttendanceCommand expected = new MarkAttendanceCommand(
+                expectedIndices, VALID_SUBJECT, VALID_DAY, VALID_TIME, AttendanceStatus.PRESENT);
+
+        assertParseSuccess(parser,
+                "1,2,3 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                expected);
+    }
+
+    @Test
+    public void parse_multipleIndicesInvalidIndex_failure() {
+        String expectedMessage = "Invalid index: " + ParserUtil.MESSAGE_INVALID_INDEX
+                + "\n" + MarkAttendanceCommand.MESSAGE_USAGE;
+        assertParseFailure(parser,
+                "1,0 " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                expectedMessage);
     }
 }

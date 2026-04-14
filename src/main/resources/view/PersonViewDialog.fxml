@@ -18,7 +18,7 @@
     </padding>
 
     <!-- Header -->
-    <Label fx:id="nameLabel" text="Name">
+    <Label fx:id="nameLabel" text="Name" wrapText="true" maxWidth="600">
         <font>
             <Font name="System Bold" size="20.0" />
         </font>
@@ -41,25 +41,25 @@
         </rowConstraints>
 
         <Label text="Emergency Contact:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <Label fx:id="emergencyContactLabel" wrapText="true" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <Label fx:id="emergencyContactLabel" wrapText="true" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="600" />
 
         <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <Label fx:id="emailLabel" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Label fx:id="emailLabel" wrapText="true" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="600" />
 
         <Label text="Address:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-        <Label fx:id="addressLabel" wrapText="true" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        <Label fx:id="addressLabel" wrapText="true" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="600" />
 
         <Label text="Tags:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-        <Label fx:id="tagsLabel" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+        <Label fx:id="tagsLabel" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="600" />
 
         <Label text="Payment:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-        <Label fx:id="paymentLabel" wrapText="true" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+        <Label fx:id="paymentLabel" wrapText="true" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="600" />
 
         <Label text="Lessons:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-        <FlowPane fx:id="lessonSlots" hgap="5.0" vgap="5.0" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+        <FlowPane fx:id="lessonSlots" hgap="5.0" vgap="5.0" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="600" />
 
         <Label text="Remark:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-        <Label fx:id="remarkLabel" wrapText="true" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+        <Label fx:id="remarkLabel" wrapText="true" GridPane.rowIndex="6" GridPane.columnIndex="1" maxWidth="600" />
     </GridPane>
 
     <!-- Attendance Records -->
@@ -69,7 +69,7 @@
                 <Font name="System Bold" size="13.0" />
             </font>
         </Label>
-        <ScrollPane fitToWidth="true" prefHeight="120.0" maxHeight="120.0">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" maxHeight="200.0">
             <VBox fx:id="attendanceRecordsBox" spacing="3.0">
                 <padding>
                     <Insets left="5.0" />
