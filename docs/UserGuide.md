@@ -45,6 +45,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | **Tag**               | A short single-token label attached to a student for categorisation (e.g., `priority`, `exam-prep`, `lower_sec`)         |
 | **Remark**            | A free-text note attached to a student for any additional information                                                   |
 
+<div style="page-break-after: always;"></div>
+
 <!-- * Table of Contents -->
 <page-nav-print />
 
@@ -57,6 +59,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 - **macOS fullscreen:** macOS users running the app in fullscreen mode may experience unexpected behaviour when opening secondary dialogs such as the Help window or the student view dialog. Use windowed mode instead.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Quick start
 
@@ -72,6 +76,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar tutorcentral.jar` command to run the application.<br>
    The initial app state after launch is shown below. Note how the app contains some sample data.<br>
    ![startup](images/startup.png)
+
+<div style="page-break-after: always;"></div>
 
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
@@ -89,6 +95,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 ---
 
+<div style="page-break-after: always;"></div>
 ## Features
 
 <box type="info" seamless>
@@ -131,6 +138,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 **Important:** Subjects, days, and times must be specified in matching triplets. Each subject requires a corresponding day and time. If you provide 2 subjects, you must provide exactly 2 days and 2 times.
 
+<div style="page-break-after: always;"></div>
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -162,6 +171,8 @@ If `r/REMARK` is omitted, the remark defaults to empty.
 Example result after adding a student:
 ![add result](images/add-result.png)
 
+<div style="page-break-after: always;"></div>
+
 ### Listing all students : `list`
 
 Shows a list of all students in Tutor Central.
@@ -176,6 +187,8 @@ Format: `list`
 
 Example result:
 ![list result](images/list-result.png)
+
+<div style="page-break-after: always;"></div>
 
 ### Editing a student : `edit`
 
@@ -206,6 +219,8 @@ Examples:
 Example result:
 ![edit result](images/edit-result.png)
 
+<div style="page-break-after: always;"></div>
+
 ### Locating students: `find`
 
 Finds students matching the given criteria.
@@ -234,6 +249,7 @@ Examples:
 - `find s/Math d/Monday` returns students taking Math on Mondays
 - `find t/priority` returns students tagged as priority
 
+<div style="page-break-after: always;"></div>
 Example result for name-based search: `find John`
 ![find by name result](images/find-name-result.png)
 
@@ -242,6 +258,7 @@ Example result for payment-status search: `find ps/Overdue`
 
 We can use the `list` command to go back to the default layout showing the details of all students.
 
+<div style="page-break-after: always;"></div>
 ### Viewing a student : `view`
 
 Shows the full details of the student at the given index, in a pop-up window.
@@ -261,6 +278,7 @@ Use `view INDEX` if a long name, tag, address, or remark appears shortened with 
 Example result:
 ![view result](images/view-result.png)
 
+<div style="page-break-after: always;"></div>
 ### Adding a remark to a student: `remark`
 
 Adds or updates a free-text remark for the student at the given index. Useful for notes like "needs help with algebra" or "prefers morning lessons".
@@ -280,6 +298,7 @@ Examples:
 Example result:
 ![remark result](images/remark-result.png)
 
+<div style="page-break-after: always;"></div>
 ### Updating payment status: `mark`
 
 Quickly updates the payment status of a student.
@@ -299,6 +318,7 @@ Examples:
 Example result:
 ![mark result](images/mark-result.png)
 
+<div style="page-break-after: always;"></div>
 ### Marking attendance: `markattendance`
 
 Records a student's attendance for a specific lesson within a subject.
@@ -333,11 +353,14 @@ Example result:
 
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Excused` can update the same record to Excused (e.g., after receiving an MC).
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-20 Algebra Lesson 3 st/Present` creates a separate attendance entry for a different week.
+
+<div style="page-break-after: always;"></div>
 - `markattendance 3 s/Mathematics d/Tuesday ti/0900 l/Lesson 1 st/Present` is blocked, since the third student does not have a lesson slot for Mathematics on Tuesday at 0900.
 
 Example result:
 ![view result](images/markattendance-error.png)
 
+<div style="page-break-after: always;"></div>
 ### Viewing attendance records: `listattendance`
 
 Displays a student's attendance records, optionally filtered by subject.
@@ -364,6 +387,7 @@ Examples:
 Example result:
 ![view result](images/listattendance-result.png)
 
+<div style="page-break-after: always;"></div>
 ### Deleting a student : `delete`
 
 Deletes the specified student from Tutor Central.
@@ -385,6 +409,7 @@ Examples:
 Example result:
 ![delete result](images/delete-result.png)
 
+<div style="page-break-after: always;"></div>
 ### Clearing all entries : `clear`
 
 Clears all entries from Tutor Central.
@@ -418,6 +443,7 @@ _Details coming soon ..._
 
 ---
 
+<div style="page-break-after: always;"></div>
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
@@ -453,6 +479,7 @@ _Details coming soon ..._
 
 ---
 
+<div style="page-break-after: always;"></div>
 ## Command summary
 
 | Action             | Format, Examples                                                                                                                                                                                                                   |
