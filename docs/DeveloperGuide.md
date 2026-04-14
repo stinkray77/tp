@@ -1106,3 +1106,9 @@ Team size: 5
 11. **Identify students who are frequently absent.** Currently, tutors can view attendance history manually, but Tutor Central does not automatically flag students with repeated absences. We will add a way to identify students who are frequently absent so tutors can follow up with at-risk students and notify their parents.
 
 12. **Export student data.** Currently, student records can only be viewed inside Tutor Central or through the local JSON data file. We will add an export feature so tutors can share selected records with centre managers or parents in a more readable format.
+
+13. **Support multiple remarks per student with categorization.** Currently, each student can only have a single free-text remark. Tutors often need to maintain different notes for different contexts (e.g., separate remarks for Mathematics vs English lessons, behavioral notes vs academic progress). We will enhance the remark system to support multiple categorized remarks, allowing tutors to:
+    - Add multiple remarks per student with optional categorization (e.g., by subject or remark type)
+    - Filter and view specific categories of remarks
+    - Search for students based on remark content and/or category
+    - Maintain a chronological history of remarks for each student
