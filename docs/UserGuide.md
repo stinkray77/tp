@@ -42,7 +42,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | **Payment Status**    | One of: `Paid`, `Due`, or `Overdue` — indicates the current fee payment status of a student                             |
 | **Subject**           | An academic subject a student is enrolled in (e.g., `Mathematics`, `English`)                                           |
 | **Lesson Slot**       | A scheduled tutoring session defined by a subject, day, and time (e.g., Mathematics on Monday at 1400)                  |
-| **Tag**               | A short alphanumeric label attached to a student for categorisation (e.g., `priority`, `trial`)                         |
+| **Tag**               | A short single-token label attached to a student for categorisation (e.g., `priority`, `exam-prep`, `lower_sec`)         |
 | **Remark**            | A free-text note attached to a student for any additional information                                                   |
 
 <!-- * Table of Contents -->
@@ -125,7 +125,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 | `d/`   | Day               | Monday-Sunday (or Mon-Sun), case-insensitive                             |
 | `ti/`  | Time              | 4-digit 24-hour format, 0000-2359                                        |
 | `ps/`  | Payment Status    | One of: `Paid`, `Due`, `Overdue`; case-insensitive                       |
-| `t/`   | Tag               | Alphanumeric characters, no spaces                                       |
+| `t/`   | Tag               | Starts with an alphanumeric character; may contain alphanumeric characters, hyphens, and underscores; leading/trailing spaces are ignored; spaces inside tag names are not allowed |
 | `r/`   | Remark            | Any text (free-form)                                                     |
 | `st/`  | Attendance Status | One of: `Present`, `Absent`, `Excused`; case-insensitive                 |
 

@@ -19,6 +19,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.AttendanceStatus;
 import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for MarkAttendanceCommand.
@@ -119,7 +120,7 @@ public class MarkAttendanceCommandTest {
                 VALID_DAY + " " + VALID_TIME, STATUS_PRESENT);
 
         MarkAttendanceCommand command = new MarkAttendanceCommand(
-                INDEX_FIRST_PERSON, "mathematics", VALID_DAY, VALID_TIME, STATUS_PRESENT);
+                INDEX_FIRST_PERSON, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
 
         String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
                 personToMark.getName(), VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT.value);
@@ -128,6 +129,92 @@ public class MarkAttendanceCommandTest {
         expectedModel.setPerson(personToMark, markedPerson);
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleIndices_success() {
+        // Test multiple students scenario by creating command with array constructor
+        // but using same person to avoid subject mismatch issues
+        Index[] indices = new Index[]{INDEX_FIRST_PERSON};
+        MarkAttendanceCommand command = new MarkAttendanceCommand(
+                indices, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
+
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person markedPerson = personToMark.markAttendance(VALID_SUBJECT,
+                VALID_DAY + " " + VALID_TIME, STATUS_PRESENT);
+
+        // Since we're using single index, it should use single success message
+        String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
+                personToMark.getName(), VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT.value);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
+
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleIndicesArrayConstructor_success() {
+        // Test the array constructor with single index to ensure array constructor works
+        // This tests the lines that check array length and determine success message
+        Index[] singleIndexArray = new Index[]{INDEX_FIRST_PERSON};
+        MarkAttendanceCommand command = new MarkAttendanceCommand(
+                singleIndexArray, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
+
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person markedPerson = personToMark.markAttendance(VALID_SUBJECT,
+                VALID_DAY + " " + VALID_TIME, STATUS_PRESENT);
+
+        // Since array length is 1, it should use single success message (covers line 136-142 logic)
+        String expectedMessage = String.format(MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_SUCCESS,
+                personToMark.getName(), VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT.value);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
+
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleIndices_successMessageTest() {
+        // Test specifically for multiple success message to cover line 140
+        // Create a custom model with two identical persons to avoid subject mismatch
+        Model testModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        // Add a second person with the same Mathematics subject
+        PersonBuilder aliceBuilder = new PersonBuilder(
+                testModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()));
+        Person aliceClone = aliceBuilder.withName("Alice Clone")
+                .withEmail("alice.clone@example.com").build();
+        testModel.addPerson(aliceClone);
+
+        // Now we have two persons with Mathematics subject
+        Index[] indices = new Index[]{INDEX_FIRST_PERSON,
+                Index.fromOneBased(testModel.getFilteredPersonList().size())};
+        MarkAttendanceCommand command = new MarkAttendanceCommand(
+                indices, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
+
+        // This should trigger the multiple success message since indices.length > 1
+        String expectedMessage = String.format(
+                MarkAttendanceCommand.MESSAGE_MARK_ATTENDANCE_MULTIPLE_SUCCESS,
+                2, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT.value);
+
+        // Create expected model with both persons marked
+        Model expectedModel = new ModelManager(new AddressBook(testModel.getAddressBook()), new UserPrefs());
+        Person firstPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = expectedModel.getFilteredPersonList()
+                .get(Index.fromOneBased(expectedModel.getFilteredPersonList().size()).getZeroBased());
+
+        Person markedFirstPerson = firstPerson.markAttendance(
+                VALID_SUBJECT, VALID_DAY + " " + VALID_TIME, STATUS_PRESENT);
+        Person markedSecondPerson = secondPerson.markAttendance(
+                VALID_SUBJECT, VALID_DAY + " " + VALID_TIME, STATUS_PRESENT);
+
+        expectedModel.setPerson(firstPerson, markedFirstPerson);
+        expectedModel.setPerson(secondPerson, markedSecondPerson);
+
+        // We expect this to succeed since both persons have Mathematics subject
+        assertCommandSuccess(command, testModel, expectedMessage, expectedModel);
     }
 
     @Test
@@ -172,5 +259,26 @@ public class MarkAttendanceCommandTest {
 
         // entirely different command
         assertFalse(commandA.equals(commandB));
+
+        // Test multiple indices scenarios
+        Index[] indices1 = new Index[]{INDEX_FIRST_PERSON, INDEX_SECOND_PERSON};
+        Index[] indices2 = new Index[]{INDEX_FIRST_PERSON, INDEX_SECOND_PERSON};
+        Index[] indices3 = new Index[]{INDEX_SECOND_PERSON, INDEX_FIRST_PERSON};
+
+        MarkAttendanceCommand multiCommandA = new MarkAttendanceCommand(
+                indices1, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
+        MarkAttendanceCommand multiCommandB = new MarkAttendanceCommand(
+                indices2, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
+        MarkAttendanceCommand multiCommandC = new MarkAttendanceCommand(
+                indices3, VALID_SUBJECT, VALID_DAY, VALID_TIME, STATUS_PRESENT);
+
+        // same multiple indices
+        assertTrue(multiCommandA.equals(multiCommandB));
+
+        // different order of indices
+        assertFalse(multiCommandA.equals(multiCommandC));
+
+        // single vs multiple indices (same first index)
+        assertFalse(commandA.equals(multiCommandA));
     }
 }

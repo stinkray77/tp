@@ -164,9 +164,9 @@ public class EditCommand extends Command {
             Person personToEdit, List<LessonSlot> updatedLessonSlots) {
         Map<String, Map<String, String>> allowedSlots = new LinkedHashMap<>();
         for (LessonSlot lessonSlot : updatedLessonSlots) {
-            String normalizedSubject = lessonSlot.getSubject().subjectName.toLowerCase(Locale.ROOT);
-            allowedSlots.computeIfAbsent(normalizedSubject, key -> new LinkedHashMap<>())
-                    .put(lessonSlot.getAttendanceKey(), lessonSlot.getSubject().subjectName);
+            String subjectName = lessonSlot.getSubject().subjectName;
+            allowedSlots.computeIfAbsent(subjectName.toLowerCase(Locale.ROOT), key -> new LinkedHashMap<>())
+                    .put(lessonSlot.getAttendanceKey(), subjectName);
         }
 
         Map<String, Map<String, seedu.address.model.person.AttendanceStatus>> prunedRecords = new LinkedHashMap<>();

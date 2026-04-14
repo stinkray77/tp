@@ -42,6 +42,7 @@ public class ParserUtilTest {
     private static final String VALID_SUBJECT_2 = "English";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_TAG_WITH_SYMBOLS = "exam-prep_2026";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -282,6 +283,13 @@ public class ParserUtilTest {
             throws Exception {
         Tag expectedTag = new Tag(VALID_TAG_1);
         assertEquals(expectedTag, ParserUtil.parseTag(VALID_TAG_1));
+    }
+
+    @Test
+    public void parseTag_validValueWithAllowedSymbols_returnsTag()
+            throws Exception {
+        Tag expectedTag = new Tag(VALID_TAG_WITH_SYMBOLS);
+        assertEquals(expectedTag, ParserUtil.parseTag(VALID_TAG_WITH_SYMBOLS));
     }
 
     @Test

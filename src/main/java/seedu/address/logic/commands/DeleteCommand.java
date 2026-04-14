@@ -7,6 +7,7 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -26,9 +27,6 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSON_SUCCESS =
             "Deleted student: %1$s successfully\nTotal students now: %2$d";
 
-    // Custom error message for out of range
-    public static final String MESSAGE_OUT_OF_RANGE = "Out of range: No student found at index %1$d.";
-
     private final Index targetIndex;
 
     public DeleteCommand(Index targetIndex) {
@@ -46,7 +44,7 @@ public class DeleteCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(String.format(MESSAGE_OUT_OF_RANGE, targetIndex.getOneBased()));
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
