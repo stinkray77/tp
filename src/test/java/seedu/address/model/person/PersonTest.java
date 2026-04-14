@@ -45,7 +45,7 @@ public class PersonTest {
 
         Person editedBob = new PersonBuilder(BOB)
                 .withName(VALID_NAME_BOB.toLowerCase()).build();
-        assertFalse(BOB.isSamePerson(editedBob));
+        assertTrue(BOB.isSamePerson(editedBob));
 
         String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
         editedBob = new PersonBuilder(BOB)
