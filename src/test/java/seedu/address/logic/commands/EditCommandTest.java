@@ -311,6 +311,24 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_editLessonSlots_prunesNonMatchingSlotWithinSubject() throws Exception {
+        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person personWithAttendance = firstPerson
+                .markAttendance("Mathematics", "Monday 1400 - Lesson 1", AttendanceStatus.PRESENT);
+        model.setPerson(firstPerson, personWithAttendance);
+
+        // Keep Mathematics but change to a different day/time
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withLessonSlots("Mathematics", "Wednesday", "1600")
+                .build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+        editCommand.execute(model);
+
+        Person edited = model.getFilteredPersonList().get(0);
+        assertTrue(edited.getAttendanceRecords().isEmpty());
+    }
+
+    @Test
     public void equals() {
         // Utility behavior: equality partitions for command identity
         final EditCommand standardCommand =

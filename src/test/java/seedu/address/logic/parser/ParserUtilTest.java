@@ -332,6 +332,24 @@ public class ParserUtilTest {
         assertEquals(expectedTagSet, actualTagSet);
     }
 
+    // --- parseLessonName ---
+
+    @Test
+    public void parseLessonName_validName_returnsName() throws Exception {
+        assertEquals("Lesson 1", ParserUtil.parseLessonName("Lesson 1"));
+        assertEquals("2026-04-13 Algebra", ParserUtil.parseLessonName("  2026-04-13 Algebra  "));
+    }
+
+    @Test
+    public void parseLessonName_invalidName_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseLessonName("!invalid"));
+    }
+
+    @Test
+    public void parseLessonName_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseLessonName(null));
+    }
+
     // --- parseLessonSlots dedup & overlap detection ---
 
     @Test

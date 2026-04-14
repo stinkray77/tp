@@ -43,6 +43,11 @@ public class AttendanceRecordKeyTest {
     }
 
     @Test
+    public void isValid_missingTimePart_returnsFalse() {
+        assertFalse(AttendanceRecordKey.isValid("Monday - Lesson 1"));
+    }
+
+    @Test
     public void isValid_invalidDay_returnsFalse() {
         assertFalse(AttendanceRecordKey.isValid("Funday 1400 - Lesson 1"));
     }
