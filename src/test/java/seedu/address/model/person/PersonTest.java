@@ -119,6 +119,32 @@ public class PersonTest {
     }
 
     @Test
+    public void hasSameEmail() {
+        // Same person
+        assertTrue(ALICE.hasSameEmail(ALICE));
+
+        // Null comparison
+        assertFalse(ALICE.hasSameEmail(null));
+
+        // Same email, different person
+        Person aliceCopy = new PersonBuilder(ALICE).build();
+        assertTrue(ALICE.hasSameEmail(aliceCopy));
+
+        // Different email, same person name
+        Person editedAlice = new PersonBuilder(ALICE)
+                .withEmail(VALID_EMAIL_BOB).build();
+        assertFalse(ALICE.hasSameEmail(editedAlice));
+
+        // Different email, different person
+        assertFalse(ALICE.hasSameEmail(BOB));
+
+        // Case sensitivity test - email comparison should be case-sensitive
+        Person aliceWithDifferentCaseEmail = new PersonBuilder(ALICE)
+                .withEmail(ALICE.getEmail().value.toUpperCase()).build();
+        assertFalse(ALICE.hasSameEmail(aliceWithDifferentCaseEmail));
+    }
+
+    @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName()
                 + "{name=" + ALICE.getName()

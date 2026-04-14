@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
@@ -48,6 +49,39 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void contains_personWithSameEmailInList_returnsTrue() {
+        uniquePersonList.add(ALICE);
+        Person personWithSameEmail = new PersonBuilder()
+                .withName("Different Name")
+                .withEmail(ALICE.getEmail().value)
+                .withAddress(VALID_ADDRESS_BOB)
+                .withTags(VALID_TAG_HUSBAND)
+                .build();
+        assertTrue(uniquePersonList.contains(personWithSameEmail));
+    }
+
+    @Test
+    public void contains_personWithSameNameDifferentEmail_returnsTrue() {
+        uniquePersonList.add(ALICE);
+        Person personWithSameName = new PersonBuilder(ALICE)
+                .withEmail(VALID_EMAIL_BOB)
+                .build();
+        assertTrue(uniquePersonList.contains(personWithSameName));
+    }
+
+    @Test
+    public void contains_personWithDifferentNameAndEmail_returnsFalse() {
+        uniquePersonList.add(ALICE);
+        Person personWithDifferentFields = new PersonBuilder()
+                .withName("Different Name")
+                .withEmail(VALID_EMAIL_BOB)
+                .withAddress(VALID_ADDRESS_BOB)
+                .withTags(VALID_TAG_HUSBAND)
+                .build();
+        assertFalse(uniquePersonList.contains(personWithDifferentFields));
+    }
+
+    @Test
     public void add_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.add(null));
     }
@@ -56,6 +90,18 @@ public class UniquePersonListTest {
     public void add_duplicatePerson_throwsDuplicatePersonException() {
         uniquePersonList.add(ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(ALICE));
+    }
+
+    @Test
+    public void add_personWithSameEmail_throwsDuplicatePersonException() {
+        uniquePersonList.add(ALICE);
+        Person personWithSameEmail = new PersonBuilder()
+                .withName("Different Name")
+                .withEmail(ALICE.getEmail().value)
+                .withAddress(VALID_ADDRESS_BOB)
+                .withTags(VALID_TAG_HUSBAND)
+                .build();
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(personWithSameEmail));
     }
 
     @Test
