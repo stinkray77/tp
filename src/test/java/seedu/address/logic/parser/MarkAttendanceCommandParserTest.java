@@ -195,6 +195,19 @@ public class MarkAttendanceCommandParserTest {
     }
 
     @Test
+    public void parse_missingIndexWithAllPrefixes_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                MarkAttendanceCommand.MESSAGE_USAGE);
+        assertParseFailure(parser,
+                " " + PREFIX_SUBJECT + VALID_SUBJECT + " "
+                        + PREFIX_DAY + VALID_DAY + " "
+                        + PREFIX_TIME + VALID_TIME + " "
+                        + PREFIX_LESSON + VALID_LESSON + " "
+                        + PREFIX_ATTENDANCE_STATUS + VALID_STATUS,
+                expectedMessage);
+    }
+
+    @Test
     public void parse_duplicatePrefixes_failure() {
         assertParseFailure(parser,
                 "1 " + PREFIX_SUBJECT + VALID_SUBJECT + " " + PREFIX_SUBJECT + "English "
