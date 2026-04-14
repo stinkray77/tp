@@ -81,6 +81,8 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
    The initial app state after launch is shown below. Note how the app contains some sample data.<br>
    ![startup](images/startup.png)
 
+<div style="page-break-after: always;"></div>
+
 5. Type the command in the command box and press Enter to execute it. e.g., typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
    - `list` : Lists all students.
@@ -360,7 +362,9 @@ Format: `markattendance INDEXES s/SUBJECT d/DAY ti/TIME l/LESSON st/STATUS`
 - The `l/LESSON` label is mandatory. Omitting it will result in an invalid command format error.
   </box>
 
-Examples:
+<div style="page-break-after: always;"></div>
+
+### Examples:
 
 **Single Student:**
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Absent` marks the 1st student as Absent for their Mathematics lesson on Monday at 1400, labelled as "2026-04-13 Algebra Lesson 2".
@@ -369,10 +373,11 @@ Example result:
 <br>
 ![view result](images/markattendance-result.png)
 
-<div style="page-break-after: always;"></div>
 
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Excused` can update the same record to Excused (e.g., after receiving an MC).
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-20 Algebra Lesson 3 st/Present` creates a separate attendance entry for a different week.
+
+<div style="page-break-after: always;"></div>
 
 **Multiple Students (Batch Operations):**
 - `markattendance 1,2,3 s/Mathematics d/Monday ti/1400 l/Week 1 st/Present` marks students 1, 2, and 3 as Present for their Mathematics lesson on Monday at 1400.
@@ -472,7 +477,9 @@ Furthermore, certain edits can cause the TutorCentral to behave in unexpected wa
 
 _Details coming soon ..._
 
----
+
+
+<div style="page-break-after: always;"></div>
 
 ## Edge Cases and Special Scenarios
 
@@ -522,6 +529,8 @@ When editing lesson slots (`edit` command):
 
 **Workaround:** Use the `remark` field to track payment details like "Paid for March 2026" or "Due for April 2026".
 
+<div style="page-break-after: always;"></div>
+
 ### Data File Corruption
 
 **Symptoms:**
@@ -565,7 +574,7 @@ When editing lesson slots (`edit` command):
 - Names with only special characters
 - Emergency contacts with fewer than 3 digits or more than 15 digits
 
----
+<div style="page-break-after: always;"></div>
 
 ## Error Messages
 
@@ -603,6 +612,8 @@ TutorCentral provides specific error messages to help you identify and fix comma
 | `The student does not take the subject: [Subject]` | Subject not found for student | Verify the subject name spelling or check the student's subjects with `view INDEX` |
 | `Attendance key must be in 'Day Time - Lesson' format` | Invalid attendance record format (data file corruption) | This error occurs during data loading; restore from backup if needed |
 
+<div style="page-break-after: always;"></div>
+
 ### Data Errors
 
 | Error Message | Cause | Solution |
@@ -610,7 +621,7 @@ TutorCentral provides specific error messages to help you identify and fix comma
 | `This student already exists in Tutor Central` | Duplicate student detected | Check if the student already exists using `find` before adding |
 | `Person's [field] field is missing!` | Data file corruption or invalid JSON format | Restore from backup or fix the JSON structure manually |
 
----
+
 
 <div style="page-break-after: always;"></div>
 
@@ -647,7 +658,7 @@ TutorCentral provides specific error messages to help you identify and fix comma
 4. **Attendance records are stored per lesson slot + lesson label (subject + day + time + lesson).** If a student's lesson slots are edited, attendance records for removed slots are deleted so that the saved attendance data stays aligned with the student's current lesson schedule.
 5. **On macOS fullscreen mode, secondary dialogs may behave unexpectedly.** Commands that open separate windows, such as `help` and `view`, may not display as expected while the app is in fullscreen. Use windowed mode if this happens.
 
----
+
 
 <div style="page-break-after: always;"></div>
 
