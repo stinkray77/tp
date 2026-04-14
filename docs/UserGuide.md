@@ -77,7 +77,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
    The initial app state after launch is shown below. Note how the app contains some sample data.<br>
    ![startup](images/startup.png)
 
-5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g., typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
    - `list` : Lists all students.
 
@@ -102,19 +102,19 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 **Notes about the command format:**<br>
 
 - Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+  e.g., in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 - Items in square brackets are optional.<br>
-  e.g. `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g., `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
 
 - Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+  e.g., `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 
 - Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME e/EMAIL`, `e/EMAIL n/NAME` is also acceptable.
+  e.g., if the command specifies `n/NAME e/EMAIL`, `e/EMAIL n/NAME` is also acceptable.
 
 - Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+  e.g., if the command specifies `help 123`, it will be interpreted as `help`.
 
 - If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
@@ -325,7 +325,7 @@ Example result:
 
 Records a student's attendance for a specific lesson within a subject. Supports both single and multiple students.
 
-Format: `markattendance INDEX[|INDEX1,INDEX2,...] s/SUBJECT d/DAY ti/TIME l/LESSON st/STATUS`
+Format: `markattendance INDEXES s/SUBJECT d/DAY ti/TIME l/LESSON st/STATUS`
 
 - The index(es) refer to the index number(s) shown in the displayed student list.
 - For single student: Use `INDEX` (e.g., `1`)
@@ -453,6 +453,144 @@ _Details coming soon ..._
 
 ---
 
+## Edge Cases and Special Scenarios
+
+This section covers special scenarios and edge cases that you may encounter while using TutorCentral.
+
+### Multiple Students with Same Name
+
+TutorCentral allows multiple students to have the same name. However, this can cause confusion when:
+- Using `find` with name keywords - all matching students will be displayed
+- Using index-based commands - ensure you select the correct index from the displayed list
+
+**Best Practice:** Use additional identifiers like unique tags or include middle names/initials to distinguish students.
+
+### Empty Search Results
+
+When a `find` command returns no results:
+- The message `0 persons listed!` will be displayed
+- Use `list` to return to the full student list
+- Check your search criteria for typos or try broader search terms
+
+### Editing Lesson Slots
+
+When editing lesson slots (`edit` command):
+- **All existing lesson slots are replaced** when providing new `s/`, `d/`, `ti/` values
+- **Partial updates are not supported** - you must provide complete triplets
+- **Attendance records for removed slots are automatically deleted**
+
+**Example:** If a student has 2 lesson slots and you edit with only 1 new slot, the student will end up with only 1 lesson slot.
+
+### Attendance Record Management
+
+**Multiple Lessons per Week:**
+- You can mark multiple attendance entries for the same weekly slot using different lesson labels
+- Example: `l/Week 1`, `l/Week 2`, `l/Week 3` for the same Monday 1400 Mathematics slot
+
+**Attendance Record Persistence:**
+- Attendance records are tied to specific lesson slots
+- If you delete a lesson slot, all attendance records for that slot are also deleted
+- This maintains data integrity between schedules and attendance
+
+### Payment Status Limitations
+
+**Current Limitations:**
+- Payment status is a single value per student (`Paid`, `Due`, `Overdue`)
+- No monthly tracking - changing status affects the entire record
+- No payment history or date tracking
+
+**Workaround:** Use the `remark` field to track payment details like "Paid for March 2026" or "Due for April 2026".
+
+### Data File Corruption
+
+**Symptoms:**
+- App starts with empty student list
+- Error messages about invalid JSON format
+- Specific fields reported as missing
+
+**Recovery Steps:**
+1. Close the application
+2. Restore from a recent backup of `tutorcentral.json`
+3. If no backup exists, the app will create a new empty file
+
+**Prevention:**
+- Regularly backup the `data/tutorcentral.json` file
+- Avoid manual editing of the JSON file unless necessary
+- Use proper shutdown (`exit` command) to ensure data is saved correctly
+
+### Large Number of Students
+
+**Performance Considerations:**
+- List display may become slower with 1000+ students
+- Search operations remain efficient due to indexed filtering
+- Consider using tags to organize large student groups
+
+**Management Tips:**
+- Use `find` with specific criteria rather than browsing full lists
+- Leverage payment status and subject filters for targeted views
+- Use descriptive tags for categorization
+
+### Special Characters in Fields
+
+**Supported Characters:**
+- **Names:** Letters, numbers, spaces, and hyphens
+- **Addresses:** Any characters (free text)
+- **Tags:** Letters, numbers, hyphens, underscores (must start with alphanumeric)
+- **Email:** Standard email format with @ and domain
+- **Emergency Contact:** 3-15 digits (may be landline or short code)
+
+**Unsupported Scenarios:**
+- Tags with spaces or special characters (except hyphens and underscores)
+- Names with only special characters
+- Emergency contacts with fewer than 3 digits or more than 15 digits
+
+---
+
+## Error Messages
+
+TutorCentral provides specific error messages to help you identify and fix command issues. Below are the most common error messages you may encounter:
+
+### Command Format Errors
+
+| Error Message | Cause | Solution |
+|--------------|-------|----------|
+| `Invalid command format!` | Command syntax is incorrect or missing required parameters | Check the command format in the [Command Summary](#command-summary) and ensure all required prefixes are present |
+| `Unknown command` | Command word is not recognized | Verify the command spelling and use one of the supported commands |
+| `The person index provided is invalid` | Index is out of range, not a number, or invalid format | Use a plain positive integer (e.g., `1`, `2`, `3`) that corresponds to an entry in the current list |
+
+### Field Validation Errors
+
+| Error Message | Cause | Solution |
+|--------------|-------|----------|
+| `Emails should be of the format local-part@domain...` | Email format is invalid | Use a valid email format like `user@example.com` |
+| `Emergency contact should be exactly 8 digits starting with 8 or 9` | Emergency contact number is invalid | Use an 8-digit Singapore mobile number starting with 8 or 9 |
+| `Tag names should start with an alphanumeric character...` | Tag format is invalid | Tags must start with a letter/number and contain only letters, numbers, hyphens, and underscores |
+| `Addresses can take any values, and it should not be blank` | Address field is empty | Provide a non-empty address |
+
+### Lesson Slot Errors
+
+| Error Message | Cause | Solution |
+|--------------|-------|----------|
+| `Number of subjects, days and times must all match` | Unequal number of subjects, days, and times | Provide the same number of subjects, days, and times (e.g., 2 subjects need 2 days and 2 times) |
+| `Subjects, days and times must all be specified together` | Incomplete lesson slot specification | When providing any of `s/`, `d/`, `ti/`, you must provide all three together |
+| `Student does not have a lesson for [Subject] on [Day] at [Time]` | No matching lesson slot found | Check that the student has the specified lesson slot, or use `view INDEX` to see their current schedule |
+
+### Attendance Errors
+
+| Error Message | Cause | Solution |
+|--------------|-------|----------|
+| `The student does not take the subject: [Subject]` | Subject not found for student | Verify the subject name spelling or check the student's subjects with `view INDEX` |
+| `Attendance key must be in 'Day Time - Lesson' format` | Invalid attendance record format (data file corruption) | This error occurs during data loading; restore from backup if needed |
+
+### Data Errors
+
+| Error Message | Cause | Solution |
+|--------------|-------|----------|
+| `This student already exists in Tutor Central` | Duplicate student detected | Check if the student already exists using `find` before adding |
+| `Person's [field] field is missing!` | Data file corruption or invalid JSON format | Restore from backup or fix the JSON structure manually |
+
+---
+
 <div style="page-break-after: always;"></div>
 
 ## FAQ
@@ -506,6 +644,6 @@ _Details coming soon ..._
 | **List**           | `list`                                                                                                                                                                                                                             |
 | **ListAttendance** | `listattendance INDEX [s/SUBJECT]` <br> e.g., `listattendance 1 s/Mathematics`                                                                                                                                                     |
 | **Mark**           | `mark INDEX ps/PAYMENT_STATUS` <br> e.g., `mark 1 ps/Paid`                                                                                                                                                                         |
-| **MarkAttendance** | `markattendance INDEX[|INDEX1,INDEX2,...] s/SUBJECT d/DAY ti/TIME l/LESSON st/STATUS` <br> e.g., `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Present` <br> e.g., `markattendance 1,2,3 s/Mathematics d/Monday ti/1400 l/Week 1 st/Present` |                                                           |
+| **MarkAttendance** | `markattendance INDEXES s/SUBJECT d/DAY ti/TIME l/LESSON st/STATUS` <br> e.g., `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Present` <br> e.g., `markattendance 1,2,3 s/Mathematics d/Monday ti/1400 l/Week 1 st/Present` |
 | **Remark**         | `remark INDEX r/REMARK` <br> e.g., `remark 1 r/Needs help with algebra`                                                                                                                                                            |
 | **View**           | `view INDEX` <br> e.g., `view 1`                                                                                                                                                                                                   |
