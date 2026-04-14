@@ -8,6 +8,17 @@ pageNav: 3
 
 TutorCentral is a **desktop app for freelance tutors in Singapore** to manage student information, optimised for use via a **Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). Whether you are tracking payments, recording attendance, or scheduling lessons, TutorCentral keeps everything organised in one place. If you can type fast, TutorCentral can get your student management tasks done faster than traditional GUI apps.
 
+<br>
+<div class="ug-table-of-contents">
+
+<h2 class="d-none d-print-block">Table of Contents</h2>
+
+<page-nav-print />
+
+</div>
+
+<div style="page-break-after: always;"></div>
+
 ## Key Features
 
 - Manage student profiles (add, edit, delete, view)
@@ -47,11 +58,6 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 <div style="page-break-after: always;"></div>
 
-<!-- * Table of Contents -->
-<page-nav-print />
-
----
-
 ## Notes for Users
 
 - **Launching the app:** Use `java -jar tutorcentral.jar` in a terminal rather than double-clicking the file, as double-clicking may not work on some systems.
@@ -59,8 +65,6 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 - **macOS fullscreen:** macOS users running the app in fullscreen mode may experience unexpected behaviour when opening secondary dialogs such as the Help window or the student view dialog. Use windowed mode instead.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## Quick start
 
@@ -93,8 +97,6 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## Features
 
 <box type="info" seamless>
@@ -119,7 +121,9 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 - If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
-**Parameter constraints:**
+<div style="page-break-after: always;"></div>
+
+## Parameter constraints
 
 | Prefix | Field             | Rules                                                                    |
 | ------ | ----------------- | ------------------------------------------------------------------------ |
@@ -137,7 +141,7 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 **Important:** Subjects, days, and times must be specified in matching triplets. Each subject requires a corresponding day and time. If you provide 2 subjects, you must provide exactly 2 days and 2 times.
 
-<div style="page-break-after: always;"></div>
+---
 
 ### Viewing help : `help`
 
@@ -146,6 +150,8 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 Example result: A pop-up window will show you a link to this user guide with more detailed instructions.
+
+<div style="page-break-after: always;"></div>
 
 ### Adding a student: `add`
 
@@ -185,6 +191,7 @@ Format: `list`
 </box>
 
 Example result:
+<br>
 ![list result](images/list-result.png)
 
 <div style="page-break-after: always;"></div>
@@ -216,6 +223,7 @@ Examples:
 - `edit 1 s/ d/ ti/` Clears all lesson slots of the 1st student.
 
 Example result:
+<br>
 ![edit result](images/edit-result.png)
 
 <div style="page-break-after: always;"></div>
@@ -275,6 +283,7 @@ Examples:
 Use `view INDEX` if a long name, tag, address, or remark appears shortened with `...` in the student list.
 
 Example result:
+<br>
 ![view result](images/view-result.png)
 
 <div style="page-break-after: always;"></div>
@@ -296,6 +305,7 @@ Examples:
 - `remark 2 r/` removes the remark from the 2nd student.
 
 Example result:
+<br>
 ![remark result](images/remark-result.png)
 
 <div style="page-break-after: always;"></div>
@@ -317,6 +327,7 @@ Examples:
 - `mark 3 ps/Paid` marks the 3rd student's payment as Paid.
 
 Example result:
+<br>
 ![mark result](images/mark-result.png)
 
 <div style="page-break-after: always;"></div>
@@ -353,6 +364,13 @@ Examples:
 
 **Single Student:**
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Absent` marks the 1st student as Absent for their Mathematics lesson on Monday at 1400, labelled as "2026-04-13 Algebra Lesson 2".
+
+Example result:
+<br>
+![view result](images/markattendance-result.png)
+
+<div style="page-break-after: always;"></div>
+
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-13 Algebra Lesson 2 st/Excused` can update the same record to Excused (e.g., after receiving an MC).
 - `markattendance 1 s/Mathematics d/Monday ti/1400 l/2026-04-20 Algebra Lesson 3 st/Present` creates a separate attendance entry for a different week.
 
@@ -365,6 +383,7 @@ Examples:
 - `markattendance 1,2,5 s/Mathematics d/Monday ti/1400 l/Week 1 st/Present` will fail if student 5 doesn't have Mathematics on Monday at 1400.
 
 Example result:
+<br>
 ![view result](images/markattendance-error.png)
 
 <div style="page-break-after: always;"></div>
@@ -393,6 +412,7 @@ Examples:
 - `listattendance 1 s/Mathematics` shows only Mathematics attendance records for the 1st student.
 
 Example result:
+<br>
 ![view result](images/listattendance-result.png)
 
 <div style="page-break-after: always;"></div>
@@ -416,6 +436,7 @@ Examples:
 - `find Betsy` followed by `delete 1` deletes the 1st student in the results of the `find` command.
 
 Example result:
+<br>
 ![delete result](images/delete-result.png)
 
 <div style="page-break-after: always;"></div>

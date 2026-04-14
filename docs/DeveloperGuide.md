@@ -7,16 +7,22 @@
 # TutorCentral Developer Guide
 
 <!-- * Table of Contents -->
+<div class="dg-table-of-contents">
+
+<h2 class="d-none d-print-block">Table of Contents</h2>
+
 <page-nav-print />
 
---------------------------------------------------------------------------------------------------------------------
+</div>
+
+---
 
 ## **Acknowledgements**
 
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 * Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)
 
---------------------------------------------------------------------------------------------------------------------
+<div style="page-break-after: always;"></div>
 
 ## **Setting up, getting started**
 
@@ -49,6 +55,8 @@ The bulk of the app's work is done by the following four components:
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
 
+<div style="page-break-after: always;"></div>
+
 **How the architecture components interact with each other**
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
@@ -65,6 +73,8 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 <puml src="diagrams/ComponentManagers.puml" width="300" />
 
 The sections below give more details of each component.
+
+<div style="page-break-after: always;"></div>
 
 ### UI component
 
@@ -85,13 +95,15 @@ The `UI` component,
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
 * depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
 
+<div style="page-break-after: always;"></div>
+
 ### Logic component
 
 **API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
-<puml src="diagrams/LogicClassDiagram.puml" width="550"/>
+<puml src="diagrams/LogicClassDiagram.puml" width="500"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
@@ -118,6 +130,8 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+<div style="page-break-after: always;"></div>
+
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -143,6 +157,8 @@ Each `Person` in TutorCentral currently contains:
 * `Set<Tag>`
 * `attendanceRecords` — a `Map<String, Map<String, AttendanceStatus>>` mapping subject name to attendance record key (e.g., `"Monday 1400 - 2026-04-13 Algebra Lesson 2"`) to `AttendanceStatus`, tracking attendance per subject per lesson entry
 
+<div style="page-break-after: always;"></div>
+
 Derived getters `getSubjects()`, `getDays()`, and `getTimes()` are provided for backward compatibility with predicates used in the `find` command.
 
 <box type="info" seamless>
@@ -153,6 +169,7 @@ Derived getters `getSubjects()`, `getDays()`, and `getTimes()` are provided for 
 
 </box>
 
+---
 
 ### Storage component
 
@@ -170,6 +187,8 @@ The `Storage` component,
 Classes used by multiple components are in the `seedu.address.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Implementation**
 
@@ -222,6 +241,8 @@ parser, command, and model components.
 
 <puml src="diagrams/FindSequenceDiagram.puml" alt="Sequence diagram for the extended find feature" />
 
+<div style="page-break-after: always;"></div>
+
 ### View student feature
 
 The `view` command displays a student's full details in a popup dialog. `ViewCommandParser` parses
@@ -237,6 +258,8 @@ The `PersonViewDialog` is a JavaFX dialog that displays all student fields in a 
 layout: name, emergency contact, email, address, tags, payment status, lesson slots (each showing subject, day, and time), and remark.
 
 <puml src="diagrams/ViewSequenceDiagram.puml" alt="Sequence diagram for the view student feature" />
+
+<div style="page-break-after: always;"></div>
 
 ### Mark payment status feature
 
@@ -261,9 +284,13 @@ model, and the filtered list is refreshed.
 
 <puml src="diagrams/MarkSequenceDiagram.puml" alt="Sequence diagram for the mark payment status feature" />
 
+<div style="page-break-after: always;"></div>
+
 The following activity diagram summarises the flow when a `mark` command is executed:
 
 <puml src="diagrams/MarkActivityDiagram.puml" alt="Activity diagram for the mark payment status feature" />
+
+<div style="page-break-after: always;"></div>
 
 ### Mark attendance feature
 
@@ -297,6 +324,8 @@ During execution, `MarkAttendanceCommand`:
 
 <puml src="diagrams/MarkAttendanceSequenceDiagram.puml" alt="Sequence diagram for the mark attendance feature" />
 
+<div style="page-break-after: always;"></div>
+
 ### List attendance feature
 
 The `listattendance` command displays a student's attendance records, optionally filtered by subject.
@@ -317,6 +346,8 @@ During execution, `ListAttendanceCommand`:
 The output format is: `Attendance for [NAME]: [SUBJECT]: [DAY TIME - LESSON]: [STATUS]`
 
 <puml src="diagrams/ListAttendanceSequenceDiagram.puml" alt="Sequence diagram for the list attendance feature" />
+
+<div style="page-break-after: always;"></div>
 
 ### \[Proposed\] Undo/redo feature
 
@@ -376,7 +407,9 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 <puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores TutorCentral data to that state.
+<div style="page-break-after: always;"></div>
+
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores Tutor Central data to that state.
 
 <box type="info" seamless>
 
@@ -395,6 +428,8 @@ Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Sinc
 The following activity diagram summarizes what happens when a user executes a new command:
 
 <puml src="diagrams/CommitActivityDiagram.puml" width="250" />
+
+<div style="page-break-after: always;"></div>
 
 #### Design considerations:
 
@@ -450,7 +485,8 @@ Each `LessonSlot` currently stores only a start time. Adding a `Duration` field 
 * [Configuration guide](Configuration.md)
 * [DevOps guide](DevOps.md)
 
---------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## **Appendix: Requirements**
 
@@ -498,11 +534,15 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 | `*`      | tutor                    | identify students who are frequently absent             | follow up with at-risk students and notify their parents      |
 | `*`      | tutor                    | export student data                                     | share records with centre managers or parents                 |
 
+---
+
 ### Use cases
 
 (For all use cases below, the **System** is `TutorCentral` and the **Actor** is the `tutor`, unless specified otherwise)
 
-**Use Case 01: Delete a student**
+<br>
+
+#### Use Case 01: Delete a student
 
 **MSS**
 
@@ -520,9 +560,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case resumes from step 1.
 
+<br>
 
-
-**Use Case 02: Search for students**
+#### Use Case 02: Search for students
 
 **MSS**
 
@@ -544,8 +584,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case ends.
 
+<div style="page-break-after: always;"></div>
 
-**Use Case 03: Add a student**
+#### Use Case 03: Add a student
 
 **MSS**
 
@@ -574,8 +615,8 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case resumes from step 1.
 
-
-**Use Case 04: Update a student**
+    
+#### Use Case 04: Update a student
 
 **MSS**
 
@@ -605,8 +646,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case resumes from step 1.
 
-
-**Use Case 05: View a student**
+#### Use Case 05: View a student
 
 **MSS**
 
@@ -624,7 +664,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
         Use case ends.
 
 
-**Use Case 06: Find students by field**
+#### Use Case 06: Find students by field
 
 **MSS**
 
@@ -654,8 +694,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case ends.
 
+<div style="page-break-after: always;"></div>
 
-**Use Case 07: Mark payment status**
+#### Use Case 07: Mark payment status
 
 **MSS**
 
@@ -680,8 +721,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case ends.
 
+<br>
 
-**Use Case 08: Add a remark to a student**
+#### Use Case 08: Add a remark to a student
 
 **MSS**
 
@@ -707,8 +749,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case ends.
 
+<div style="page-break-after: always;"></div>
 
-**Use Case 09: Mark student attendance**
+#### Use Case 09: Mark student attendance
 
 **MSS**
 
@@ -747,8 +790,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case resumes from step 2.
 
+<br>
 
-**Use Case 10: List student attendance**
+#### Use Case 10: List student attendance
 
 **MSS**
 
@@ -772,6 +816,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
         Use case ends.
 
+<div style="page-break-after: always;"></div>
 
 ### Non-Functional Requirements
 
@@ -787,6 +832,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 10. The `listattendance` command should return results within 1 second even for students with 100+ attendance records.
 11. All error messages must include the invalid input value and the expected format, so the user can correct the command without consulting the User Guide.
 
+---
 
 ### Glossary
 
@@ -834,7 +880,6 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * **Command Output Area**: The display area showing the results of commands entered (successes or failures)
 * **Mainstream OS**: Windows, Linux, and macOS
 
---------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
 
@@ -893,6 +938,8 @@ testers are expected to do more *exploratory* testing.
    1. Test case: Mismatched subjects/days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math s/English d/Monday ti/1400 d/Tuesday ec/91234567 ps/Paid`<br>
       Expected: No student added. Error message stating subjects, days, and times count must all match.
 
+<div style="page-break-after: always;"></div>
+
 ### Editing a student
 
 1. Editing a student's details
@@ -949,6 +996,8 @@ testers are expected to do more *exploratory* testing.
 
    6. Test case: `mark 1` (missing payment status)<br>
       Expected: No change. Error message showing correct usage format.
+
+<div style="page-break-after: always;"></div>
 
 ### Adding/editing a remark
 
@@ -1012,6 +1061,8 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `find ps/Paid ps/Overdue`<br>
       Expected: Students with either `Paid` or `Overdue` status are listed.
 
+<div style="page-break-after: always;"></div>
+
 ### Exiting the application
 
 1. Test case: `exit`<br>
@@ -1071,7 +1122,7 @@ testers are expected to do more *exploratory* testing.
    2. Re-launch the application.<br>
       Expected: The student added in the previous session is still present in the list.
 
---------------------------------------------------------------------------------------------------------------------
+<div style="page-break-after: always;"></div>
 
 ## **Appendix: Effort**
 
