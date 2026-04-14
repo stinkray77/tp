@@ -76,6 +76,8 @@ The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `Re
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-T09-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
+In the student list, `PersonListCard.fxml` keeps long single-line details such as names and addresses within the card width by using JavaFX text overrun with ellipses. Tags are also constrained and shortened with ellipses when needed. The complete values remain stored in the model and are shown in the `view` dialog.
+
 The `UI` component,
 
 * executes user commands using the `Logic` component.
@@ -766,7 +768,7 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 3.  A user with above-average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.  Changes made via commands must be auto-saved within 1 second of completion.
 5.  The student list must scroll smoothly and display at least 200 student records without lag or stutter.
-6.  The default view must show essential fields like name and timeslot without horizontal scrolling.
+6.  The default view must show essential fields like name and timeslot without horizontal scrolling. Long single-line details may be shortened with ellipses in the student list, but must remain available in full through the `view` command.
 7.  The system must detect and reject duplicate student entries (same name, case-sensitive) within 1 second of the `add` command completing, displaying a clear error message.
 8.  Must consume less than 150MB of RAM, and minimal CPU when idle.
 9.  Attendance records must be persisted to the JSON data file within 1 second of the `markattendance` command completing.
@@ -870,7 +872,10 @@ testers are expected to do more *exploratory* testing.
    3. Test case: `add n/John Doe e/johnd@example.com a/123 Main St s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due` (same name as existing student)<br>
       Expected: No student added. Error message indicating duplicate student.
 
-   4. Test case: Missing compulsory field, e.g. `add n/John Doe e/johnd@example.com`<br>
+   4. Test case: Add a student with a very long name, address, or tag, then run `view INDEX` for that student<br>
+      Expected: Long fields may be shortened with `...` in the student list if they exceed the available display width. Full details are shown in the view dialog.
+
+   5. Test case: Missing compulsory field, e.g. `add n/John Doe e/johnd@example.com`<br>
       Expected: No student added. Error message showing correct usage format.
 
    1. Test case: Mismatched subjects/days/times count, e.g. `add n/John Doe e/j@e.com a/addr s/Math s/English d/Monday ti/1400 d/Tuesday ec/91234567 ps/Paid`<br>

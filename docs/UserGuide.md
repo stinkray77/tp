@@ -167,6 +167,12 @@ Shows a list of all students in Tutor Central.
 
 Format: `list`
 
+<box type="tip" seamless>
+
+**Tip:** Long single-line details such as names, tags, and addresses are shortened with `...` in the student list if they exceed the available display width. The full details are still saved and can be viewed with the `view INDEX` command.
+
+</box>
+
 Example result:
 ![list result](images/list-result.png)
 
@@ -248,6 +254,8 @@ Examples:
 
 - `view 1` shows the full details of the 1st student in the current list.
 - `find Alex` followed by `view 1` shows the full details of the 1st student in the filtered results.
+
+Use `view INDEX` if a long name, tag, address, or remark appears shortened with `...` in the student list.
 
 Example result:
 ![view result](images/view-result.png)
