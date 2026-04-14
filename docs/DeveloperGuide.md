@@ -540,32 +540,30 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 
 **MSS**
 
-1.  Tutor requests to add a student.
-2.  Tutor Central shows the required details to be input.
-3.  Tutor provides the student's details: name, email, address, emergency contact, lesson slots (subject/day/time triplets), payment status, and tags.
-4.  Tutor Central validates the input.
-5.  Tutor Central records the new student and shows a success message with the added student's details.
+1.  Tutor requests to add a student by providing the student's details: name, email, address, emergency contact, lesson slots (subject/day/time triplets), payment status, and tags.
+2.  Tutor Central validates the input.
+3.  Tutor Central records the new student and shows a success message with the added student's details.
 
     Use case ends.
 
 **Extensions**
 
-* 4a. The provided details are invalid.
-    * 4a1. Tutor Central shows an error message.
+* 2a. The provided details are invalid.
+    * 2a1. Tutor Central shows an error message.
 
-        Use case resumes from step 2.
-
-
-* 4b. The number of subjects, days, and times do not match (must be equal triplets).
-    * 4b1. Tutor Central shows an error message.
-
-        Use case resumes from step 2.
+        Use case resumes from step 1.
 
 
-* 4c. A matching student already exists.
-    * 4c1. Tutor Central shows an error message.
+* 2b. The number of subjects, days, and times do not match (must be equal triplets).
+    * 2b1. Tutor Central shows an error message.
 
-        Use case resumes from step 2.
+        Use case resumes from step 1.
+
+
+* 2c. A matching student already exists.
+    * 2c1. Tutor Central shows an error message.
+
+        Use case resumes from step 1.
 
 
 **Use Case 04: Update a student**
@@ -573,11 +571,9 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 **MSS**
 
 1.  Tutor lists students or performs <u>Search for students (UC02).</u>
-2.  Tutor requests to update the target student from the search results.
-3.  Tutor Central shows the details that can be updated.
-4.  Tutor provides updated values for one or more fields.
-5.  Tutor Central validates the updated values.
-6.  Tutor Central updates the student and shows a success message with the updated details.
+2.  Tutor requests to update the target student from the search results by providing updated values for one or more fields.
+3.  Tutor Central validates the updated values.
+4.  Tutor Central updates the student and shows a success message with the updated details.
 
     Use case ends.
 
@@ -586,19 +582,19 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 * 2a. The specified student is invalid.
     * 2a1. Tutor Central shows an error message.
 
-        Use case resumes from step 2.
+        Use case resumes from step 1.
 
 
-* 5a. The provided update details are invalid.
-    * 5a1. Tutor Central shows an error message.
+* 3a. The provided update details are invalid.
+    * 3a1. Tutor Central shows an error message.
 
-        Use case resumes from step 3.
+        Use case resumes from step 1.
 
 
-* 5b. Tutor updates lesson slots without providing all three of subject, day, and time together.
-    * 5b1. Tutor Central shows an error message.
+* 3b. Tutor updates lesson slots without providing all three of subject, day, and time together.
+    * 3b1. Tutor Central shows an error message.
 
-        Use case resumes from step 3.
+        Use case resumes from step 1.
 
 
 **Use Case 05: View a student**
