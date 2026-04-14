@@ -29,7 +29,7 @@ AddressBookParser -> Parser : parse(args)
 activate Parser
 
 create Command
-Parser -> Command : index, subject, day, time, status
+Parser -> Command : index, subject, day, time, lesson, status
 activate Command
 Command --> Parser
 deactivate Command
