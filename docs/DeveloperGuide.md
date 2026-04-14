@@ -139,7 +139,7 @@ Each `Person` in Tutor Central currently contains:
 * `PaymentStatus`
 * `Remark`
 * `Set<Tag>`
-* `attendanceRecords` — a `Map<String, Map<String, AttendanceStatus>>` mapping subject name to time-slot key (e.g., `"Monday 1400"`) to `AttendanceStatus`, tracking attendance per subject per lesson slot
+* `attendanceRecords` — a `Map<String, Map<String, AttendanceStatus>>` mapping subject name to attendance record key (e.g., `"Monday 1400 - 2026-04-13 Algebra Lesson 2"`) to `AttendanceStatus`, tracking attendance per subject per lesson entry
 
 Derived getters `getSubjects()`, `getDays()`, and `getTimes()` are provided for backward compatibility with predicates used in the `find` command.
 
@@ -267,22 +267,23 @@ The following activity diagram summarises the flow when a `mark` command is exec
 
 The `markattendance` command records a student's attendance for a specific lesson within a subject.
 
-`MarkAttendanceCommandParser` tokenizes the user input with the `s/`, `d/`, `ti/`, and `st/` prefixes and checks
+`MarkAttendanceCommandParser` tokenizes the user input with the `s/`, `d/`, `ti/`, `l/`, and `st/` prefixes and checks
 that the command contains:
 
 * a non-empty preamble that can be parsed into an index
 * exactly one `s/` value (subject)
 * exactly one `d/` value (day)
 * exactly one `ti/` value (time)
+* exactly one `l/` value (lesson/session label)
 * exactly one `st/` value (attendance status)
 
 If the input is valid, the parser creates a `MarkAttendanceCommand` with the target index, subject name,
-day, time, and `AttendanceStatus`.
+day, time, lesson label, and `AttendanceStatus`.
 
 During execution, `MarkAttendanceCommand`:
 1. Retrieves the target student from the filtered list.
 2. Validates that the student has a matching lesson slot for the specified subject, day, and time combination (subject match is case-insensitive).
-3. Creates a new `Person` with the updated attendance record using `Person#markAttendance(subject, "Day Time", status)`.
+3. Creates a new `Person` with the updated attendance record using `Person#markAttendance(subject, "Day Time - Lesson", status)`.
 4. Replaces the original student in the model.
 5. Refreshes the filtered list.
 
@@ -305,7 +306,7 @@ During execution, `ListAttendanceCommand`:
 5. Formats the results into a human-readable string.
 6. Returns a `CommandResult` with the formatted string.
 
-The output format is: `Attendance for [NAME]: [SUBJECT]: [DAY TIME]: [STATUS]`
+The output format is: `Attendance for [NAME]: [SUBJECT]: [DAY TIME - LESSON]: [STATUS]`
 
 <puml src="diagrams/ListAttendanceSequenceDiagram.puml" alt="Sequence diagram for the list attendance feature" />
 
@@ -1110,3 +1111,7 @@ Team size: 5
 11. **Identify students who are frequently absent.** Currently, tutors can view attendance history manually, but Tutor Central does not automatically flag students with repeated absences. We will add a way to identify students who are frequently absent so tutors can follow up with at-risk students and notify their parents.
 
 12. **Export student data.** Currently, student records can only be viewed inside Tutor Central or through the local JSON data file. We will add an export feature so tutors can share selected records with centre managers or parents in a more readable format.
+
+13. **Add lesson end times to lesson slots.** Currently each lesson slot only records a start time (e.g., `ti/1400`). We plan to add an optional end time parameter (e.g., `te/1530`) to `LessonSlot` so tutors can see the full duration of each lesson.
+
+14. **Validate `l/LESSON` as a structured date.** Currently `markattendance` uses a free-text `l/LESSON` session label. Tutors can include dates manually (e.g., `l/2026-04-13 Algebra Lesson 2`), but TutorCentral does not validate, sort, or filter attendance records by date. We plan to add a dedicated `date/DATE` parameter so attendance records can be stored and queried using actual lesson dates, enabling chronological sorting and date-range filtering.
