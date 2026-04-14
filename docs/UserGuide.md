@@ -123,15 +123,15 @@ TutorCentral is a **desktop app for freelance tutors in Singapore** to manage st
 
 | Prefix | Field             | Rules                                                                    |
 | ------ | ----------------- | ------------------------------------------------------------------------ |
-| `n/`   | Name              | Alphanumeric characters and spaces, cannot be blank                      |
+| `n/`   | Name              | Alphanumeric characters, spaces, and hyphens, cannot be blank           |
 | `e/`   | Email             | Valid email format (e.g., `user@example.com`)                            |
 | `a/`   | Address           | Any text, cannot be blank                                                |
 | `ec/`  | Emergency Contact | Exactly 8 digits, must start with 8 or 9 (valid Singapore mobile number) |
 | `s/`   | Subject           | Alphanumeric characters and spaces; must not be blank; matching is case-insensitive |
-| `d/`   | Day               | Monday-Sunday (or Mon-Sun), case-insensitive                             |
+| `d/`   | Day               | Full day names (Monday-Sunday) or 3-letter abbreviations (Mon-Sun), case-insensitive |
 | `ti/`  | Time              | 4-digit 24-hour format, 0000-2359                                        |
 | `ps/`  | Payment Status    | One of: `Paid`, `Due`, `Overdue`; case-insensitive                       |
-| `t/`   | Tag               | Starts with an alphanumeric character; may contain alphanumeric characters, hyphens, and underscores; leading/trailing spaces are ignored; spaces inside tag names are not allowed |
+| `t/`   | Tag               | Starts with an alphanumeric character; may contain alphanumeric characters, hyphens, and underscores; spaces inside tag names are not allowed |
 | `r/`   | Remark            | Any text (free-form)                                                     |
 | `st/`  | Attendance Status | One of: `Present`, `Absent`, `Excused`; case-insensitive                 |
 

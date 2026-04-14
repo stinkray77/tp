@@ -713,28 +713,37 @@ Such items are tracked in [Appendix: Planned Enhancements](#appendix-planned-enh
 **MSS**
 
 1.  Tutor lists students or performs <u>Search for students (UC02).</u>
-2.  Tutor requests to mark attendance for a student at a specific index, specifying the subject, day, time, and status.
-3.  Tutor Central validates the index, subject, day, time, and status.
+2.  Tutor requests to mark attendance for student(s) at specific index/indices, specifying the subject, day, time, lesson, and status.
+3.  Tutor Central validates the index/indices, subject, day, time, lesson, and status.
 4.  Tutor Central records the attendance and shows a success message.
 
     Use case ends.
 
 **Extensions**
 
+* 2a. Tutor requests to mark attendance for multiple students using comma-separated indices (e.g., "1,2,3").
+    * 2a1. Tutor Central validates each student has the required lesson slot.
+    * 2a2. Tutor Central marks attendance for all valid students and shows a summary message.
+
+        Use case ends.
+
 * 3a. The specified index is invalid.
     * 3a1. Tutor Central shows an error message.
 
         Use case resumes from step 2.
-
 
 * 3b. The specified subject does not match any of the student's subjects.
     * 3b1. Tutor Central shows an error message indicating the subject mismatch.
 
         Use case resumes from step 2.
 
-
 * 3c. The attendance status is not one of Present, Absent, or Excused.
     * 3c1. Tutor Central shows an error message with valid status options.
+
+        Use case resumes from step 2.
+
+* 3d. For multiple students, some students do not have the required lesson slot.
+    * 3d1. Tutor Central shows an error message indicating which students lack the required lesson slot.
 
         Use case resumes from step 2.
 
