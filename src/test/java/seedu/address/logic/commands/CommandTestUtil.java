@@ -33,14 +33,19 @@ public class CommandTestUtil {
 
     public static final String VALID_NAME_AMY = "Amy Bee";
     public static final String VALID_NAME_BOB = "Bob Choo";
+    public static final String VALID_NAME_TEST = "Test Student";
+    public static final String VALID_NAME_UNIQUE = "Unique Student";
     public static final String VALID_EMAIL_AMY = "amy@example.com";
     public static final String VALID_EMAIL_BOB = "bob@example.com";
+    public static final String VALID_EMAIL_TEST = "test@example.com";
     public static final String VALID_ADDRESS_AMY = "Block 312, Amy Street 1";
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
+    public static final String VALID_ADDRESS_TEST = "Block 999, Test Street 9";
     public static final String VALID_SUBJECT_MATH = "Mathematics";
     public static final String VALID_SUBJECT_ENGLISH = "English";
     public static final String VALID_EMERGENCY_CONTACT_AMY = "81111111";
     public static final String VALID_EMERGENCY_CONTACT_BOB = "92222222";
+    public static final String VALID_EMERGENCY_CONTACT_TEST = "99999999";
     public static final String VALID_PAYMENT_STATUS_AMY = "Paid";
     public static final String VALID_PAYMENT_STATUS_BOB = "Due";
     public static final String VALID_DAY_MONDAY = "Monday";

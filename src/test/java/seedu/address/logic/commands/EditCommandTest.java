@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_TEST;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_TEST;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_TEST;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_UNIQUE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
@@ -69,13 +71,15 @@ public class EditCommandTest {
                 .get(indexLastPerson.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(lastPerson);
-        Person editedPerson = personInList.withName(VALID_NAME_BOB)
-                .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
+        Person editedPerson = personInList.withName(VALID_NAME_TEST)
+                .withEmail(VALID_EMAIL_TEST)
+                .withEmergencyContact(VALID_EMERGENCY_CONTACT_TEST)
                 .withTags(VALID_TAG_HUSBAND).build();
 
         EditPersonDescriptor descriptor =
-                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                        .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
+                new EditPersonDescriptorBuilder().withName(VALID_NAME_TEST)
+                        .withEmail(VALID_EMAIL_TEST)
+                        .withEmergencyContact(VALID_EMERGENCY_CONTACT_TEST)
                         .withTags(VALID_TAG_HUSBAND).build();
         EditCommand editCommand =
                 new EditCommand(indexLastPerson, descriptor);
@@ -142,10 +146,12 @@ public class EditCommandTest {
         Person personInFilteredList = model.getFilteredPersonList()
                 .get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder(personInFilteredList)
-                .withName(VALID_NAME_BOB).build();
+                .withName(VALID_NAME_TEST)
+                .withEmail(VALID_EMAIL_TEST).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
                 new EditPersonDescriptorBuilder()
-                        .withName(VALID_NAME_BOB).build());
+                        .withName(VALID_NAME_TEST)
+                        .withEmail(VALID_EMAIL_TEST).build());
 
         String expectedMessage = String.format(
                 EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
@@ -170,8 +176,9 @@ public class EditCommandTest {
         model.setPerson(originalFirstPerson, firstPerson);
 
         PersonBuilder personInList = new PersonBuilder(firstPerson);
-        Person editedPerson = personInList.withName(VALID_NAME_BOB)
-                .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
+        Person editedPerson = personInList.withName(VALID_NAME_TEST)
+                .withEmail(VALID_EMAIL_TEST)
+                .withEmergencyContact(VALID_EMERGENCY_CONTACT_TEST)
                 .withTags(VALID_TAG_HUSBAND).build();
         editedPerson = new Person(
                 editedPerson.getName(), editedPerson.getEmail(), editedPerson.getAddress(),
@@ -180,8 +187,9 @@ public class EditCommandTest {
                 editedPerson.getRemark(), editedPerson.getTags(), firstPerson.getAttendanceRecords());
 
         EditPersonDescriptor descriptor =
-                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                        .withEmergencyContact(VALID_EMERGENCY_CONTACT_BOB)
+                new EditPersonDescriptorBuilder().withName(VALID_NAME_TEST)
+                        .withEmail(VALID_EMAIL_TEST)
+                        .withEmergencyContact(VALID_EMERGENCY_CONTACT_TEST)
                         .withTags(VALID_TAG_HUSBAND).build();
         EditCommand editCommand =
                 new EditCommand(INDEX_FIRST_PERSON, descriptor);
@@ -233,7 +241,7 @@ public class EditCommandTest {
                 model.getFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor =
                 new EditPersonDescriptorBuilder()
-                        .withName(VALID_NAME_BOB).build();
+                        .withName(VALID_NAME_TEST).build();
         EditCommand editCommand =
                 new EditCommand(outOfBoundIndex, descriptor);
 
@@ -251,7 +259,7 @@ public class EditCommandTest {
 
         EditCommand editCommand = new EditCommand(outOfBoundIndex,
                 new EditPersonDescriptorBuilder()
-                        .withName(VALID_NAME_BOB).build());
+                        .withName(VALID_NAME_TEST).build());
 
         assertCommandFailure(editCommand, model,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -266,7 +274,7 @@ public class EditCommandTest {
         model.setPerson(firstPerson, personWithAttendance);
 
         EditPersonDescriptor descriptor =
-                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
+                new EditPersonDescriptorBuilder().withRemark("Test remark for attendance preservation").build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
         editCommand.execute(model);
 
