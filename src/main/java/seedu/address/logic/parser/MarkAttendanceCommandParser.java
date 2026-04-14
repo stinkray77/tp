@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ATTENDANCE_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LESSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
@@ -28,15 +29,16 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         requireNonNull(args);
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                args, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_ATTENDANCE_STATUS);
+                args, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_LESSON, PREFIX_ATTENDANCE_STATUS);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_ATTENDANCE_STATUS)
-                || argMultimap.getPreamble().isEmpty()) {
+        if (!arePrefixesPresent(argMultimap, PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_LESSON,
+                PREFIX_ATTENDANCE_STATUS) || argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkAttendanceCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_ATTENDANCE_STATUS);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_SUBJECT, PREFIX_DAY, PREFIX_TIME, PREFIX_LESSON,
+                PREFIX_ATTENDANCE_STATUS);
 
         Index[] indices;
         try {
@@ -60,10 +62,11 @@ public class MarkAttendanceCommandParser implements Parser<MarkAttendanceCommand
         String subject = ParserUtil.parseSubject(argMultimap.getValue(PREFIX_SUBJECT).get()).subjectName;
         String day = ParserUtil.parseDay(argMultimap.getValue(PREFIX_DAY).get()).dayName;
         String time = ParserUtil.parseTime(argMultimap.getValue(PREFIX_TIME).get()).timeValue;
+        String lesson = argMultimap.getValue(PREFIX_LESSON).get().trim();
         AttendanceStatus status = ParserUtil.parseAttendanceStatus(
                 argMultimap.getValue(PREFIX_ATTENDANCE_STATUS).get());
 
-        return new MarkAttendanceCommand(indices, subject, day, time, status);
+        return new MarkAttendanceCommand(indices, subject, day, time, lesson, status);
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {

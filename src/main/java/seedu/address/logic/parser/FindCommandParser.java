@@ -57,8 +57,9 @@ public class FindCommandParser implements Parser<FindCommand> {
                 || argMultimap.getValue(PREFIX_TAG).isPresent();
 
         if (!hasPrefixes) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            // Name-only search: use preamble as keywords
+            String[] nameKeywords = trimmedArgs.split("\\s+");
+            return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
         } else {
             if (!argMultimap.getPreamble().isEmpty()) {
                 throw new ParseException(
