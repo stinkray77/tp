@@ -370,4 +370,27 @@ public class AddCommandParserTest {
                         + SUBJECT_DESC_MATH + DAY_DESC_MONDAY + INVALID_TIME_DESC,
                 Time.MESSAGE_CONSTRAINTS);
     }
+
+    @Test
+    public void parse_remarkField_success() {
+        Person expectedPerson = new PersonBuilder(BOB)
+                .withRemark("Needs extra help").build();
+        assertParseSuccess(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + EMERGENCY_CONTACT_DESC_BOB
+                        + TAG_DESC_FRIEND + TAG_DESC_HUSBAND
+                        + " r/Needs extra help",
+                new AddCommand(expectedPerson));
+    }
+
+    @Test
+    public void parse_noRemark_defaultsToEmpty() {
+        Person expectedPerson = new PersonBuilder(BOB)
+                .withRemark("").build();
+        assertParseSuccess(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + EMERGENCY_CONTACT_DESC_BOB
+                        + TAG_DESC_FRIEND + TAG_DESC_HUSBAND,
+                new AddCommand(expectedPerson));
+    }
 }

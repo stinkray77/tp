@@ -111,7 +111,8 @@ public class ScreenshotTest {
 
         runCommand(robot,
                 "add n/John Tan e/johntan@example.com a/21 Lower Kent Ridge Rd "
-                + "s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due");
+                + "s/Mathematics d/Monday ti/1400 ec/91234567 ps/Due "
+                + "r/Needs extra help");
         takeScreenshot("add-result");
 
         runCommand(robot, "list");

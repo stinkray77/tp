@@ -143,7 +143,7 @@ Example result: A pop-up window will show you a link to this user guide with mor
 
 Adds a student to Tutor Central.
 
-Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]… [ps/PAYMENT_STATUS] [t/TAG]…`
+Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]… [ps/PAYMENT_STATUS] [r/REMARK] [t/TAG]…`
 
 <box type="tip" seamless>
 
@@ -154,9 +154,10 @@ Format: `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/T
 
 Examples:
 
-- `add n/John Tan e/johntan@example.com a/21 Lower Kent Ridge Rd ec/98765432 s/Mathematics d/Monday ti/1400 s/English d/Wednesday ti/1600 ps/Due`
+- `add n/John Tan e/johntan@example.com a/21 Lower Kent Ridge Rd ec/98765432 s/Mathematics d/Monday ti/1400 s/English d/Wednesday ti/1600 ps/Due r/Needs extra help`
 
 If `ps/PAYMENT_STATUS` is omitted, the student's payment status defaults to `Due`.
+If `r/REMARK` is omitted, the remark defaults to empty.
 
 Example result after adding a student:
 ![add result](images/add-result.png)
@@ -444,7 +445,7 @@ _Details coming soon ..._
 
 | Action             | Format, Examples                                                                                                                                                                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add**            | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [t/TAG]...` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due` |
+| **Add**            | `add n/NAME e/EMAIL a/ADDRESS ec/EMERGENCY_CONTACT [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [r/REMARK] [t/TAG]...` <br> e.g., `add n/John Doe e/johnd@example.com a/Clementi Ave 2 ec/91234567 s/Mathematics d/Monday ti/1400 ps/Due r/Needs help` |
 | **Clear**          | `clear`                                                                                                                                                                                                                            |
 | **Delete**         | `delete INDEX` <br> e.g., `delete 3`                                                                                                                                                                                               |
 | **Edit**           | `edit INDEX [n/NAME] [e/EMAIL] [a/ADDRESS] [ec/EMERGENCY_CONTACT] [s/SUBJECT d/DAY ti/TIME]... [ps/PAYMENT_STATUS] [r/REMARK] [t/TAG]...` <br> e.g., `edit 1 e/johndoe@example.com`                                                |

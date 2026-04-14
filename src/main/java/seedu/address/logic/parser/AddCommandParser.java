@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PAYMENT_STATUS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
@@ -44,7 +45,7 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_SUBJECT, PREFIX_DAY,
                         PREFIX_TIME, PREFIX_EMERGENCY_CONTACT,
-                        PREFIX_PAYMENT_STATUS, PREFIX_TAG);
+                        PREFIX_PAYMENT_STATUS, PREFIX_REMARK, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS,
                 PREFIX_EMAIL, PREFIX_EMERGENCY_CONTACT)
@@ -102,8 +103,11 @@ public class AddCommandParser implements Parser<AddCommand> {
         Set<Tag> tagList = ParserUtil.parseTags(
                 argMultimap.getAllValues(PREFIX_TAG));
 
+        Remark remark = argMultimap.getValue(PREFIX_REMARK).isPresent()
+                ? new Remark(argMultimap.getValue(PREFIX_REMARK).get().trim())
+                : new Remark("");
         Person person = new Person(name, email, address, lessonSlots,
-                emergencyContact, paymentStatus, new Remark(""), tagList);
+                emergencyContact, paymentStatus, remark, tagList);
 
         return new AddCommand(person);
     }

@@ -35,6 +35,7 @@ public class AddCommand extends Command {
             + "[" + PREFIX_TIME + "TIME]... "
             + PREFIX_EMERGENCY_CONTACT + "EMERGENCY_CONTACT "
             + "[" + PREFIX_PAYMENT_STATUS + "PAYMENT_STATUS] "
+            + "[r/REMARK] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
